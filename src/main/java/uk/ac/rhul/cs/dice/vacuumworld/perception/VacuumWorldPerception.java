@@ -1,4 +1,4 @@
-package uk.ac.rhul.cs.dice.vacuumworld;
+package uk.ac.rhul.cs.dice.vacuumworld.perception;
 
 import uk.ac.rhul.cs.dice.agent.interfaces.Perception;
 

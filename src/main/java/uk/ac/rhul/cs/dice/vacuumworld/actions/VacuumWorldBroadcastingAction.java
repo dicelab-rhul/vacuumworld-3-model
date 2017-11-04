@@ -6,18 +6,18 @@ import uk.ac.rhul.cs.dice.agentcontainers.interfaces.Environment;
 import uk.ac.rhul.cs.dice.agentcontainers.interfaces.Physics;
 import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldEnvironment;
 import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldPhysicsInterface;
-import uk.ac.rhul.cs.dice.vacuumworld.actions.enums.VacuumWorldPhysicalActionsEnum;
-import uk.ac.rhul.cs.dice.vacuumworld.actions.results.VacuumWorldPhysicalActionResult;
+import uk.ac.rhul.cs.dice.vacuumworld.actions.enums.VacuumWorldCommunicativeActionsEnum;
+import uk.ac.rhul.cs.dice.vacuumworld.actions.results.VacuumWorldCommunicativeActionResult;
 
-public class VacuumWorldMoveAction extends VacuumWorldAbstractPhysicalAction {    
-    
-    public VacuumWorldMoveAction() {
-	super(VacuumWorldPhysicalActionsEnum.MOVE);
+public class VacuumWorldBroadcastingAction extends VacuumWorldSpeakAction {
+
+    public VacuumWorldBroadcastingAction() {
+	super(VacuumWorldCommunicativeActionsEnum.BROADCAST);
     }
 
     @Override
     public boolean isTypeConsistent() {
-	return VacuumWorldPhysicalActionsEnum.MOVE.equals(getType());
+	return VacuumWorldCommunicativeActionsEnum.BROADCAST.equals(getType());
     }
 
     @Override
@@ -35,7 +35,7 @@ public class VacuumWorldMoveAction extends VacuumWorldAbstractPhysicalAction {
             return ((VacuumWorldPhysicsInterface) physics).perform(this, (VacuumWorldEnvironment) context);
         }
         
-        return new VacuumWorldPhysicalActionResult(ActionResult.FAILURE);
+        return new VacuumWorldCommunicativeActionResult(ActionResult.FAILURE);
     }
     
     @Override

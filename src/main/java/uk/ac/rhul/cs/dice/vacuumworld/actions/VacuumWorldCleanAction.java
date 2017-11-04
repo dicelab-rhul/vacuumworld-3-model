@@ -9,15 +9,15 @@ import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldPhysicsInterface;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.enums.VacuumWorldPhysicalActionsEnum;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.results.VacuumWorldPhysicalActionResult;
 
-public class VacuumWorldMoveAction extends VacuumWorldAbstractPhysicalAction {    
-    
-    public VacuumWorldMoveAction() {
-	super(VacuumWorldPhysicalActionsEnum.MOVE);
+public class VacuumWorldCleanAction extends VacuumWorldAbstractPhysicalAction {
+
+    public VacuumWorldCleanAction() {
+	super(VacuumWorldPhysicalActionsEnum.CLEAN);
     }
 
     @Override
     public boolean isTypeConsistent() {
-	return VacuumWorldPhysicalActionsEnum.MOVE.equals(getType());
+	return VacuumWorldPhysicalActionsEnum.CLEAN.equals(getType());
     }
 
     @Override

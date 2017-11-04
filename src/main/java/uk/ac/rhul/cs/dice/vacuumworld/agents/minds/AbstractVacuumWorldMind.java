@@ -6,9 +6,9 @@ import java.util.List;
 import uk.ac.rhul.cs.dice.agent.abstractimpl.AbstractAgentMind;
 import uk.ac.rhul.cs.dice.agent.interfaces.Analyzable;
 import uk.ac.rhul.cs.dice.agentcommon.interfaces.Action;
-import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldPerception;
-import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldSpeechPerception;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldSensingAction;
+import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldPerception;
+import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldSpeechPerception;
 
 public abstract class AbstractVacuumWorldMind extends AbstractAgentMind {
     private List<VacuumWorldPerception> lastCyclePerceptions;

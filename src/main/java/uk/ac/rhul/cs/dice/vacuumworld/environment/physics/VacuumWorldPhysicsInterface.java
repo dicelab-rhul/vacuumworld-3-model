@@ -1,4 +1,4 @@
-package uk.ac.rhul.cs.dice.vacuumworld;
+package uk.ac.rhul.cs.dice.vacuumworld.environment.physics;
 
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldBroadcastingAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldCleanAction;
@@ -8,7 +8,10 @@ import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldSensingAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldSpeakAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldTurnLeftAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldTurnRightAction;
+import uk.ac.rhul.cs.dice.vacuumworld.actions.results.VacuumWorldCommunicativeActionResult;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.results.VacuumWorldPhysicalActionResult;
+import uk.ac.rhul.cs.dice.vacuumworld.actions.results.VacuumWorldSensingActionResult;
+import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldEnvironment;
 
 public interface VacuumWorldPhysicsInterface {
     public abstract boolean isPossible(VacuumWorldMoveAction action, VacuumWorldEnvironment context);
@@ -24,9 +27,9 @@ public interface VacuumWorldPhysicsInterface {
     public abstract VacuumWorldPhysicalActionResult perform(VacuumWorldTurnLeftAction action, VacuumWorldEnvironment context);
     public abstract VacuumWorldPhysicalActionResult perform(VacuumWorldTurnRightAction action, VacuumWorldEnvironment context);
     public abstract VacuumWorldPhysicalActionResult perform(VacuumWorldCleanAction action, VacuumWorldEnvironment context);
-    public abstract VacuumWorldPhysicalActionResult perform(VacuumWorldSpeakAction action, VacuumWorldEnvironment context);
-    public abstract VacuumWorldPhysicalActionResult perform(VacuumWorldBroadcastingAction action, VacuumWorldEnvironment context);
-    public abstract VacuumWorldPhysicalActionResult perform(VacuumWorldSensingAction action, VacuumWorldEnvironment context);
+    public abstract VacuumWorldCommunicativeActionResult perform(VacuumWorldSpeakAction action, VacuumWorldEnvironment context);
+    public abstract VacuumWorldCommunicativeActionResult perform(VacuumWorldBroadcastingAction action, VacuumWorldEnvironment context);
+    public abstract VacuumWorldSensingActionResult perform(VacuumWorldSensingAction action, VacuumWorldEnvironment context);
     public abstract VacuumWorldPhysicalActionResult perform(VacuumWorldDropDirtAction action, VacuumWorldEnvironment context);
     
     public abstract boolean succeeded(VacuumWorldMoveAction action, VacuumWorldEnvironment context);

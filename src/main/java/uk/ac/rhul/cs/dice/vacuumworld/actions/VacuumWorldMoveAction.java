@@ -4,15 +4,26 @@ import uk.ac.rhul.cs.dice.agentactions.enums.ActionResult;
 import uk.ac.rhul.cs.dice.agentactions.interfaces.Result;
 import uk.ac.rhul.cs.dice.agentcontainers.interfaces.Environment;
 import uk.ac.rhul.cs.dice.agentcontainers.interfaces.Physics;
-import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldEnvironment;
-import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldPhysicsInterface;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.enums.VacuumWorldPhysicalActionsEnum;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.results.VacuumWorldPhysicalActionResult;
+import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldCoordinates;
+import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldEnvironment;
+import uk.ac.rhul.cs.dice.vacuumworld.environment.physics.VacuumWorldPhysicsInterface;
 
-public class VacuumWorldMoveAction extends VacuumWorldAbstractPhysicalAction {    
-    
+public class VacuumWorldMoveAction extends VacuumWorldAbstractPhysicalAction {
+    private static final long serialVersionUID = 3134040451268255878L;
+    private VacuumWorldCoordinates originalCoordinates;
+
     public VacuumWorldMoveAction() {
 	super(VacuumWorldPhysicalActionsEnum.MOVE);
+    }
+    
+    public void setOriginalCoordinates(VacuumWorldCoordinates originalCoordinates) {
+	this.originalCoordinates = originalCoordinates;
+    }
+    
+    public VacuumWorldCoordinates getOriginalCoordinates() {
+	return this.originalCoordinates;
     }
 
     @Override

@@ -4,20 +4,29 @@ import uk.ac.rhul.cs.dice.agentactions.enums.ActionResult;
 import uk.ac.rhul.cs.dice.agentactions.interfaces.Result;
 import uk.ac.rhul.cs.dice.agentcontainers.interfaces.Environment;
 import uk.ac.rhul.cs.dice.agentcontainers.interfaces.Physics;
-import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldEnvironment;
-import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldPhysicsInterface;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.enums.VacuumWorldPhysicalActionsEnum;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.results.VacuumWorldPhysicalActionResult;
+import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldDirtColor;
+import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldEnvironment;
+import uk.ac.rhul.cs.dice.vacuumworld.environment.physics.VacuumWorldPhysicsInterface;
 
 public class VacuumWorldDropDirtAction extends VacuumWorldAbstractPhysicalAction {
+    private static final long serialVersionUID = 2037182628265165811L;
+    private VacuumWorldDirtColor droppedDirtColor;
 
-    public VacuumWorldDropDirtAction() {
+    public VacuumWorldDropDirtAction(VacuumWorldDirtColor droppedDirtColor) {
 	super(VacuumWorldPhysicalActionsEnum.DROP_DIRT);
+	
+	this.droppedDirtColor = droppedDirtColor;
     }
 
     @Override
     public boolean isTypeConsistent() {
 	return VacuumWorldPhysicalActionsEnum.DROP_DIRT.equals(getType());
+    }
+    
+    public VacuumWorldDirtColor getDroppedDirtColor() {
+	return this.droppedDirtColor;
     }
 
     @Override

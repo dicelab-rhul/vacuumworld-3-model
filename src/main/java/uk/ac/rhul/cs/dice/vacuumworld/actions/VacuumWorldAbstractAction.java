@@ -1,23 +1,24 @@
 package uk.ac.rhul.cs.dice.vacuumworld.actions;
 
-import uk.ac.rhul.cs.dice.agentcommon.interfaces.Actor;
+import java.io.Serializable;
 
-public abstract class VacuumWorldAbstractAction implements VacuumWorldAbstractActionInterface {
-    private Actor actor;
+public abstract class VacuumWorldAbstractAction implements VacuumWorldAbstractActionInterface, Serializable {
+    private static final long serialVersionUID = -600283328134615689L;
+    private String actor;
     
     public VacuumWorldAbstractAction() {}
     
-    public VacuumWorldAbstractAction(Actor actor) {
+    public VacuumWorldAbstractAction(String actor) {
 	this.actor = actor;
     }
     
     @Override
-    public Actor getActor() {
+    public String getActorID() {
 	return this.actor;
     }
     
     @Override
-    public void setActor(Actor actor) {
+    public void setActor(String actor) {
 	this.actor = actor;
     }
 }

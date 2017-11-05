@@ -1,8 +1,8 @@
 package uk.ac.rhul.cs.dice.vacuumworld.actions;
 
-import uk.ac.rhul.cs.dice.agentcommon.interfaces.Actor;
+import java.io.Serializable;
 
-public interface VacuumWorldAbstractActionInterface {
-    public abstract Actor getActor();
-    public abstract void setActor(Actor actor);
+public interface VacuumWorldAbstractActionInterface extends Serializable {
+    public abstract String getActorID();
+    public abstract void setActor(String actor);
 }

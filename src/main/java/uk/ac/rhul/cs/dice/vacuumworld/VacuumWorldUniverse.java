@@ -1,7 +1,8 @@
 package uk.ac.rhul.cs.dice.vacuumworld;
 
-import uk.ac.rhul.cs.dice.agentcontainers.interfaces.abstractimpl.AbstractUniverse;
+import uk.ac.rhul.cs.dice.agentcontainers.abstractimpl.AbstractUniverse;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldUniverseAppearance;
+import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldEnvironment;
 
 public class VacuumWorldUniverse extends AbstractUniverse {
 

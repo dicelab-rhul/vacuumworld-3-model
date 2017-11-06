@@ -45,21 +45,24 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
     private VacuumWorldPhysics physics;
     private Map<String, ObjectInputStream> input;
     private Map<String, ObjectOutputStream> output;
+    private volatile boolean stopFlag;
     
-    public VacuumWorldEnvironment(int dimension) {
+    public VacuumWorldEnvironment(int dimension, boolean stopFlag) {
 	int upperSize = dimension > MAXIMUM_SIZE ? MAXIMUM_SIZE : dimension;
 	this.size = dimension < MINIMUM_SIZE ? MINIMUM_SIZE : upperSize;
 	this.grid = new ConcurrentHashMap<>(1 + (int) (this.size * this.size / LOADING_FACTOR));
 	this.physics = new VacuumWorldPhysics();
+	this.stopFlag = stopFlag;
 	
 	initGrid();
 	setAppearance(new VacuumWorldEnvironmentAppearance(this.grid));
     }
     
-    public VacuumWorldEnvironment(Map<VacuumWorldCoordinates, VacuumWorldLocation> grid) {
+    public VacuumWorldEnvironment(Map<VacuumWorldCoordinates, VacuumWorldLocation> grid, boolean stopFlag) {
 	this.size = (int) Math.sqrt(grid.size());
 	this.grid = new ConcurrentHashMap<>(grid);
 	this.physics = new VacuumWorldPhysics();
+	this.stopFlag = stopFlag;
 	
 	setAppearance(new VacuumWorldEnvironmentAppearance(this.grid));
     }
@@ -263,7 +266,8 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 
     @Override
     public void run() {
-	// TODO Auto-generated method stub
-	
+	while(!this.stopFlag) {
+	    listenAndExecute();
+	}
     }
 }

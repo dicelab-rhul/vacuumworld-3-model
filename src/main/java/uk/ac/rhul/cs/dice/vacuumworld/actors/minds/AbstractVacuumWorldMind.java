@@ -1,7 +1,8 @@
-package uk.ac.rhul.cs.dice.vacuumworld.agents.minds;
+package uk.ac.rhul.cs.dice.vacuumworld.actors.minds;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import uk.ac.rhul.cs.dice.agent.abstractimpl.AbstractAgentMind;
 import uk.ac.rhul.cs.dice.agent.interfaces.Analyzable;
@@ -11,6 +12,7 @@ import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldPerception;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldSpeechPerception;
 
 public abstract class AbstractVacuumWorldMind extends AbstractAgentMind {
+    private static final long serialVersionUID = 5415182091402486290L;
     private List<VacuumWorldPerception> lastCyclePerceptions;
     private List<VacuumWorldSpeechPerception> lastCycleReceivedMessages;
     
@@ -22,7 +24,7 @@ public abstract class AbstractVacuumWorldMind extends AbstractAgentMind {
     }
 
     @Override
-    public void perceive(List<Analyzable> perceptions) {
+    public void perceive(Set<Analyzable> perceptions) {
 	super.perceive(null);
 	
 	this.lastCyclePerceptions.clear();

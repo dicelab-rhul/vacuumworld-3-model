@@ -1,4 +1,4 @@
-package uk.ac.rhul.cs.dice.vacuumworld.agents;
+package uk.ac.rhul.cs.dice.vacuumworld.actors;
 
 import uk.ac.rhul.cs.dice.agent.abstractimpl.AbstractSensor;
 import uk.ac.rhul.cs.dice.agent.enums.SensorPurposeEnum;

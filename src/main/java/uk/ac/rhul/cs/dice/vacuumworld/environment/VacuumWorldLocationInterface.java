@@ -2,9 +2,9 @@ package uk.ac.rhul.cs.dice.vacuumworld.environment;
 
 import uk.ac.rhul.cs.dice.agentcommon.interfaces.Actor;
 import uk.ac.rhul.cs.dice.agentcontainers.interfaces.Location;
-import uk.ac.rhul.cs.dice.vacuumworld.agents.AgentColor;
-import uk.ac.rhul.cs.dice.vacuumworld.agents.VacuumWorldCleaningAgent;
-import uk.ac.rhul.cs.dice.vacuumworld.agents.VacuumWorldUserAgent;
+import uk.ac.rhul.cs.dice.vacuumworld.actors.AgentColor;
+import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldCleaningAgent;
+import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldUserAgent;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldDirtColor;
 import uk.ac.rhul.cs.dice.vacuumworld.dirt.VacuumWorldDirt;
 

@@ -1,17 +1,20 @@
-package uk.ac.rhul.cs.dice.vacuumworld.agents;
+package uk.ac.rhul.cs.dice.vacuumworld.actors;
 
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.List;
 
 import uk.ac.rhul.cs.dice.agent.abstractimpl.AbstractAgent;
 import uk.ac.rhul.cs.dice.agent.interfaces.Actuator;
 import uk.ac.rhul.cs.dice.agent.interfaces.AgentMind;
-import uk.ac.rhul.cs.dice.agent.interfaces.Analyzable;
 import uk.ac.rhul.cs.dice.agent.interfaces.Sensor;
 import uk.ac.rhul.cs.dice.agentcommon.interfaces.Action;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
 
 public class VacuumWorldCleaningAgent extends AbstractAgent {
     private static final long serialVersionUID = -7231158706838196637L;
+    private transient ObjectInputStream input;
+    private transient ObjectOutputStream output;
 
     public VacuumWorldCleaningAgent(String id, VacuumWorldActorAppearance appearance, List<Sensor> sensors, List<Actuator> actuators, AgentMind mind) {
 	super(id, appearance, sensors, actuators, mind);
@@ -19,11 +22,6 @@ public class VacuumWorldCleaningAgent extends AbstractAgent {
 
     public VacuumWorldCleaningAgent(VacuumWorldCleaningAgent toCopy) {
 	super(toCopy.getID(), toCopy.getAppearance(), toCopy.getAllSensors(), toCopy.getAllActuators(), toCopy.getMind());
-    }
-    
-    @Override
-    public void sendToMind(Analyzable analyzable) {
-	// TODO Auto-generated method stub
     }
 
     @Override
@@ -45,5 +43,25 @@ public class VacuumWorldCleaningAgent extends AbstractAgent {
     @Override
     public void turnRight() {
 	((VacuumWorldActorAppearance) getAppearance()).turnRight();
+    }
+
+    @Override
+    public ObjectInputStream getInputChannels() {
+	return this.input;
+    }
+
+    @Override
+    public ObjectOutputStream getOutputChannels() {
+	return this.output;
+    }
+
+    @Override
+    public void setInputChannels(ObjectInputStream input) {
+	this.input = input;
+    }
+
+    @Override
+    public void setOutputChannels(ObjectOutputStream output) {
+	this.output = output;
     }
 }

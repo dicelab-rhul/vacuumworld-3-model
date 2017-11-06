@@ -5,11 +5,11 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 
 import uk.ac.rhul.cs.dice.agent.interfaces.ActorAppearance;
+import uk.ac.rhul.cs.dice.agent.interfaces.Actuator;
+import uk.ac.rhul.cs.dice.agent.interfaces.Sensor;
 import uk.ac.rhul.cs.dice.agentcontainers.enums.Orientation;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.ActorType;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.AgentColor;
-import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldActuator;
-import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldSensor;
 
 public class VacuumWorldActorAppearance implements ActorAppearance {
     private static final long serialVersionUID = 1958091110354446585L;
@@ -18,10 +18,10 @@ public class VacuumWorldActorAppearance implements ActorAppearance {
     private ActorType type;
     private Orientation orientation;
     private VacuumWorldMindAppearance mindAppearance;
-    private List<VacuumWorldSensor> sensors;
-    private List<VacuumWorldActuator> actuators;
+    private List<Sensor> sensors;
+    private List<Actuator> actuators;
     
-    public VacuumWorldActorAppearance(String id, AgentColor color, ActorType type, Orientation orientation, VacuumWorldMindAppearance mindappearance, List<VacuumWorldSensor> sensors, List<VacuumWorldActuator> actuators) {
+    public VacuumWorldActorAppearance(String id, AgentColor color, ActorType type, Orientation orientation, VacuumWorldMindAppearance mindappearance, List<Sensor> sensors, List<Actuator> actuators) {
 	this.id = id;
 	this.color = color;
 	this.type = type;
@@ -76,11 +76,11 @@ public class VacuumWorldActorAppearance implements ActorAppearance {
 	return this.mindAppearance;
     }
     
-    public List<VacuumWorldActuator> getActuators() {
+    public List<Actuator> getActuators() {
 	return this.actuators;
     }
     
-    public List<VacuumWorldSensor> getSensors() {
+    public List<Sensor> getSensors() {
 	return this.sensors;
     }
     

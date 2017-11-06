@@ -1,0 +1,93 @@
+{
+    "size": 9,
+    "notable_locations": [
+        {
+            "x": 4,
+            "y": 4,
+            "actor": {
+                "type": "cleaning_agent",
+                "id": "Agent-qwertyuiop",
+                "color": "orange",
+                "orientation": "north",
+                "mind": "SomeMind",
+                "sensors": [
+                    {
+                        "id": "Sensor-asdasdasd",
+                        "purpose": "see"
+                    },
+                    {
+                        "id": "Sensor-donaldgoofy",
+                        "purpose": "listen"
+                    },
+                    {
+                        "id": "Sensor-whatever",
+                        "purpose": "other"
+                    }
+                ],
+                "actuators": [
+                    {
+                        "id": "Actuator-gwuhgjshgosh",
+                        "purpose": "act_physically"
+                    },
+                    {
+                        "id": "Actuator-kewthoghdoisgh",
+                        "purpose": "speak"
+                    },
+                    {
+                        "id": "Actuator-arohgofghl",
+                        "purpose": "other"
+                    }
+                ]
+            },
+            "dirt": {
+                "color": "orange"
+            }
+        },
+        {
+            "x": 2,
+            "y": 3,
+            "dirt": {
+                "color": "orange"
+            }
+        },
+        {
+            "x": 3,
+            "y": 2,
+            "actor": {
+                "type": "user",
+                "id": "User-qwertyuiop",
+                "color": null,
+                "orientation": "west",
+                "mind": "SomeUserMind",
+                "sensors": [
+                    {
+                        "id": "Sensor-kghsfhgusfhgl",
+                        "purpose": "see"
+                    },
+                    {
+                        "id": "Sensor-dgushdgkhgsd",
+                        "purpose": "listen"
+                    },
+                    {
+                        "id": "Sensor-dfaughdauoa",
+                        "purpose": "other"
+                    }
+                ],
+                "actuators": [
+                    {
+                        "id": "Actuator-fkagfkdgusd",
+                        "purpose": "act_physically"
+                    },
+                    {
+                        "id": "Actuator-etghfsuogsrg",
+                        "purpose": "speak"
+                    },
+                    {
+                        "id": "Actuator-gkhgsiuohgeuoihs",
+                        "purpose": "other"
+                    }
+                ]
+            }
+        }
+    ]
+}

@@ -37,8 +37,8 @@ import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldPerception;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldSpeechPerception;
 
 public class VacuumWorldEnvironment extends AbstractEnvironment implements Runnable {
-    private static final int MINIMUM_SIZE = 3;
-    private static final int MAXIMUM_SIZE = 10;
+    public static final int MINIMUM_SIZE = 3;
+    public static final int MAXIMUM_SIZE = 10;
     private static final double LOADING_FACTOR = 0.75;
     private Map<VacuumWorldCoordinates, VacuumWorldLocation> grid;
     private int size;
@@ -79,18 +79,20 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 	for(int i = 0; i < this.size; i++) {
 	    for(int j = 0; j < this.size; j++) {
 		VacuumWorldCoordinates coordinates = new VacuumWorldCoordinates(i, j);
-		this.grid.put(coordinates, new VacuumWorldLocation(coordinates, getWallInfo(i, j)));
+		this.grid.put(coordinates, new VacuumWorldLocation(coordinates, getWallInfo(coordinates, this.size)));
 	    }
 	}
     }
 
-    private boolean[] getWallInfo(int i, int j) {
+    public static boolean[] getWallInfo(VacuumWorldCoordinates coordinates, int size) {
 	boolean[] walls = new boolean[4];
+	int i = coordinates.getX();
+	int j = coordinates.getY();
 	
 	walls[0] = j == 0; //north
-	walls[1] = j == this.size - 1; //south
+	walls[1] = j == size - 1; //south
 	walls[2] = i == 0; //west
-	walls[3] = i == this.size - 1; //east
+	walls[3] = i == size - 1; //east
 	
 	return walls;
     }

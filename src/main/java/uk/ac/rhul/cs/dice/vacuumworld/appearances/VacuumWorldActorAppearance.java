@@ -11,6 +11,7 @@ import uk.ac.rhul.cs.dice.vacuumworld.agents.VacuumWorldActuator;
 import uk.ac.rhul.cs.dice.vacuumworld.agents.VacuumWorldSensor;
 
 public class VacuumWorldActorAppearance implements AgentAppearance {
+    private static final long serialVersionUID = 1958091110354446585L;
     private String id;
     private AgentColor color;
     private Orientation orientation;

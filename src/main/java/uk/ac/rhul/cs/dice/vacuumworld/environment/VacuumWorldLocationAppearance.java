@@ -5,6 +5,7 @@ import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldDirtAppearance;
 
 public class VacuumWorldLocationAppearance implements Appearance {
+    private static final long serialVersionUID = -2552147509566518640L;
     private static final int MAX_WALLS = 4;
     private VacuumWorldActorAppearance actorAppearance;
     private VacuumWorldDirtAppearance dirtAppearance;

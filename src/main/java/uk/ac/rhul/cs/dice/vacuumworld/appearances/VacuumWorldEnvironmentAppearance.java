@@ -11,7 +11,8 @@ import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldLocation;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldLocationAppearance;
 
 public class VacuumWorldEnvironmentAppearance implements EnvironmentAppearance {
-    Map<VacuumWorldCoordinates, VacuumWorldLocationAppearance> grid;
+    private static final long serialVersionUID = 3587669408864383174L;
+    private Map<VacuumWorldCoordinates, VacuumWorldLocationAppearance> grid;
     
     public VacuumWorldEnvironmentAppearance(Map<VacuumWorldCoordinates, VacuumWorldLocation> grid) {
 	Map<VacuumWorldCoordinates, VacuumWorldLocationAppearance> appearancesGrid = new HashMap<>();
@@ -23,4 +24,6 @@ public class VacuumWorldEnvironmentAppearance implements EnvironmentAppearance {
     public Map<VacuumWorldCoordinates, VacuumWorldLocationAppearance> getGrid() {
 	return this.grid;
     }
+    
+    //TODO create the full API for the perception
 }

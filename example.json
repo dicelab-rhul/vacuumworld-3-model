@@ -88,6 +88,46 @@
                     }
                 ]
             }
+        },
+        {
+            "x": 3,
+            "y": 2,
+            "actor": {
+                "type": "avatar",
+                "id": "Avatar-qwertyuiop",
+                "color": null,
+                "orientation": "east",
+                "port": 12345,
+                "mind": "SomeAvatarMind",
+                "sensors": [
+                    {
+                        "id": "Sensor-kghsfhgusfhgl",
+                        "purpose": "see"
+                    },
+                    {
+                        "id": "Sensor-dgushdgkhgsd",
+                        "purpose": "listen"
+                    },
+                    {
+                        "id": "Sensor-dfaughdauoa",
+                        "purpose": "other"
+                    }
+                ],
+                "actuators": [
+                    {
+                        "id": "Actuator-fkagfkdgusd",
+                        "purpose": "act_physically"
+                    },
+                    {
+                        "id": "Actuator-etghfsuogsrg",
+                        "purpose": "speak"
+                    },
+                    {
+                        "id": "Actuator-gkhgsiuohgeuoihs",
+                        "purpose": "other"
+                    }
+                ]
+            }
         }
     ]
 }

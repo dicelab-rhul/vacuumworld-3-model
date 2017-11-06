@@ -3,6 +3,7 @@ package uk.ac.rhul.cs.dice.vacuumworld;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -18,18 +19,23 @@ import uk.ac.rhul.cs.dice.agent.abstractimpl.AbstractAgentMind;
 import uk.ac.rhul.cs.dice.agent.enums.ActuatorPurposeEnum;
 import uk.ac.rhul.cs.dice.agent.enums.SensorPurposeEnum;
 import uk.ac.rhul.cs.dice.agent.interfaces.Actuator;
+import uk.ac.rhul.cs.dice.agent.interfaces.AvatarAppearance;
 import uk.ac.rhul.cs.dice.agent.interfaces.Sensor;
 import uk.ac.rhul.cs.dice.agentcommon.interfaces.Actor;
 import uk.ac.rhul.cs.dice.agentcontainers.enums.Orientation;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.ActorType;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.AgentColor;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldActuator;
+import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldAvatar;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldCleaningAgent;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldSensor;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldUserAgent;
+import uk.ac.rhul.cs.dice.vacuumworld.actors.minds.VacuumWorldPrincipalListener;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
+import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldAvatarAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldDirtColor;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldMindAppearance;
+import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldPrincipalListenerAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.dirt.VacuumWorldDirt;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldCoordinates;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldEnvironment;
@@ -120,41 +126,65 @@ public class VacuumWorldParser {
     }
     
     private static Actor buildActor(JsonObject actorRepresentation) {
+	String id = actorRepresentation.get("id").getAsString();
+	JsonElement colorRepresentation = actorRepresentation.get("color");
+	AgentColor color = colorRepresentation.isJsonNull() ? null : AgentColor.valueOf(colorRepresentation.getAsString().toUpperCase());
+	Orientation orientation = Orientation.valueOf(actorRepresentation.get("orientation").getAsString().toUpperCase());
+	List<Sensor> sensors = buildSensors(actorRepresentation.get("sensors").getAsJsonArray());
+	List<Actuator> actuators = buildActuators(actorRepresentation.get("actuators").getAsJsonArray());
+	ActorType actorType = ActorType.valueOf(actorRepresentation.get("type").getAsString().toUpperCase());
+	
+	return buildActorSwitcher(actorRepresentation, id, color, orientation, sensors, actuators, actorType);
+    }
+
+    private static Actor buildActorSwitcher(JsonObject actorRepresentation, String id, AgentColor color, Orientation orientation, List<Sensor> sensors, List<Actuator> actuators, ActorType actorType) {
+	switch(actorType) {
+	case CLEANING_AGENT:
+	case USER:
+	    return buildAutonomousActor(actorRepresentation, id, color, orientation, sensors, actuators, actorType);
+	case AVATAR:
+	    return buildAvatar(actorRepresentation, id, orientation, sensors, actuators);
+	default:
+	    throw new IllegalArgumentException();
+	}
+    }
+
+    private static Actor buildAutonomousActor(JsonObject actorRepresentation, String id, AgentColor color, Orientation orientation, List<Sensor> sensors, List<Actuator> actuators, ActorType actorType) {
 	try {
-	    String id = actorRepresentation.get("id").getAsString();
-	    JsonElement colorRepresentation = actorRepresentation.get("color");
-	    AgentColor color = colorRepresentation.isJsonNull() ? null : AgentColor.valueOf(colorRepresentation.getAsString().toUpperCase());
-	    Orientation orientation = Orientation.valueOf(actorRepresentation.get("orientation").getAsString().toUpperCase());
 	    AbstractAgentMind mind = (AbstractAgentMind) Class.forName(actorRepresentation.get("mind").getAsString()).newInstance();
 	    VacuumWorldMindAppearance mindAppearance = new VacuumWorldMindAppearance(actorRepresentation.get("mind").getAsString());
-	    List<Sensor> sensors = buildSensors(actorRepresentation.get("sensors").getAsJsonArray());
-	    List<Actuator> actuators = buildActuators(actorRepresentation.get("actuators").getAsJsonArray());
-	    ActorType actorType = ActorType.valueOf(actorRepresentation.get("type").getAsString().toUpperCase());
 	    VacuumWorldActorAppearance appearance = new VacuumWorldActorAppearance(id, color, actorType, orientation, mindAppearance, sensors, actuators);
-	
-	    return buildActor(id, appearance, sensors, actuators, mind);
+	    
+	    return buildAutonomousActor(id, appearance, sensors, actuators, mind);
 	}
 	catch(Exception e) {
 	    throw new VacuumWorldRuntimeException(e);
 	}
     }
 
-    private static Actor buildActor(String id, VacuumWorldActorAppearance appearance, List<Sensor> sensors, List<Actuator> actuators, AbstractAgentMind mind) {
+    private static Actor buildAvatar(JsonObject actorRepresentation, String id, Orientation orientation, List<Sensor> sensors, List<Actuator> actuators) {
+	try {
+	    int port = actorRepresentation.get("port").getAsInt();
+	    VacuumWorldPrincipalListener listener = new VacuumWorldPrincipalListener(new ServerSocket(port));
+	    VacuumWorldPrincipalListenerAppearance mindAppearance = new VacuumWorldPrincipalListenerAppearance(port);
+	    AvatarAppearance avatarAppearance = new VacuumWorldAvatarAppearance(id, orientation, mindAppearance, sensors, actuators);
+	    
+	    return new VacuumWorldAvatar(id, avatarAppearance, sensors, actuators, listener);
+	}
+	catch(Exception e) {
+	    throw new VacuumWorldRuntimeException(e);
+	}
+    }
+
+    private static Actor buildAutonomousActor(String id, VacuumWorldActorAppearance appearance, List<Sensor> sensors, List<Actuator> actuators, AbstractAgentMind mind) {
 	switch(appearance.getType()) {
 	case CLEANING_AGENT:
 	    return new VacuumWorldCleaningAgent(id, appearance, sensors, actuators, mind);
 	case USER:
 	    return new VacuumWorldUserAgent(id, appearance, sensors, actuators, mind);
-	case AVATAR:
-	    return buildAvatar(id, appearance, sensors, actuators, mind);
 	default:
 	    throw new IllegalArgumentException();
 	}
-    }
-
-    private static Actor buildAvatar(String id, VacuumWorldActorAppearance appearance, List<Sensor> sensors, List<Actuator> actuators, AbstractAgentMind mind) {
-	// TODO Auto-generated method stub
-	return null;
     }
 
     private static List<Actuator> buildActuators(JsonArray actuatorsList) {

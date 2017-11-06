@@ -1,12 +1,15 @@
 package uk.ac.rhul.cs.dice.vacuumworld.environment;
 
 import uk.ac.rhul.cs.dice.agentcommon.interfaces.Actor;
+import uk.ac.rhul.cs.dice.agentcommon.interfaces.Appearance;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.AgentColor;
+import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldAvatar;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldCleaningAgent;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldUserAgent;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldDirtAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldDirtColor;
+import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldLocationAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.dirt.VacuumWorldDirt;
 
 public class VacuumWorldLocation implements VacuumWorldLocationInterface {
@@ -14,6 +17,7 @@ public class VacuumWorldLocation implements VacuumWorldLocationInterface {
     private VacuumWorldLocationAppearance appearance;
     private VacuumWorldCleaningAgent agent;
     private VacuumWorldUserAgent user;
+    private VacuumWorldAvatar avatar;
     private VacuumWorldDirt dirt;
     private boolean[] walls; //N, S, W, E
     
@@ -42,12 +46,15 @@ public class VacuumWorldLocation implements VacuumWorldLocationInterface {
 	return this.dirt == null ? null : this.dirt.getAppearance();
     }
 
-    private VacuumWorldActorAppearance getActorAppearance() {
+    private Appearance getActorAppearance() {
 	if(this.agent != null) {
-	    return (VacuumWorldActorAppearance) this.agent.getAppearance();
+	    return this.agent.getAppearance();
 	}
 	else if(this.user != null) {
-	    return (VacuumWorldActorAppearance) this.user.getAppearance();
+	    return this.user.getAppearance();
+	}
+	else if(this.avatar != null) {
+	    return this.avatar.getAppearance();
 	}
 	else {
 	    return null;
@@ -56,7 +63,7 @@ public class VacuumWorldLocation implements VacuumWorldLocationInterface {
 
     @Override
     public boolean containsAnActor() {
-	return this.agent != null || this.user != null;
+	return this.agent != null || this.user != null || this.avatar != null;
     }
     
     @Override
@@ -67,6 +74,11 @@ public class VacuumWorldLocation implements VacuumWorldLocationInterface {
     @Override
     public boolean containsAUser() {
 	return this.user != null;
+    }
+    
+    @Override
+    public boolean containsAnAvatar() {
+	return this.avatar != null;
     }
     
     @Override
@@ -113,6 +125,11 @@ public class VacuumWorldLocation implements VacuumWorldLocationInterface {
     }
     
     @Override
+    public VacuumWorldAvatar getAvatarIfAny() {
+	return this.avatar;
+    }
+    
+    @Override
     public VacuumWorldDirt getDirtIfAny() {
 	return this.dirt;
     }
@@ -124,6 +141,9 @@ public class VacuumWorldLocation implements VacuumWorldLocationInterface {
 	}
 	else if(this.user != null) {
 	    return this.user;
+	}
+	else if(this.avatar != null) {
+	    return this.avatar;
 	}
 	else {
 	    return null;
@@ -171,12 +191,35 @@ public class VacuumWorldLocation implements VacuumWorldLocationInterface {
     }
     
     @Override
+    public VacuumWorldAvatar removeAvatar() {
+	VacuumWorldAvatar toReturn = new VacuumWorldAvatar(this.avatar);
+	this.user = null;
+	reviseAppearance();
+	
+	return toReturn;
+    }
+    
+    @Override
+    public void addAvatar(VacuumWorldAvatar avatar) {
+	if(containsAnActor()) {
+	    throw new UnsupportedOperationException(getOccupiedErrorMessage(this.agent != null));
+	}
+	else {
+	    this.avatar = avatar;
+	    reviseAppearance();
+	}
+    }
+    
+    @Override
     public Actor removeActor() {
 	if(this.agent != null) {
 	    return removeAgent();
 	}
 	else if(this.user != null) {
 	    return removeUser();
+	}
+	else if(this.avatar != null) {
+	    return removeAvatar();
 	}
 	else {
 	    return null;
@@ -190,6 +233,9 @@ public class VacuumWorldLocation implements VacuumWorldLocationInterface {
 	}
 	else if(actor instanceof VacuumWorldUserAgent) {
 	    addUser((VacuumWorldUserAgent) actor);
+	}
+	else if(actor instanceof VacuumWorldAvatar) {
+	    addAvatar((VacuumWorldAvatar) actor);
 	}
 	else {
 	    throw new IllegalArgumentException();
@@ -216,6 +262,7 @@ public class VacuumWorldLocation implements VacuumWorldLocationInterface {
 	}
     }
     
+    //TODO change
     private String getOccupiedErrorMessage(boolean agent) {
 	StringBuilder builder = new StringBuilder("The location at ");
 	

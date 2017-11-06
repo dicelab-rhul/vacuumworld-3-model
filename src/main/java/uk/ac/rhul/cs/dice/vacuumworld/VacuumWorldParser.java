@@ -195,7 +195,7 @@ public class VacuumWorldParser {
     }
 
     private static Actuator parseActuator(JsonObject actuatorRepresentation) {
-	ActuatorPurposeEnum purpose = ActuatorPurposeEnum.valueOf(actuatorRepresentation.get("purpose").getAsString());
+	ActuatorPurposeEnum purpose = ActuatorPurposeEnum.valueOf(actuatorRepresentation.get("purpose").getAsString().toUpperCase());
 	
 	return new VacuumWorldActuator(purpose);
     }
@@ -208,7 +208,7 @@ public class VacuumWorldParser {
     }
 
     private static Sensor parseSensor(JsonObject sensorRepresentation) {
-	SensorPurposeEnum purpose = SensorPurposeEnum.valueOf(sensorRepresentation.get("purpose").getAsString());
+	SensorPurposeEnum purpose = SensorPurposeEnum.valueOf(sensorRepresentation.get("purpose").getAsString().toUpperCase());
 	
 	return new VacuumWorldSensor(purpose);
     }

@@ -15,4 +15,15 @@ public enum VacuumWorldDirtColor {
 	    throw new UnsupportedOperationException();
 	}
     }
+    
+    public char toChar() {
+	switch(this) {
+	case GREEN:
+	    return 'g';
+	case ORANGE:
+	    return 'o';
+	default:
+	    throw new UnsupportedOperationException();
+	}
+    }
 }

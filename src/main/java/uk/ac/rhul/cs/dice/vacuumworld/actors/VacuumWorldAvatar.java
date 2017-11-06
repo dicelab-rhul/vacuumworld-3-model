@@ -22,6 +22,10 @@ public class VacuumWorldAvatar extends AbstractAvatar {
     public VacuumWorldAvatar(String id, AvatarAppearance appearance, List<Sensor> sensors, List<Actuator> actuators, PrincipalListener principalListener) {
 	super(id, appearance, sensors, actuators, principalListener);
     }
+    
+    public VacuumWorldAvatar(VacuumWorldAvatar toCopy) {
+	this(toCopy.getID(), toCopy.getAppearance(), toCopy.getAllSensors(), toCopy.getAllActuators(), toCopy.getPrincipalListener());
+    }
 
     @Override
     public void sendFeedbackToPrincipal(Analyzable... feedback) {

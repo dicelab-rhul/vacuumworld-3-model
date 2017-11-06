@@ -11,7 +11,6 @@ import com.google.common.collect.ImmutableSet;
 import uk.ac.rhul.cs.dice.agentcontainers.interfaces.EnvironmentAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldCoordinates;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldLocation;
-import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldLocationAppearance;
 
 public class VacuumWorldEnvironmentAppearance implements EnvironmentAppearance {
     private static final long serialVersionUID = 3587669408864383174L;

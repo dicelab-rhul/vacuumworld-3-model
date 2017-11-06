@@ -1,15 +1,15 @@
 {
-    "size": 9,
+    "size": 3,
     "notable_locations": [
         {
-            "x": 4,
-            "y": 4,
+            "x": 1,
+            "y": 1,
             "actor": {
                 "type": "cleaning_agent",
                 "id": "Agent-qwertyuiop",
                 "color": "orange",
                 "orientation": "north",
-                "mind": "SomeMind",
+                "mind": "uk.ac.rhul.cs.dice.vacuumworld.actors.minds.VacuumWorldDefaultMind",
                 "sensors": [
                     {
                         "id": "Sensor-asdasdasd",
@@ -44,21 +44,21 @@
             }
         },
         {
-            "x": 2,
-            "y": 3,
+            "x": 0,
+            "y": 0,
             "dirt": {
                 "color": "orange"
             }
         },
         {
-            "x": 3,
+            "x": 2,
             "y": 2,
             "actor": {
                 "type": "user",
                 "id": "User-qwertyuiop",
                 "color": null,
                 "orientation": "west",
-                "mind": "SomeUserMind",
+                "mind": "uk.ac.rhul.cs.dice.vacuumworld.actors.minds.VacuumWorldDefaultMind",
                 "sensors": [
                     {
                         "id": "Sensor-kghsfhgusfhgl",
@@ -90,7 +90,7 @@
             }
         },
         {
-            "x": 3,
+            "x": 1,
             "y": 2,
             "actor": {
                 "type": "avatar",
@@ -98,7 +98,7 @@
                 "color": null,
                 "orientation": "east",
                 "port": 12345,
-                "mind": "SomeAvatarMind",
+                "mind": "uk.ac.rhul.cs.dice.vacuumworld.actors.minds.VacuumWorldPrincipalListener",
                 "sensors": [
                     {
                         "id": "Sensor-kghsfhgusfhgl",

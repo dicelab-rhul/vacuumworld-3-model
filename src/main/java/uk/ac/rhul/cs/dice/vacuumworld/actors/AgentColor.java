@@ -13,4 +13,18 @@ public enum AgentColor {
 	    return color.canBeCleanedBy(this);
 	}
     }
+    
+    public char toChar() {
+	switch(this) {
+	case GREEN:
+	    return 'G';
+	case ORANGE:
+	    return 'O';
+	case WHITE:
+	    return 'W';
+	case UNDEFINED:
+	default:
+	    throw new IllegalArgumentException();
+	}
+    }
 }

@@ -52,6 +52,6 @@ public abstract class AbstractVacuumWorldMind extends AbstractAgentMind {
 
     @Override
     public <T extends Action<?>> void execute(T action) {
-	//TODO
+	return;
     }
 }

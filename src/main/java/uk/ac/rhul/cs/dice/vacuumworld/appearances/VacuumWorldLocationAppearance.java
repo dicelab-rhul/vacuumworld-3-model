@@ -170,6 +170,16 @@ public class VacuumWorldLocationAppearance implements Appearance, VacuumWorldLoc
     }
     
     @Override
+    public boolean isACleaningAgentWithSuchColorThere(AgentColor color) {
+	return isACleaningAgentThere() && color.equals(((VacuumWorldActorAppearance) this.activeBodyAppearance).getColor());
+    }
+    
+    @Override
+    public boolean isACleaningAgentCompatibleWithSuchDirtThere(VacuumWorldDirtColor color) {
+	return isACleaningAgentThere() && color.canBeCleanedBy(((VacuumWorldActorAppearance) this.activeBodyAppearance).getColor());
+    }
+    
+    @Override
     public boolean isAUserThere() {
 	return this.activeBodyAppearance != null && VacuumWorldActorAppearance.class.isAssignableFrom(this.activeBodyAppearance.getClass()) && ((VacuumWorldActorAppearance) this.activeBodyAppearance).isUser();
     }

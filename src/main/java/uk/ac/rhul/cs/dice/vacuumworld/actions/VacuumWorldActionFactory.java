@@ -1,0 +1,95 @@
+package uk.ac.rhul.cs.dice.vacuumworld.actions;
+
+import java.util.Collections;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import uk.ac.rhul.cs.dice.vacuumworld.actions.enums.VacuumWorldCommunicativeActionsEnum;
+import uk.ac.rhul.cs.dice.vacuumworld.actions.enums.VacuumWorldPhysicalActionsEnum;
+import uk.ac.rhul.cs.dice.vacuumworld.actions.enums.VacuumWorldSensingActionsEnum;
+import uk.ac.rhul.cs.dice.vacuumworld.actions.messages.VacuumWorldMessage;
+
+public class VacuumWorldActionFactory {
+
+    private VacuumWorldActionFactory() {}
+    
+    public static VacuumWorldAbstractAction generate(Enum<?> code, Object... additional) {
+	if(VacuumWorldPhysicalActionsEnum.class.isAssignableFrom(code.getClass())) {
+	    return generatePhysical((VacuumWorldPhysicalActionsEnum) code);
+	}
+	else if(VacuumWorldSensingActionsEnum.class.isAssignableFrom(code.getClass())) {
+	    return generateSensing((VacuumWorldSensingActionsEnum) code);
+	}
+	else if(VacuumWorldCommunicativeActionsEnum.class.isAssignableFrom(code.getClass())) {
+	    return generateCommunicative((VacuumWorldCommunicativeActionsEnum) code, additional);
+	}
+	else {
+	    throw new IllegalArgumentException();
+	}
+    }
+
+    private static VacuumWorldAbstractAction generatePhysical(VacuumWorldPhysicalActionsEnum code) {
+	switch(code) {
+	case MOVE:
+	    return new VacuumWorldMoveAction();
+	case TURN_LEFT:
+	    return new VacuumWorldTurnLeftAction();
+	case TURN_RIGHT:
+	    return new VacuumWorldTurnRightAction();
+	case CLEAN:
+	    return new VacuumWorldCleanAction();
+	case DROP_DIRT:
+	    return new VacuumWorldDropDirtAction(null); //i.e., random color.
+	default:
+	    throw new IllegalArgumentException();
+	}
+    }
+
+    private static VacuumWorldAbstractAction generateSensing(VacuumWorldSensingActionsEnum code) {
+	switch(code) {
+	case SENSE:
+	    return new VacuumWorldSensingAction();
+	case STAY_IDLE:
+	    throw new UnsupportedOperationException("Not yet implemeted.");
+	default:
+	    throw new IllegalArgumentException();
+	}
+    }
+
+    private static VacuumWorldAbstractAction generateCommunicative(VacuumWorldCommunicativeActionsEnum code, Object[] additional) {
+	switch(code) {
+	case SPEAK:
+	    return new VacuumWorldSpeakAction(parseMessage(additional), parseRecipients(additional));
+	case BROADCAST:
+	    return new VacuumWorldBroadcastingAction(parseMessage(additional));
+	default:
+	    throw new IllegalArgumentException();
+		
+	}
+    }
+
+    private static VacuumWorldMessage parseMessage(Object[] additional) {
+	checkArgumentsLength(additional, 1);
+	Object o = additional[0];
+	
+	return o instanceof String ? new VacuumWorldMessage((String) o) : new VacuumWorldMessage();
+    }
+
+    private static Set<String> parseRecipients(Object[] additional) {
+	checkArgumentsLength(additional, 2);
+	
+	Object o = additional[1];
+	
+	return o instanceof Set<?> ? parseRecipients((Set<?>) o) : Collections.emptySet();
+    }
+    
+    private static Set<String> parseRecipients(Set<?> candidates) {
+	return candidates.stream().filter(candidate -> String.class.isAssignableFrom(candidate.getClass())).map(String.class::cast).collect(Collectors.toSet());
+    }
+
+    private static void checkArgumentsLength(Object[] additional, int minimumLength) {
+	if(additional.length < minimumLength) {
+	    throw new IllegalArgumentException();
+	}
+    }
+}

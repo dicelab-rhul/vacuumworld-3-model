@@ -17,7 +17,11 @@ public class VacuumWorldDropDirtAction extends VacuumWorldAbstractPhysicalAction
     public VacuumWorldDropDirtAction(VacuumWorldDirtColor droppedDirtColor) {
 	super(VacuumWorldPhysicalActionsEnum.DROP_DIRT);
 	
-	this.droppedDirtColor = droppedDirtColor;
+	this.droppedDirtColor = droppedDirtColor == null ? selectRandomDirtColor() : droppedDirtColor;
+    }
+
+    private VacuumWorldDirtColor selectRandomDirtColor() {
+	return VacuumWorldDirtColor.random();
     }
 
     @Override

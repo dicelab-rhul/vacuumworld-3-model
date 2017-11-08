@@ -268,11 +268,11 @@ public class VacuumWorldLocationAppearance implements Appearance, VacuumWorldLoc
     public String toString() {
         StringBuilder builder = new StringBuilder();
         
-        builder.append("XXXXXXXXX\n");
-        builder.append("X       X\n");
+        builder.append("#########\n");
+        builder.append("#       #\n");
         builder.append(getMiddleLine());
-        builder.append("X       X\n");
-        builder.append("XXXXXXXXX\n");
+        builder.append("#       #\n");
+        builder.append("#########\n");
         
         return builder.toString();
     }
@@ -280,7 +280,7 @@ public class VacuumWorldLocationAppearance implements Appearance, VacuumWorldLoc
     private Object getMiddleLine() {
 	StringBuilder builder = new StringBuilder();
 	
-	builder.append("X");
+	builder.append("#");
 	
 	if(isACleaningAgentThere()) {
 	    builder.append(getMiddleLineWithAgent());

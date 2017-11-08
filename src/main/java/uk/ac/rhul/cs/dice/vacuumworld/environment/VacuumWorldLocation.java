@@ -12,7 +12,7 @@ import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldDirtColor;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldLocationAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.dirt.VacuumWorldDirt;
 
-public class VacuumWorldLocation implements VacuumWorldLocationInterface {
+public class VacuumWorldLocation implements VacuumWorldLocationInterface, Comparable<VacuumWorldLocation> {
     private VacuumWorldCoordinates coordinates;
     private VacuumWorldLocationAppearance appearance;
     private VacuumWorldCleaningAgent agent;
@@ -260,6 +260,32 @@ public class VacuumWorldLocation implements VacuumWorldLocationInterface {
 	    this.dirt = dirt;
 	    reviseAppearance();
 	}
+    }
+    
+    //I only care about the X value
+    @Override
+    public int compareTo(VacuumWorldLocation other) {
+        return Integer.valueOf(getCoordinates().getX()).compareTo(other.getCoordinates().getX());
+    }
+
+    @Override
+    public int hashCode() {
+	final int prime = 31;
+	int result = 1;
+	
+	result = prime * result + ((this.appearance == null) ? 0 : this.appearance.hashCode());
+	
+	return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	return obj != null && obj instanceof VacuumWorldLocation && this.appearance.equals(((VacuumWorldLocation) obj).getAppearance());
+    }
+
+    @Override
+    public String toString() {
+        return this.appearance.toString();
     }
     
     //TODO change

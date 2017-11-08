@@ -5,21 +5,26 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class LogUtils {
-    private static final Logger LOGGER = initLogger();
+    private static final Logger LOGGER = initLogger(true);
+    private static final Logger ERRORS_LOGGER = initLogger(false);
 
     private LogUtils() {
     }
 
-    private static Logger initLogger() {
-	Logger logger = Logger.getAnonymousLogger();
+    private static Logger initLogger(boolean stdout) {
+	Logger logger = Logger.getGlobal();
 	logger.setUseParentHandlers(false);
-	ConsoleHandler handler = new ConsoleHandler();
+	ConsoleHandler handler = stdout ? new VacuumWorldConsoleHandler() : new ConsoleHandler();
 	handler.setFormatter(new VacuumWorldLogFormatter());
 	logger.addHandler(handler);
 
 	return logger;
     }
 
+    public static <T> void log(T message) {
+	log(Level.INFO, message.toString());
+    }
+    
     public static void log(String message) {
 	log(Level.INFO, message);
     }
@@ -53,7 +58,7 @@ public class LogUtils {
     }
 
     public static void log(Level level, String message, Exception e) {
-	LOGGER.log(level, message, e);
+	ERRORS_LOGGER.log(level, message, e);
     }
 
     public static void logWithClass(String source, String message) {

@@ -16,13 +16,13 @@ public class VacuumWorld {
 	//VacuumWorldEnvironment env = new VacuumWorldEnvironment(9, false);
 	VacuumWorldPrinter.dumpModel(env.getGrid());
 	
-	LogUtils.log(VacuumWorldAbstractAction.generate('M').toString());
-	LogUtils.log(VacuumWorldAbstractAction.generate('L').toString());
-	LogUtils.log(VacuumWorldAbstractAction.generate('R').toString());
-	LogUtils.log(VacuumWorldAbstractAction.generate('C').toString());
-	LogUtils.log(VacuumWorldAbstractAction.generate('D').toString());
-	LogUtils.log(VacuumWorldAbstractAction.generate('S').toString());
-	LogUtils.log(VacuumWorldAbstractAction.generate('T', new VacuumWorldMessage("Hello World"), new HashSet<>(Arrays.asList("A1, A2"))).toString());
-	LogUtils.log(VacuumWorldAbstractAction.generate('B', new VacuumWorldMessage("Hello World")).toString());
+	LogUtils.log(VacuumWorldAbstractAction.generate('M'));
+	LogUtils.log(VacuumWorldAbstractAction.generate('L'));
+	LogUtils.log(VacuumWorldAbstractAction.generate('R'));
+	LogUtils.log(VacuumWorldAbstractAction.generate('C'));
+	LogUtils.log(VacuumWorldAbstractAction.generate('D'));
+	LogUtils.log(VacuumWorldAbstractAction.generate('S'));
+	LogUtils.log(VacuumWorldAbstractAction.generate('T', new VacuumWorldMessage("Hello World"), new HashSet<>(Arrays.asList("A1, A2"))));
+	LogUtils.log(VacuumWorldAbstractAction.generate('B', new VacuumWorldMessage("Hello World")));
     }
 }

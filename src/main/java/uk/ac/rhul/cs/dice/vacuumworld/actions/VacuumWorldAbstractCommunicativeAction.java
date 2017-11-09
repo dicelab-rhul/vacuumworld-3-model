@@ -8,7 +8,7 @@ import uk.ac.rhul.cs.dice.agentactions.interfaces.CommunicativeAction;
 import uk.ac.rhul.cs.dice.agentactions.interfaces.Result;
 import uk.ac.rhul.cs.dice.agentcontainers.interfaces.Environment;
 import uk.ac.rhul.cs.dice.agentcontainers.interfaces.Physics;
-import uk.ac.rhul.cs.dice.vacuumworld.LogUtils;
+import uk.ac.rhul.cs.dice.agentcommon.utils.LogUtils;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.enums.VacuumWorldCommunicativeActionsEnum;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.messages.VacuumWorldMessage;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.results.VacuumWorldCommunicativeActionResult;

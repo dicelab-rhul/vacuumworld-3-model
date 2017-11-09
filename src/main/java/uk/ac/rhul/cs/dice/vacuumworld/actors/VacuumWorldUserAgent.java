@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import com.google.gson.JsonObject;
+
 import uk.ac.rhul.cs.dice.agent.abstractimpl.AbstractAgent;
 import uk.ac.rhul.cs.dice.agent.enums.ActuatorPurposeEnum;
 import uk.ac.rhul.cs.dice.agent.interfaces.Actuator;
@@ -99,5 +101,10 @@ public class VacuumWorldUserAgent extends AbstractAgent {
     @Override
     public void setOutputChannels(ObjectOutputStream output) {
 	this.output = output;
+    }
+    
+    @Override
+    public JsonObject serialize() {
+        return ((VacuumWorldActorAppearance) getAppearance()).serialize();
     }
 }

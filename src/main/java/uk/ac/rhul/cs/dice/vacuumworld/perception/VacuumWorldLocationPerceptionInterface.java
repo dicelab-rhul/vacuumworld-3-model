@@ -1,5 +1,9 @@
 package uk.ac.rhul.cs.dice.vacuumworld.perception;
 
+import java.io.Serializable;
+
+import com.google.gson.JsonObject;
+
 import uk.ac.rhul.cs.dice.agent.interfaces.ActiveBody;
 import uk.ac.rhul.cs.dice.agentcommon.interfaces.Appearance;
 import uk.ac.rhul.cs.dice.agentcontainers.enums.Orientation;
@@ -23,7 +27,9 @@ import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldLocation;
  * @author cloudstrife9999
  *
  */
-public interface VacuumWorldLocationPerceptionInterface {
+public interface VacuumWorldLocationPerceptionInterface extends Serializable {
+    
+    public abstract JsonObject serialize();
     
     /**
      * 

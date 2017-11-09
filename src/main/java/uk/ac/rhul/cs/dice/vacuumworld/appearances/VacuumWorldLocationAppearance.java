@@ -1,14 +1,17 @@
 package uk.ac.rhul.cs.dice.vacuumworld.appearances;
 
+import com.google.gson.JsonObject;
+
 import uk.ac.rhul.cs.dice.agentcommon.interfaces.Appearance;
 import uk.ac.rhul.cs.dice.agentcontainers.enums.Orientation;
+import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldSerializer;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.ActorType;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.AgentColor;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldCoordinates;
 import uk.ac.rhul.cs.dice.vacuumworld.exceptions.VacuumWorldRuntimeException;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldLocationPerceptionInterface;
 
-public class VacuumWorldLocationAppearance implements Appearance, VacuumWorldLocationPerceptionInterface {
+public class VacuumWorldLocationAppearance implements Appearance, VacuumWorldLocationPerceptionInterface, Comparable<VacuumWorldLocationAppearance> {
     private static final long serialVersionUID = -2552147509566518640L;
     private static final int MAX_WALLS = 4;
     private static final String TEXTUAL_BORDER = "X\n";
@@ -262,6 +265,44 @@ public class VacuumWorldLocationAppearance implements Appearance, VacuumWorldLoc
     @Override
     public VacuumWorldAvatarAppearance getAvatarAppearanceIfAny() {
 	return isAnAvatarThere() ? (VacuumWorldAvatarAppearance) this.activeBodyAppearance : null;
+    }
+    
+    //I only care about the X value
+    @Override
+    public int compareTo(VacuumWorldLocationAppearance other) {
+        return Integer.valueOf(getCoordinates().getX()).compareTo(other.getCoordinates().getX());
+    }
+    
+    @Override
+    public int hashCode() {
+	final int prime = 31;
+	int result = 1;
+	
+	result = prime * result + ((this.coordinates == null) ? 0 : this.coordinates.hashCode());
+	result = prime * result + (this.wallOnEast ? 1231 : 1237);
+	result = prime * result + (this.wallOnNorth ? 1231 : 1237);
+	result = prime * result + (this.wallOnSouth ? 1231 : 1237);
+	result = prime * result + (this.wallOnWest ? 1231 : 1237);
+	
+	return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	return obj != null && obj instanceof VacuumWorldLocationAppearance && checkFields((VacuumWorldLocationAppearance) obj);
+    }
+
+    private boolean checkFields(VacuumWorldLocationAppearance obj) {
+	return obj != null && this.coordinates.equals(obj.coordinates) && checkWalls(obj);
+    }
+
+    private boolean checkWalls(VacuumWorldLocationAppearance obj) {
+	return this.wallOnNorth == obj.wallOnNorth && this.wallOnSouth == obj.wallOnSouth && this.wallOnWest == obj.wallOnWest && this.wallOnEast == obj.wallOnEast;
+    }
+
+    @Override
+    public JsonObject serialize() {
+	return VacuumWorldSerializer.serialize(this);
     }
     
     @Override

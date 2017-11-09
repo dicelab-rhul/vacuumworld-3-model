@@ -3,11 +3,13 @@ package uk.ac.rhul.cs.dice.vacuumworld.appearances;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
+import com.google.gson.JsonObject;
 
 import uk.ac.rhul.cs.dice.agent.interfaces.ActorAppearance;
 import uk.ac.rhul.cs.dice.agent.interfaces.Actuator;
 import uk.ac.rhul.cs.dice.agent.interfaces.Sensor;
 import uk.ac.rhul.cs.dice.agentcontainers.enums.Orientation;
+import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldSerializer;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.ActorType;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.AgentColor;
 
@@ -90,5 +92,10 @@ public class VacuumWorldActorAppearance implements ActorAppearance {
     
     public void turnRight() {
 	this.orientation = this.orientation.getRight();
+    }
+    
+    @Override
+    public JsonObject serialize() {
+        return VacuumWorldSerializer.serialize(this);
     }
 }

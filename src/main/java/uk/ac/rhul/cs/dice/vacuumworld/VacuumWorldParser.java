@@ -166,8 +166,8 @@ public class VacuumWorldParser {
 	try {
 	    int port = actorRepresentation.get("port").getAsInt();
 	    VacuumWorldPrincipalListener listener = new VacuumWorldPrincipalListener(new ServerSocket(port));
-	    VacuumWorldPrincipalListenerAppearance mindAppearance = new VacuumWorldPrincipalListenerAppearance(port);
-	    AvatarAppearance avatarAppearance = new VacuumWorldAvatarAppearance(id, orientation, mindAppearance, sensors, actuators);
+	    VacuumWorldPrincipalListenerAppearance mindAppearance = new VacuumWorldPrincipalListenerAppearance(listener.getName(), port);
+	    AvatarAppearance avatarAppearance = new VacuumWorldAvatarAppearance(id, orientation, port, mindAppearance, sensors, actuators);
 	    
 	    return new VacuumWorldAvatar(id, avatarAppearance, sensors, actuators, listener);
 	}

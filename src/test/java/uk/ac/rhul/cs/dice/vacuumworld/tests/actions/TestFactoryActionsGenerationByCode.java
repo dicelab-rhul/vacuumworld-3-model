@@ -6,7 +6,7 @@ import java.util.HashSet;
 import org.junit.Assert;
 import org.junit.Test;
 
-import uk.ac.rhul.cs.dice.vacuumworld.LogUtils;
+import uk.ac.rhul.cs.dice.agentcommon.utils.LogUtils;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldBroadcastingAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldCleanAction;

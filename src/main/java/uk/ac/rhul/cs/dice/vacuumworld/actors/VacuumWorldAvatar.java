@@ -4,6 +4,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.List;
 
+import com.google.gson.JsonObject;
+
 import uk.ac.rhul.cs.dice.agent.abstractimpl.AbstractAvatar;
 import uk.ac.rhul.cs.dice.agent.enums.ActuatorPurposeEnum;
 import uk.ac.rhul.cs.dice.agent.interfaces.Actuator;
@@ -91,5 +93,10 @@ public class VacuumWorldAvatar extends AbstractAvatar {
     @Override
     public void turnRight() {
 	((VacuumWorldAvatarAppearance) getAppearance()).turnRight();
+    }
+    
+    @Override
+    public JsonObject serialize() {
+        return ((VacuumWorldAvatarAppearance) this.getAppearance()).serialize();
     }
 }

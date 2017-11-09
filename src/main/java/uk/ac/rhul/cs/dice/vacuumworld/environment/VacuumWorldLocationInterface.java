@@ -37,4 +37,12 @@ public interface VacuumWorldLocationInterface extends Location {
     public abstract void addActor(Actor actor);
     public abstract VacuumWorldDirt removeDirt();
     public abstract void addDirt(VacuumWorldDirt dirt);
+    
+    public default boolean isEmpty() {
+	return !containsAnActor() && !containsDirt();
+    }
+    
+    public default boolean isNotEmpty() {
+	return !isEmpty();
+    }
 }

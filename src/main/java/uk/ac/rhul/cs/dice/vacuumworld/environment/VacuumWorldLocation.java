@@ -1,5 +1,7 @@
 package uk.ac.rhul.cs.dice.vacuumworld.environment;
 
+import com.google.gson.JsonObject;
+
 import uk.ac.rhul.cs.dice.agentcommon.interfaces.Actor;
 import uk.ac.rhul.cs.dice.agentcommon.interfaces.Appearance;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.AgentColor;
@@ -13,6 +15,7 @@ import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldLocationAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.dirt.VacuumWorldDirt;
 
 public class VacuumWorldLocation implements VacuumWorldLocationInterface, Comparable<VacuumWorldLocation> {
+    private static final long serialVersionUID = -4705357825465363219L;
     private VacuumWorldCoordinates coordinates;
     private VacuumWorldLocationAppearance appearance;
     private VacuumWorldCleaningAgent agent;
@@ -60,7 +63,7 @@ public class VacuumWorldLocation implements VacuumWorldLocationInterface, Compar
 	    return null;
 	}
     }
-
+    
     @Override
     public boolean containsAnActor() {
 	return this.agent != null || this.user != null || this.avatar != null;
@@ -162,7 +165,7 @@ public class VacuumWorldLocation implements VacuumWorldLocationInterface, Compar
     @Override
     public void addAgent(VacuumWorldCleaningAgent agent) {
 	if(containsAnActor()) {
-	    throw new UnsupportedOperationException(getOccupiedErrorMessage(this.agent != null));
+	    throw new UnsupportedOperationException(getOccupiedErrorMessage(getActiveBody(), getActiveBodyID()));
 	}
 	else {
 	    this.agent = agent;
@@ -182,7 +185,7 @@ public class VacuumWorldLocation implements VacuumWorldLocationInterface, Compar
     @Override
     public void addUser(VacuumWorldUserAgent user) {
 	if(containsAnActor()) {
-	    throw new UnsupportedOperationException(getOccupiedErrorMessage(this.agent != null));
+	    throw new UnsupportedOperationException(getOccupiedErrorMessage(getActiveBody(), getActiveBodyID()));
 	}
 	else {
 	    this.user = user;
@@ -202,7 +205,7 @@ public class VacuumWorldLocation implements VacuumWorldLocationInterface, Compar
     @Override
     public void addAvatar(VacuumWorldAvatar avatar) {
 	if(containsAnActor()) {
-	    throw new UnsupportedOperationException(getOccupiedErrorMessage(this.agent != null));
+	    throw new UnsupportedOperationException(getOccupiedErrorMessage(getActiveBody(), getActiveBodyID()));
 	}
 	else {
 	    this.avatar = avatar;
@@ -265,7 +268,7 @@ public class VacuumWorldLocation implements VacuumWorldLocationInterface, Compar
     //I only care about the X value
     @Override
     public int compareTo(VacuumWorldLocation other) {
-        return Integer.valueOf(getCoordinates().getX()).compareTo(other.getCoordinates().getX());
+        return this.appearance.compareTo(other.getAppearance());
     }
 
     @Override
@@ -284,20 +287,54 @@ public class VacuumWorldLocation implements VacuumWorldLocationInterface, Compar
     }
 
     @Override
+    public JsonObject serialize() {
+	return this.appearance.serialize();
+    }
+    
+    @Override
     public String toString() {
         return this.appearance.toString();
     }
     
-    //TODO change
-    private String getOccupiedErrorMessage(boolean agent) {
+    private String getOccupiedErrorMessage(String activeBody, String activeBodyId) {
 	StringBuilder builder = new StringBuilder("The location at ");
 	
 	builder.append(this.coordinates);
 	builder.append(" is already occupied by ");
-	builder.append(agent ? "agent " : "user ");
-	builder.append(agent ? this.agent.getID() : this.user.getID());
+	builder.append(activeBody);
+	builder.append(activeBodyId);
 	builder.append('.');
 	
 	return builder.toString();
+    }
+
+    private String getActiveBody() {
+	if(containsACleaningAgent()) {
+	    return "agent ";
+	}
+	else if(containsAUser()) {
+	    return "user ";
+	}
+	else if(containsAnAvatar()) {
+	    return "avatar ";
+	}
+	else {
+	    return "unknown ";
+	}
+    }
+
+    private String getActiveBodyID() {
+	if(containsACleaningAgent()) {
+	    return this.agent.getID();
+	}
+	else if(containsAUser()) {
+	    return this.user.getID();
+	}
+	else if(containsAnAvatar()) {
+	    return this.avatar.getID();
+	}
+	else {
+	    return "UNKNOWN";
+	}
     }
 }

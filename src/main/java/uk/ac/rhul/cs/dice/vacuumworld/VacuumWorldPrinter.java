@@ -1,10 +1,14 @@
 package uk.ac.rhul.cs.dice.vacuumworld;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
+import com.google.common.collect.ImmutableMap;
+
+import uk.ac.rhul.cs.dice.agentcommon.utils.LogUtils;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.ActorType;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldLocationAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldCoordinates;
@@ -14,18 +18,25 @@ public class VacuumWorldPrinter {
 
     private VacuumWorldPrinter() {}
     
-    public static void dumpModel(Map<VacuumWorldCoordinates, VacuumWorldLocation> model) {
+    public static void dumpModelFromLocations(Map<VacuumWorldCoordinates, VacuumWorldLocation> model) {
+	Map<VacuumWorldCoordinates, VacuumWorldLocationAppearance> newModel = new HashMap<>();
+	model.entrySet().forEach(e -> newModel.put(e.getKey(), e.getValue().getAppearance()));
+	
+	dumpModelFromLocationAppearances(ImmutableMap.copyOf(newModel));
+    }
+    
+    public static void dumpModelFromLocationAppearances(Map<VacuumWorldCoordinates, VacuumWorldLocationAppearance> model) {
 	int size = (int) Math.sqrt(model.size());
 	String representation = size == 1 ? getSingleLocationRepresentation(model) : buildRows(model, size);
 	
 	LogUtils.log(representation);
     }
     
-    private static String getSingleLocationRepresentation(Map<VacuumWorldCoordinates, VacuumWorldLocation> model) {
-	return model.get(new VacuumWorldCoordinates(0, 0)).getAppearance().toString();
+    private static String getSingleLocationRepresentation(Map<VacuumWorldCoordinates, VacuumWorldLocationAppearance> model) {
+	return model.get(new VacuumWorldCoordinates(0, 0)).toString();
     }
 
-    private static String buildRows(Map<VacuumWorldCoordinates, VacuumWorldLocation> model, int size) {
+    private static String buildRows(Map<VacuumWorldCoordinates, VacuumWorldLocationAppearance> model, int size) {
 	StringBuilder builder = new StringBuilder();
 	
 	for(int i = 0; i < size; i++) {
@@ -35,7 +46,7 @@ public class VacuumWorldPrinter {
 	return builder.toString();
     }
 
-    private static String buildRow(Map<VacuumWorldCoordinates, VacuumWorldLocation> model, int i, int size) {
+    private static String buildRow(Map<VacuumWorldCoordinates, VacuumWorldLocationAppearance> model, int i, int size) {
 	if(i == 0) {
 	    return buildFirstRow(model, size);
 	}
@@ -47,7 +58,7 @@ public class VacuumWorldPrinter {
 	}
     }
 
-    private static String buildIntermediateRow(Map<VacuumWorldCoordinates, VacuumWorldLocation> model, int i, int size) {
+    private static String buildIntermediateRow(Map<VacuumWorldCoordinates, VacuumWorldLocationAppearance> model, int i, int size) {
 	StringBuilder builder = new StringBuilder();
 	
 	builder.append(buildWhiteLine(size));
@@ -58,7 +69,7 @@ public class VacuumWorldPrinter {
 	return builder.toString();
     }
 
-    private static String buildLastRow(Map<VacuumWorldCoordinates, VacuumWorldLocation> model, int size) {
+    private static String buildLastRow(Map<VacuumWorldCoordinates, VacuumWorldLocationAppearance> model, int size) {
 	StringBuilder builder = new StringBuilder();
 	
 	builder.append(buildWhiteLine(size));
@@ -69,7 +80,7 @@ public class VacuumWorldPrinter {
 	return builder.toString();
     }
 
-    private static String buildFirstRow(Map<VacuumWorldCoordinates, VacuumWorldLocation> model, int size) {
+    private static String buildFirstRow(Map<VacuumWorldCoordinates, VacuumWorldLocationAppearance> model, int size) {
 	StringBuilder builder = new StringBuilder();
 	
 	builder.append(buildWallLine(size));
@@ -93,7 +104,7 @@ public class VacuumWorldPrinter {
 	return builder.toString();
     }
 
-    private static String buildContextualLine(List<VacuumWorldLocation>locationsInSpecificRow) {
+    private static String buildContextualLine(List<VacuumWorldLocationAppearance>locationsInSpecificRow) {
 	StringBuilder builder = new StringBuilder("#");
 	
 	for(int i = 0; i < locationsInSpecificRow.size() - 1; i++) {
@@ -107,14 +118,13 @@ public class VacuumWorldPrinter {
 	return builder.toString();
     }
 
-    private static String parseLocation(VacuumWorldLocation vacuumWorldLocation) {
-	VacuumWorldLocationAppearance appearance = vacuumWorldLocation.getAppearance();
+    private static String parseLocation(VacuumWorldLocationAppearance location) {
 	
-	if(appearance.isAnActiveBodyThere()) {
-	    return parseLocationWithActiveBody(appearance);
+	if(location.isAnActiveBodyThere()) {
+	    return parseLocationWithActiveBody(location);
 	}
-	else if(appearance.isDirtThere()) {
-	    return "   " + appearance.getDirtAppearanceIfAny().getColor().toChar() + "   ";
+	else if(location.isDirtThere()) {
+	    return "   " + location.getDirtAppearanceIfAny().getColor().toChar() + "   ";
 	}
 	else {
 	    return "       ";

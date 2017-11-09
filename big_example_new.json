@@ -1,0 +1,299 @@
+{
+    "size": 10,
+    "notable_locations": [
+        {
+            "x": 2,
+            "y": 2,
+            "actor": {
+                "type": "user",
+                "id": "User-1",
+                "color": null,
+                "orientation": "west",
+                "mind": "uk.ac.rhul.cs.dice.vacuumworld.actors.minds.VacuumWorldDefaultMind",
+                "sensors": [
+                    {
+                        "id": "Sensor-0f901f6b-243e-4104-afc8-4468eece5cb0",
+                        "purpose": "see"
+                    },
+                    {
+                        "id": "Sensor-5cdc6972-d6e7-461f-83ba-f9bf639623bb",
+                        "purpose": "listen"
+                    },
+                    {
+                        "id": "Sensor-384b6996-031b-4512-b7f9-f1146f9a9fc3",
+                        "purpose": "other"
+                    }
+                ],
+                "actuators": [
+                    {
+                        "id": "Actuator-dfdf55b3-6b39-40c4-b2cc-aae81b38efe6",
+                        "purpose": "act_physically"
+                    },
+                    {
+                        "id": "Actuator-6ec1f468-2681-4c09-80c9-e8108c3e830a",
+                        "purpose": "speak"
+                    },
+                    {
+                        "id": "Actuator-41f31b66-8323-4885-a670-01a979b09ad3",
+                        "purpose": "other"
+                    }
+                ]
+            }
+        },
+        {
+            "x": 3,
+            "y": 9,
+            "actor": {
+                "type": "cleaning_agent",
+                "id": "Agent-2",
+                "color": "green",
+                "orientation": "south",
+                "mind": "uk.ac.rhul.cs.dice.vacuumworld.actors.minds.VacuumWorldDefaultMind",
+                "sensors": [
+                    {
+                        "id": "Sensor-c8e61fd1-ab9a-448d-8e3d-27a0219ab46f",
+                        "purpose": "see"
+                    },
+                    {
+                        "id": "Sensor-c3ae513c-9113-4ed4-84b4-bfe5d14f0dc8",
+                        "purpose": "listen"
+                    },
+                    {
+                        "id": "Sensor-7a043392-7a33-43cb-8ccf-3b400a37d9d3",
+                        "purpose": "other"
+                    }
+                ],
+                "actuators": [
+                    {
+                        "id": "Actuator-e9247276-006e-42cc-9b94-c2c966b44850",
+                        "purpose": "act_physically"
+                    },
+                    {
+                        "id": "Actuator-37ea3dc9-b3d3-4c67-a669-be7d9d43a2d5",
+                        "purpose": "speak"
+                    },
+                    {
+                        "id": "Actuator-68c2e9dc-16f7-44dd-a358-822795f8e0ba",
+                        "purpose": "other"
+                    }
+                ]
+            }
+        },
+        {
+            "x": 4,
+            "y": 6,
+            "dirt": {
+                "color": "green"
+            }
+        },
+        {
+            "x": 4,
+            "y": 9,
+            "actor": {
+                "type": "user",
+                "id": "User-2",
+                "color": null,
+                "orientation": "east",
+                "mind": "uk.ac.rhul.cs.dice.vacuumworld.actors.minds.VacuumWorldDefaultMind",
+                "sensors": [
+                    {
+                        "id": "Sensor-da339ee9-802d-459e-849c-7f9344064255",
+                        "purpose": "see"
+                    },
+                    {
+                        "id": "Sensor-25c0c108-4312-4011-a1f2-7b82cd8652d4",
+                        "purpose": "listen"
+                    },
+                    {
+                        "id": "Sensor-621407b7-ec13-4c1e-a0f8-09e645986198",
+                        "purpose": "other"
+                    }
+                ],
+                "actuators": [
+                    {
+                        "id": "Actuator-4c404303-d443-4e5d-99a8-eff30986d789",
+                        "purpose": "act_physically"
+                    },
+                    {
+                        "id": "Actuator-fa1cca07-7a6f-4a7b-8e07-2c51ef9d9558",
+                        "purpose": "speak"
+                    },
+                    {
+                        "id": "Actuator-f2b06985-c4bb-4201-9bf7-fcd16466c0c2",
+                        "purpose": "other"
+                    }
+                ]
+            },
+            "dirt": {
+                "color": "green"
+            }
+        },
+        {
+            "x": 5,
+            "y": 5,
+            "dirt": {
+                "color": "orange"
+            }
+        },
+        {
+            "x": 6,
+            "y": 3,
+            "dirt": {
+                "color": "orange"
+            }
+        },
+        {
+            "x": 7,
+            "y": 9,
+            "dirt": {
+                "color": "green"
+            }
+        },
+        {
+            "x": 8,
+            "y": 5,
+            "actor": {
+                "type": "avatar",
+                "id": "Avatar-2",
+                "color": null,
+                "orientation": "west",
+                "port": 33333,
+                "mind": "uk.ac.rhul.cs.dice.vacuumworld.actors.minds.VacuumWorldPrincipalListener",
+                "sensors": [
+                    {
+                        "id": "Sensor-3679df29-2cc9-4944-82d9-2931688a03cb",
+                        "purpose": "see"
+                    },
+                    {
+                        "id": "Sensor-989425db-e39c-4986-8893-47ead567090c",
+                        "purpose": "listen"
+                    },
+                    {
+                        "id": "Sensor-0af0e6f6-b58b-48e4-933d-37abfc63e250",
+                        "purpose": "other"
+                    }
+                ],
+                "actuators": [
+                    {
+                        "id": "Actuator-5b0005fb-dbeb-476e-bcab-c8aef3a40ffc",
+                        "purpose": "act_physically"
+                    },
+                    {
+                        "id": "Actuator-4a7e151c-9df6-4df9-b516-6bcd0e09d3ac",
+                        "purpose": "speak"
+                    },
+                    {
+                        "id": "Actuator-0a3907f7-db83-4f80-a04a-6a3a5948880c",
+                        "purpose": "other"
+                    }
+                ]
+            },
+            "dirt": {
+                "color": "green"
+            }
+        },
+        {
+            "x": 8,
+            "y": 8,
+            "dirt": {
+                "color": "orange"
+            }
+        },
+        {
+            "x": 9,
+            "y": 2,
+            "dirt": {
+                "color": "green"
+            }
+        },
+        {
+            "x": 0,
+            "y": 0,
+            "dirt": {
+                "color": "green"
+            }
+        },
+        {
+            "x": 1,
+            "y": 1,
+            "actor": {
+                "type": "cleaning_agent",
+                "id": "Agent-1",
+                "color": "orange",
+                "orientation": "north",
+                "mind": "uk.ac.rhul.cs.dice.vacuumworld.actors.minds.VacuumWorldDefaultMind",
+                "sensors": [
+                    {
+                        "id": "Sensor-31087d3d-5bf3-4179-bb59-cec858a78922",
+                        "purpose": "see"
+                    },
+                    {
+                        "id": "Sensor-4b1a4835-f24e-4661-8e21-d78259e166a5",
+                        "purpose": "listen"
+                    },
+                    {
+                        "id": "Sensor-541d1f19-45f9-443b-85ae-c5c0a431fa0f",
+                        "purpose": "other"
+                    }
+                ],
+                "actuators": [
+                    {
+                        "id": "Actuator-4d1d816a-b331-4e2f-8c3e-349281da3276",
+                        "purpose": "act_physically"
+                    },
+                    {
+                        "id": "Actuator-d4c88629-29c4-4827-be7b-3d7ba57bb513",
+                        "purpose": "speak"
+                    },
+                    {
+                        "id": "Actuator-0204733c-94ea-46d3-825c-6311333d1100",
+                        "purpose": "other"
+                    }
+                ]
+            },
+            "dirt": {
+                "color": "orange"
+            }
+        },
+        {
+            "x": 1,
+            "y": 2,
+            "actor": {
+                "type": "avatar",
+                "id": "Avatar-1",
+                "color": null,
+                "orientation": "east",
+                "port": 44444,
+                "mind": "uk.ac.rhul.cs.dice.vacuumworld.actors.minds.VacuumWorldPrincipalListener",
+                "sensors": [
+                    {
+                        "id": "Sensor-bb4f06ce-c2d6-41ba-b9b0-063d72d7b621",
+                        "purpose": "see"
+                    },
+                    {
+                        "id": "Sensor-a246ad2f-e279-48bf-92e6-e6546dddae12",
+                        "purpose": "listen"
+                    },
+                    {
+                        "id": "Sensor-d9b54c08-91d1-4688-9709-1cc6fa878fbd",
+                        "purpose": "other"
+                    }
+                ],
+                "actuators": [
+                    {
+                        "id": "Actuator-e87e22de-fe3a-428d-86cc-4a4303c36941",
+                        "purpose": "act_physically"
+                    },
+                    {
+                        "id": "Actuator-c281be82-38b8-4c73-b747-dc67887a0a59",
+                        "purpose": "speak"
+                    },
+                    {
+                        "id": "Actuator-cfcb8271-d39c-4f59-b785-1a0175bb533c",
+                        "purpose": "other"
+                    }
+                ]
+            }
+        }
+    ]
+}

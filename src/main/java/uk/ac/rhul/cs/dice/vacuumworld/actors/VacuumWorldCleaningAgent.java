@@ -23,15 +23,22 @@ public class VacuumWorldCleaningAgent extends AbstractAgent {
     private static final long serialVersionUID = -7231158706838196637L;
     private transient ObjectInputStream input;
     private transient ObjectOutputStream output;
+    private volatile boolean stop;
 
     public VacuumWorldCleaningAgent(String id, VacuumWorldActorAppearance appearance, List<Sensor> sensors, List<Actuator> actuators, AgentMind mind) {
 	super(id, appearance, sensors, actuators, mind);
+	
+	this.stop = stop;
     }
 
     public VacuumWorldCleaningAgent(VacuumWorldCleaningAgent toCopy) {
 	super(toCopy.getID(), toCopy.getAppearance(), toCopy.getAllSensors(), toCopy.getAllActuators(), toCopy.getMind());
     }
 
+    public void setStopFlag(boolean stop) {
+	this.stop = stop;
+    }
+    
     @Override
     public void sendToActuator(Action<?> action) {
 	EnvironmentalActionType type = (EnvironmentalActionType) action.getGenericType();
@@ -53,11 +60,23 @@ public class VacuumWorldCleaningAgent extends AbstractAgent {
 
     @Override
     public void run() {
-	VacuumWorldAbstractAction action = (VacuumWorldAbstractAction) getMind().decide();
+	/*VacuumWorldAbstractAction action = (VacuumWorldAbstractAction) getMind().decide();
 	getMind().execute((Action<?>) action);
 	sendToActuator((Action<?>) action);
 	setForMind(sendToEnvironment());
-	sendToMind();
+	sendToMind();*/
+	while(!this.stop) {
+	    System.out.println("Agent " + getID() + " is being executed.");
+	    
+	    try {
+		Thread.sleep(2000);
+	    }
+	    catch (InterruptedException e) {
+		Thread.currentThread().interrupt();
+	    }
+	}
+	
+	System.out.println("Agent " + getID() + ": stop!");
     }
     
     private Set<Analyzable> sendToEnvironment() {

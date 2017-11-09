@@ -7,7 +7,11 @@ import java.util.Set;
 import uk.ac.rhul.cs.dice.agent.abstractimpl.AbstractAgentMind;
 import uk.ac.rhul.cs.dice.agent.interfaces.Analyzable;
 import uk.ac.rhul.cs.dice.agentcommon.interfaces.Action;
+import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractAction;
+import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldMoveAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldSensingAction;
+import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldTurnLeftAction;
+import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldTurnRightAction;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldPerception;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldSpeechPerception;
 
@@ -46,8 +50,21 @@ public abstract class AbstractVacuumWorldMind extends AbstractAgentMind {
     }
 
     @Override
-    public VacuumWorldSensingAction decide() {
+    public VacuumWorldAbstractAction decide() {
 	return new VacuumWorldSensingAction();
+    }
+    
+    public VacuumWorldAbstractAction decideRandomly() {
+	switch(getRng().nextInt(3)) {
+	case 0:
+	    return new VacuumWorldMoveAction();
+	case 1:
+	    return new VacuumWorldTurnLeftAction();
+	case 2:
+	    return new VacuumWorldTurnRightAction();
+	default:
+	    return this.decide();
+	}
     }
 
     @Override

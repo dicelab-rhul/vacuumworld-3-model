@@ -18,5 +18,6 @@ public class VacuumWorld {
 	VacuumWorldSerializer.dumpToFile(Paths.get(".", "example_new.json"), VacuumWorldSerializer.serialize(env));
 	VacuumWorldSerializer.dumpToFile(Paths.get(".", "empty_new.json"), VacuumWorldSerializer.serialize(emptyEnv));
 	VacuumWorldSerializer.dumpToFile(Paths.get(".", "big_example_new.json"), VacuumWorldSerializer.serialize(bigEnv));
+	new VacuumWorldComponentsManager();
     }
 }

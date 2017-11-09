@@ -67,6 +67,10 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 	setAppearance(new VacuumWorldEnvironmentAppearance(this.grid));
     }
     
+    public void setStopFlag(boolean flag) {
+	this.stopFlag = flag;
+    }
+    
     public void setInputStreams(Map<String, ObjectInputStream> input) {
 	this.input = input;
     }
@@ -269,7 +273,17 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
     @Override
     public void run() {
 	while(!this.stopFlag) {
-	    listenAndExecute();
+	    //listenAndExecute();
+	    System.out.println("Environment is being executed.");
+	    
+	    try {
+		Thread.sleep(2000);
+	    }
+	    catch (InterruptedException e) {
+		Thread.currentThread().interrupt();
+	    }
 	}
+	
+	System.out.println("Environment: stop!");
     }
 }

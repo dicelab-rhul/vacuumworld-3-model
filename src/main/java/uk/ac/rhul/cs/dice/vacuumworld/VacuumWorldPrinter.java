@@ -6,9 +6,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
+import org.cloudstrife9999.logutilities.LogUtils;
+
 import com.google.common.collect.ImmutableMap;
 
-import uk.ac.rhul.cs.dice.agentcommon.utils.LogUtils;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.ActorType;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldLocationAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldCoordinates;

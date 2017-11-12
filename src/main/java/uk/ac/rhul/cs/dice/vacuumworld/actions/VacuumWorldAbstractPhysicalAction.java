@@ -1,11 +1,12 @@
 package uk.ac.rhul.cs.dice.vacuumworld.actions;
 
+import org.cloudstrife9999.logutilities.LogUtils;
+
 import uk.ac.rhul.cs.dice.agentactions.enums.ActionResult;
 import uk.ac.rhul.cs.dice.agentactions.interfaces.PhysicalAction;
 import uk.ac.rhul.cs.dice.agentactions.interfaces.Result;
 import uk.ac.rhul.cs.dice.agentcontainers.interfaces.Environment;
 import uk.ac.rhul.cs.dice.agentcontainers.interfaces.Physics;
-import uk.ac.rhul.cs.dice.agentcommon.utils.LogUtils;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.enums.VacuumWorldPhysicalActionsEnum;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.results.VacuumWorldPhysicalActionResult;
 

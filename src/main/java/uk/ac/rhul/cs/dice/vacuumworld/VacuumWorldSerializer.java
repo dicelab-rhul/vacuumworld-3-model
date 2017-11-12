@@ -7,6 +7,8 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
+import org.cloudstrife9999.logutilities.LogUtils;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.internal.Streams;
@@ -14,7 +16,6 @@ import com.google.gson.stream.JsonWriter;
 
 import uk.ac.rhul.cs.dice.agent.interfaces.Actuator;
 import uk.ac.rhul.cs.dice.agent.interfaces.Sensor;
-import uk.ac.rhul.cs.dice.agentcommon.utils.LogUtils;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldAvatarAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldDirtAppearance;

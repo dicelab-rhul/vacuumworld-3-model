@@ -16,7 +16,6 @@ import uk.ac.rhul.cs.dice.agent.interfaces.Analyzable;
 import uk.ac.rhul.cs.dice.agent.interfaces.Sensor;
 import uk.ac.rhul.cs.dice.agentactions.enums.EnvironmentalActionType;
 import uk.ac.rhul.cs.dice.agentcommon.interfaces.Action;
-import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractAction;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
 
 public class VacuumWorldCleaningAgent extends AbstractAgent {

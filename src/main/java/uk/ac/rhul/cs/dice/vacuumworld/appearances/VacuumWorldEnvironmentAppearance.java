@@ -32,6 +32,11 @@ public class VacuumWorldEnvironmentAppearance implements EnvironmentAppearance, 
     }
     
     @Override
+    public int countNumberOfLocations() {
+	return this.grid.size();
+    }
+    
+    @Override
     public Set<VacuumWorldLocationAppearance> getAllLocations() {
 	return ImmutableSet.copyOf(this.grid.values());
     }

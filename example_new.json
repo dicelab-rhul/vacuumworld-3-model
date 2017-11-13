@@ -19,29 +19,29 @@
                 "mind": "uk.ac.rhul.cs.dice.vacuumworld.actors.minds.VacuumWorldDefaultMind",
                 "sensors": [
                     {
-                        "id": "Sensor-affec75d-79bc-499c-a1ed-e4288e339cbb",
+                        "id": "Sensor-a5a8c8b8-ce92-496f-8c91-3312f76c44ae",
                         "purpose": "see"
                     },
                     {
-                        "id": "Sensor-9d2b1c3e-58fa-4d79-831d-3c7836868122",
+                        "id": "Sensor-44cbfbea-c266-47e7-82f5-88cfa33321bd",
                         "purpose": "listen"
                     },
                     {
-                        "id": "Sensor-869c77b4-a7f8-43dc-889a-85a2a28c2af6",
+                        "id": "Sensor-1886afce-c993-4a09-a69c-b91b89753e10",
                         "purpose": "other"
                     }
                 ],
                 "actuators": [
                     {
-                        "id": "Actuator-0c416598-a880-4a29-a116-a2eca687c72d",
+                        "id": "Actuator-0cbdef30-61e0-474d-be2d-94f17e0044cb",
                         "purpose": "act_physically"
                     },
                     {
-                        "id": "Actuator-ff8b18f5-c4eb-4d9e-a4a6-6ffebfd347c7",
+                        "id": "Actuator-5667e4cf-6236-4f0a-baba-7da1f78f80fa",
                         "purpose": "speak"
                     },
                     {
-                        "id": "Actuator-1916b0c8-befb-445c-b413-cd1d8394969b",
+                        "id": "Actuator-4625de6c-d5ba-4f89-a7cb-666918cbd9e7",
                         "purpose": "other"
                     }
                 ]
@@ -61,29 +61,29 @@
                 "mind": "uk.ac.rhul.cs.dice.vacuumworld.actors.minds.VacuumWorldDefaultMind",
                 "sensors": [
                     {
-                        "id": "Sensor-33309db8-0f48-483d-bdb1-5632291be102",
+                        "id": "Sensor-872b65bf-ee19-4c54-879c-9905947d0023",
                         "purpose": "see"
                     },
                     {
-                        "id": "Sensor-5be6314d-f8d9-47f0-96bb-97d99df88fda",
+                        "id": "Sensor-f655885d-0337-43a6-9380-1e3555baf02f",
                         "purpose": "listen"
                     },
                     {
-                        "id": "Sensor-a99d9934-6bc3-4891-aa15-b3a33cec9927",
+                        "id": "Sensor-cf7d1954-9dca-400e-a017-fcff2f172e15",
                         "purpose": "other"
                     }
                 ],
                 "actuators": [
                     {
-                        "id": "Actuator-0a92b216-12fc-420b-b392-f5b4c8b967c4",
+                        "id": "Actuator-bdefa764-86f3-4971-8cb0-c5ae0662b77c",
                         "purpose": "act_physically"
                     },
                     {
-                        "id": "Actuator-2e06eba8-aa7c-4455-a796-67aebb07050c",
+                        "id": "Actuator-a84ea0ea-0545-4f76-bd03-fc5539b8f8c5",
                         "purpose": "speak"
                     },
                     {
-                        "id": "Actuator-d8460a51-803c-4a1e-89af-eb48f4f6671d",
+                        "id": "Actuator-45d3ecb9-32c6-4fd3-a326-48d0cfb2b3cd",
                         "purpose": "other"
                     }
                 ]
@@ -101,29 +101,29 @@
                 "mind": "uk.ac.rhul.cs.dice.vacuumworld.actors.minds.VacuumWorldPrincipalListener",
                 "sensors": [
                     {
-                        "id": "Sensor-ad289ced-d0a3-46a6-9713-43e4508b8f61",
+                        "id": "Sensor-8c5459f2-892f-4c2a-afdc-267262b9ce71",
                         "purpose": "see"
                     },
                     {
-                        "id": "Sensor-967ecd08-d2bd-42e7-9543-95f6d03be7dc",
+                        "id": "Sensor-8080644b-b829-4315-ab67-b3b4de386092",
                         "purpose": "listen"
                     },
                     {
-                        "id": "Sensor-67a97f07-f2af-49d4-85e3-73f08d19f23a",
+                        "id": "Sensor-bd692391-7498-4ce6-bb52-6878a5f686a6",
                         "purpose": "other"
                     }
                 ],
                 "actuators": [
                     {
-                        "id": "Actuator-383d96fb-5f14-4402-aad3-fd74a03aefd1",
+                        "id": "Actuator-57e1ba5e-70a0-4804-96bf-5358873601e2",
                         "purpose": "act_physically"
                     },
                     {
-                        "id": "Actuator-8479551d-1c78-4ebc-8a76-2365cff51fdf",
+                        "id": "Actuator-fd586c02-009f-4559-ad25-92e42edd0f05",
                         "purpose": "speak"
                     },
                     {
-                        "id": "Actuator-638ed5d7-e968-4240-be2a-31f0039ebb4a",
+                        "id": "Actuator-68317f63-d946-44be-96e6-30c5cf6ef894",
                         "purpose": "other"
                     }
                 ]

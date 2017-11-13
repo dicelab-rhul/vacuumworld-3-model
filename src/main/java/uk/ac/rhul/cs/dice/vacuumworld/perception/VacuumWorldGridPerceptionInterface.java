@@ -26,6 +26,28 @@ public interface VacuumWorldGridPerceptionInterface {
     
     public abstract Map<VacuumWorldCoordinates, VacuumWorldLocationAppearance> getGrid();
     
+    public abstract int countNumberOfLocations();
+    
+    public default boolean doesLeftExist(String id) {
+	return !isWallJustOnTheLeft(id);
+    }
+    
+    public default boolean doesRightExist(String id) {
+	return !isWallJustOnTheRight(id);
+    }
+    
+    public default boolean doesForwardExist(String id) {
+	return !isWallJustAhead(id);
+    }
+    
+    public default boolean doesFrontLeftExist(String id) {
+	return !isWallJustAhead(id) && !isWallJustOnTheLeft(id);
+    }
+    
+    public default boolean doesFrontRIghtExist(String id) {
+	return !isWallJustAhead(id) && !isWallJustOnTheRight(id);
+    }
+    
     public abstract Set<VacuumWorldLocationAppearance> getAllLocations();
     
     public abstract Set<VacuumWorldCoordinates> getAllCoordinates();

@@ -8,7 +8,9 @@ import uk.ac.rhul.cs.dice.agent.interfaces.ActiveBody;
 import uk.ac.rhul.cs.dice.agentcommon.interfaces.Appearance;
 import uk.ac.rhul.cs.dice.agentcontainers.enums.Orientation;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.AgentColor;
+import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldAvatar;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldCleaningAgent;
+import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldUserAgent;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldAvatarAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldDirtAppearance;
@@ -174,41 +176,154 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
     
     /**
      * 
-     * Checks whether a {@link VacuumWorldCleaningAgent} is present of this {@link VacuumWorldLocation}.
+     * Checks whether a {@link VacuumWorldCleaningAgent} is present on this {@link VacuumWorldLocation}.
      * 
-     * @return whether or not a {@link VacuumWorldCleaningAgent} is present of this {@link VacuumWorldLocation}.
+     * @return whether or not a {@link VacuumWorldCleaningAgent} is present on this {@link VacuumWorldLocation}.
      * 
      */
     public abstract boolean isACleaningAgentThere();
     
+    /**
+     * 
+     * Checks whether a <code>GREEN</code> {@link VacuumWorldCleaningAgent} is present on this {@link VacuumWorldLocation}.
+     * 
+     * @return whether or not a <code>GREEN</code> {@link VacuumWorldCleaningAgent} is present on this {@link VacuumWorldLocation}.
+     * 
+     */
     public abstract boolean isAGreenAgentThere();
     
+    /**
+     * 
+     * Checks whether an <code>ORANGE</code> {@link VacuumWorldCleaningAgent} is present on this {@link VacuumWorldLocation}.
+     * 
+     * @return whether or not an <code>ORANGE</code> {@link VacuumWorldCleaningAgent} is present on this {@link VacuumWorldLocation}.
+     * 
+     */
     public abstract boolean isAnOrangeAgentThere();
     
+    /**
+     * 
+     * Checks whether a <code>WHITE</code> {@link VacuumWorldCleaningAgent} is present on this {@link VacuumWorldLocation}.
+     * 
+     * @return whether or not a <code>WHITE</code> {@link VacuumWorldCleaningAgent} is present on this {@link VacuumWorldLocation}.
+     * 
+     */
     public abstract boolean isAWhiteAgentThere();
     
+    /**
+     * 
+     * Checks whether a {@link VacuumWorldCleaningAgent} whose {@link AgentColor} matches <code>color</code> is present on this {@link VacuumWorldLocation}.
+     * 
+     * @param color the {@link AgentColor} of the {@link VacuumWorldCleaningAgent} this method is looking for.
+     * 
+     * @return whether or not a {@link VacuumWorldCleaningAgent} whose {@link AgentColor} matches <code>color</code> is present on this {@link VacuumWorldLocation}.
+     * 
+     */
     public abstract boolean isACleaningAgentWithSuchColorThere(AgentColor color);
     
+    /**
+     * 
+     * Checks whether a {@link VacuumWorldCleaningAgent} whose {@link AgentColor} is compatible with <code>color</code> is present on this {@link VacuumWorldLocation}.
+     * 
+     * @param color the {@link VacuumWorldDirtColor} which needs to be compatible with the {@link AgentColor} of the {@link VacuumWorldCleaningAgent} this method is looking for.
+     * 
+     * @return whether or not a {@link VacuumWorldCleaningAgent} whose {@link AgentColor} is compatible with <code>color</code> is present on this {@link VacuumWorldLocation}..
+     * 
+     */
     public abstract boolean isACleaningAgentCompatibleWithSuchDirtThere(VacuumWorldDirtColor color);
     
+    /**
+     * 
+     * Checks whether a {@link VacuumWorldUserAgent} is present on this {@link VacuumWorldLocation}.
+     * 
+     * @return whether or not a {@link VacuumWorldUserAgent} is present on this {@link VacuumWorldLocation}.
+     * 
+     */
     public abstract boolean isAUserThere();
     
+    /**
+     * 
+     * Checks whether a {@link VacuumWorldAvatar} is present on this {@link VacuumWorldLocation}.
+     * 
+     * @return whether or not a {@link VacuumWorldAvatar} is present on this {@link VacuumWorldLocation}.
+     * 
+     */
     public abstract boolean isAnAvatarThere();
     
+    /**
+     * 
+     * Checks whether an {@link ActiveBody} ({@link VacuumWorldCleaningAgent}, {@link VacuumWorldUserAgent}, or {@link VacuumWorldAvatar}) is present on this {@link VacuumWorldLocation}.
+     * 
+     * @return whether or not an {@link ActiveBody} ({@link VacuumWorldCleaningAgent}, {@link VacuumWorldUserAgent}, or {@link VacuumWorldAvatar}) is present on this {@link VacuumWorldLocation}.
+     * 
+     */
     public abstract boolean isAnActiveBodyThere();
     
+    /**
+     * 
+     * Checks whether no instance of an {@link ActiveBody} ({@link VacuumWorldCleaningAgent}, {@link VacuumWorldUserAgent}, or {@link VacuumWorldAvatar}) is present on this {@link VacuumWorldLocation}.
+     * 
+     * @return  whether or not no instance of an {@link ActiveBody} ({@link VacuumWorldCleaningAgent}, {@link VacuumWorldUserAgent}, or {@link VacuumWorldAvatar}) is present on this {@link VacuumWorldLocation}.
+     * 
+     */
     public abstract boolean isFreeFromActiveBodies();
     
+    /**
+     * 
+     * Checks whether a {@link VacuumWorldDirt} is present on this {@link VacuumWorldLocation}.
+     * 
+     * @return whether or not a {@link VacuumWorldDirt} is present on this {@link VacuumWorldLocation}.
+     * 
+     */
     public abstract boolean isDirtThere();
     
+    /**
+     * 
+     * Checks whether a {@link VacuumWorldDirt} whose {@link VacuumWorldDirtColor} matches <code>color</code> is present on this {@link VacuumWorldLocation}.
+     * 
+     * @param color the {@link VacuumWorldDirtColor} of the {@link VacuumWorldDirt} this method is looking for.
+     * 
+     * @return whether or not a {@link VacuumWorldDirt} whose {@link VacuumWorldDirtColor} matches <code>color</code> is present on this {@link VacuumWorldLocation}.
+     * 
+     */
     public abstract boolean isSuchDirtThere(VacuumWorldDirtColor color);
     
+    /**
+     * 
+     * Checks whether a {@link VacuumWorldDirt} whose {@link VacuumWorldDirtColor} is compatible with <code>color</code> is present on this {@link VacuumWorldLocation}.
+     * 
+     * @param color the {@link AgentColor} which needs to be compatible with the {@link VacuumWorldDirtColor} of the {@link VacuumWorldDirt} this method is looking for.
+     * 
+     * @return whether or not a {@link VacuumWorldDirt} whose {@link VacuumWorldDirtColor} is compatible with <code>color</code> is present on this {@link VacuumWorldLocation}.
+     * 
+     */
     public abstract boolean isCompatibleDirtThere(AgentColor color);
     
+    /**
+     * 
+     * Checks whether a <code>GREEN</code> {@link VacuumWorldDirt} is present on this {@link VacuumWorldLocation}.
+     * 
+     * @return whether or not a <code>GREEN</code> {@link VacuumWorldDirt} is present on this {@link VacuumWorldLocation}.
+     * 
+     */
     public abstract boolean isGreenDirtThere() ;
     
+    /**
+     * 
+     * Checks whether an <code>ORANGE</code> {@link VacuumWorldDirt} is present on this {@link VacuumWorldLocation}.
+     * 
+     * @return whether or not an <code>ORANGE</code> {@link VacuumWorldDirt} is present on this {@link VacuumWorldLocation}.
+     * 
+     */
     public abstract boolean isOrangeDirtThere();
     
+    /**
+     * 
+     * Checks whether no instance of an {@link ActiveBody} ({@link VacuumWorldCleaningAgent}, {@link VacuumWorldUserAgent}, or {@link VacuumWorldAvatar}) and no instance of a {@link VacuumWorldDirt} are present on this {@link VacuumWorldLocation}.
+     * 
+     * @return  whether or not no instance of an {@link ActiveBody} ({@link VacuumWorldCleaningAgent}, {@link VacuumWorldUserAgent}, or {@link VacuumWorldAvatar}) and no instance of a {@link VacuumWorldDirt} are present on this {@link VacuumWorldLocation}.
+     * 
+     */
     public abstract boolean isEmpty();
     
     public abstract boolean containsSuchActiveBody(String id);

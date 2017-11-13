@@ -15,10 +15,24 @@ import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldCoordinates;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldLocation;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldGridPerceptionInterface;
 
+/**
+ * 
+ * Implementation of {@link VacuumWorldGridPerceptionInterface} and {@link EnvironmentAppearance}.
+ * 
+ * @author cloudstrife9999
+ *
+ */
 public class VacuumWorldEnvironmentAppearance implements EnvironmentAppearance, VacuumWorldGridPerceptionInterface {
     private static final long serialVersionUID = 3587669408864383174L;
     private Map<VacuumWorldCoordinates, VacuumWorldLocationAppearance> grid;
     
+    /**
+     * 
+     * Constructs a {@link VacuumWorldEnvironmentAppearance} from a {@link Map} from {@link VacuumWorldCoordinates} to {@link VacuumWorldLocation} representing the grid.
+     * 
+     * @param grid a {@link Map} from {@link VacuumWorldCoordinates} to {@link VacuumWorldLocation} representing the grid.
+     * 
+     */
     public VacuumWorldEnvironmentAppearance(Map<VacuumWorldCoordinates, VacuumWorldLocation> grid) {
 	Map<VacuumWorldCoordinates, VacuumWorldLocationAppearance> appearancesGrid = new HashMap<>();
 	grid.entrySet().forEach(e -> appearancesGrid.put(e.getKey(), e.getValue().getAppearance()));

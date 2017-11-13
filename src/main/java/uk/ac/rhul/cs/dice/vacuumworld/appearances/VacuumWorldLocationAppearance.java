@@ -2,6 +2,7 @@ package uk.ac.rhul.cs.dice.vacuumworld.appearances;
 
 import com.google.gson.JsonObject;
 
+import uk.ac.rhul.cs.dice.agent.interfaces.ActiveBody;
 import uk.ac.rhul.cs.dice.agentcommon.interfaces.Appearance;
 import uk.ac.rhul.cs.dice.agentcontainers.enums.Orientation;
 import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldSerializer;
@@ -12,6 +13,13 @@ import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldLocation;
 import uk.ac.rhul.cs.dice.vacuumworld.exceptions.VacuumWorldRuntimeException;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldLocationPerceptionInterface;
 
+/**
+ * 
+ * Implementation of {@link Appearance}, {@link VacuumWorldLocationPerceptionInterface}, and {@link Comparable} (with {@link VacuumWorldLocationAppearance}).
+ * 
+ * @author cloudstrife9999
+ *
+ */
 public class VacuumWorldLocationAppearance implements Appearance, VacuumWorldLocationPerceptionInterface, Comparable<VacuumWorldLocationAppearance> {
     private static final long serialVersionUID = -2552147509566518640L;
     private static final int MAX_WALLS = 4;
@@ -24,6 +32,16 @@ public class VacuumWorldLocationAppearance implements Appearance, VacuumWorldLoc
     private boolean wallOnWest;
     private boolean wallOnEast;
     
+    /**
+     * 
+     * Constructs a {@link VacuumWorldLocationAppearance} from the {@link VacuumWorldCoordinates}, the {@link Appearance} of an {@link ActiveBody}, a {@link VacuumWorldDirtAppearance} and the {@link Boolean} flags for the walls.
+     * 
+     * @param coordinates the {@link VacuumWorldCoordinates}.
+     * @param activeBodyAppearance the {@link Appearance} of an {@link ActiveBody}.
+     * @param dirtAppearance a {@link VacuumWorldDirtAppearance}.
+     * @param walls the {@link Boolean} flags for the walls (NORTH, SOUTH, WEST, and EAST).
+     * 
+     */
     public VacuumWorldLocationAppearance(VacuumWorldCoordinates coordinates, Appearance activeBodyAppearance, VacuumWorldDirtAppearance dirtAppearance, boolean... walls) {
 	this.activeBodyAppearance = activeBodyAppearance;
 	this.dirtAppearance = dirtAppearance;
@@ -307,6 +325,13 @@ public class VacuumWorldLocationAppearance implements Appearance, VacuumWorldLoc
 	return this.wallOnNorth == obj.wallOnNorth && this.wallOnSouth == obj.wallOnSouth && this.wallOnWest == obj.wallOnWest && this.wallOnEast == obj.wallOnEast;
     }
 
+    /**
+     * 
+     * Serializes this {@link VacuumWorldLocationAppearance} to a {@link JsonObject}.
+     * 
+     * @return the {@link JsonObject} serialization of this {@link VacuumWorldLocationAppearance}.
+     * 
+     */
     @Override
     public JsonObject serialize() {
 	return VacuumWorldSerializer.serialize(this);

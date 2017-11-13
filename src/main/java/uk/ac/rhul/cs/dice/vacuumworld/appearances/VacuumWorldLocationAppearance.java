@@ -8,6 +8,7 @@ import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldSerializer;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.ActorType;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.AgentColor;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldCoordinates;
+import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldLocation;
 import uk.ac.rhul.cs.dice.vacuumworld.exceptions.VacuumWorldRuntimeException;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldLocationPerceptionInterface;
 
@@ -267,7 +268,13 @@ public class VacuumWorldLocationAppearance implements Appearance, VacuumWorldLoc
 	return isAnAvatarThere() ? (VacuumWorldAvatarAppearance) this.activeBodyAppearance : null;
     }
     
-    //I only care about the X value
+    /**
+     * 
+     * Returns whether this {@link VacuumWorldLocation} <code>x</code> coordinate is smaller, equal, or bigger that <code>other</code>'s <code>x</code> coordinate.
+     * 
+     * @return whether this {@link VacuumWorldLocation} <code>x</code> coordinate is smaller, equal, or bigger that <code>other</code>'s <code>x</code> coordinate.
+     * 
+     */
     @Override
     public int compareTo(VacuumWorldLocationAppearance other) {
         return Integer.valueOf(getCoordinates().getX()).compareTo(other.getCoordinates().getX());
@@ -305,6 +312,13 @@ public class VacuumWorldLocationAppearance implements Appearance, VacuumWorldLoc
 	return VacuumWorldSerializer.serialize(this);
     }
     
+    /**
+     * 
+     * Returns a textual representation of this {@link VacuumWorldLocation}.
+     * 
+     * @return a textual representation of this {@link VacuumWorldLocation}.
+     * 
+     */
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();

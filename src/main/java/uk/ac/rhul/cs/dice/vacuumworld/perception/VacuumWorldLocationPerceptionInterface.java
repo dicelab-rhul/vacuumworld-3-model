@@ -281,7 +281,7 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * 
      * Checks whether a {@link VacuumWorldDirt} whose {@link VacuumWorldDirtColor} matches <code>color</code> is present on this {@link VacuumWorldLocation}.
      * 
-     * @param color the {@link VacuumWorldDirtColor} of the {@link VacuumWorldDirt} this method is looking for.
+     * @param color the {@link VacuumWorldDirtColor} of the {@link VacuumWorldDirt} this method is looking for on this {@link VacuumWorldLocation}..
      * 
      * @return whether or not a {@link VacuumWorldDirt} whose {@link VacuumWorldDirtColor} matches <code>color</code> is present on this {@link VacuumWorldLocation}.
      * 
@@ -292,7 +292,7 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * 
      * Checks whether a {@link VacuumWorldDirt} whose {@link VacuumWorldDirtColor} is compatible with <code>color</code> is present on this {@link VacuumWorldLocation}.
      * 
-     * @param color the {@link AgentColor} which needs to be compatible with the {@link VacuumWorldDirtColor} of the {@link VacuumWorldDirt} this method is looking for.
+     * @param color the {@link AgentColor} which needs to be compatible with the {@link VacuumWorldDirtColor} of the {@link VacuumWorldDirt} this method is looking for on this {@link VacuumWorldLocation}..
      * 
      * @return whether or not a {@link VacuumWorldDirt} whose {@link VacuumWorldDirtColor} is compatible with <code>color</code> is present on this {@link VacuumWorldLocation}.
      * 
@@ -326,17 +326,74 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      */
     public abstract boolean isEmpty();
     
+    /**
+     * 
+     * Checks whether an {@link ActiveBody} ({@link VacuumWorldCleaningAgent}, {@link VacuumWorldUserAgent}, or {@link VacuumWorldAvatar}) whose ID matches <code>id</code> is present on this {@link VacuumWorldLocation}.
+     * 
+     * @param id the <code>ID</code> of the {@link ActiveBody} this method is looking for on this {@link VacuumWorldLocation}.
+     * 
+     * @return whether or not an {@link ActiveBody} ({@link VacuumWorldCleaningAgent}, {@link VacuumWorldUserAgent}, or {@link VacuumWorldAvatar}) whose ID matches <code>id</code> is present on this {@link VacuumWorldLocation}.
+     * 
+     */
     public abstract boolean containsSuchActiveBody(String id);
     
+    /**
+     * 
+     * Checks whether a {@link VacuumWorldCleaningAgent} whose ID matches <code>id</code> is present on this {@link VacuumWorldLocation}.
+     * 
+     * @param id the <code>ID</code> of the {@link VacuumWorldCleaningAgent} this method is looking for on this {@link VacuumWorldLocation}.
+     * 
+     * @return whether or not a {@link VacuumWorldCleaningAgent} whose ID matches <code>id</code> is present on this {@link VacuumWorldLocation}.
+     * 
+     */
     public abstract boolean containsSuchCleaningAgent(String id);
     
+    /**
+     * 
+     * Checks whether a {@link VacuumWorldUserAgent} whose ID matches <code>id</code> is present on this {@link VacuumWorldLocation}.
+     * 
+     * @param id the <code>ID</code> of the {@link VacuumWorldUserAgent} this method is looking for on this {@link VacuumWorldLocation}.
+     * 
+     * @return whether or not a {@link VacuumWorldUserAgent} whose ID matches <code>id</code> is present on this {@link VacuumWorldLocation}.
+     * 
+     */
     public abstract boolean containsSuchUser(String id);
     
+    /**
+     * 
+     * Checks whether a {@link VacuumWorldAvatar} whose ID matches <code>id</code> is present on this {@link VacuumWorldLocation}.
+     * 
+     * @param id the <code>ID</code> of the {@link VacuumWorldAvatar} this method is looking for on this {@link VacuumWorldLocation}.
+     * 
+     * @return whether or not a {@link VacuumWorldAvatar} whose ID matches <code>id</code> is present on this {@link VacuumWorldLocation}.
+     * 
+     */
     public abstract boolean containsSuchAvatar(String id);
     
+    /**
+     * 
+     * Returns the {@link VacuumWorldActorAppearance} of the {@link VacuumWorldCleaningAgent} on this {@link VacuumWorldLocation}, if any.
+     * 
+     * @return the {@link VacuumWorldActorAppearance} of the {@link VacuumWorldCleaningAgent} on this {@link VacuumWorldLocation}, if any, <code>null</code> otherwise.
+     * 
+     */
     public abstract VacuumWorldActorAppearance getAgentAppearanceIfAny();
     
+    /**
+     * 
+     * Returns the {@link VacuumWorldActorAppearance} of the {@link VacuumWorldUserAgent} on this {@link VacuumWorldLocation}, if any.
+     * 
+     * @return the {@link VacuumWorldActorAppearance} of the {@link VacuumWorldUserAgent} on this {@link VacuumWorldLocation}, if any, <code>null</code> otherwise.
+     * 
+     */
     public abstract VacuumWorldActorAppearance getUserAppearanceIfAny();
     
+    /**
+     * 
+     * Returns the {@link VacuumWorldAvatarAppearance} of the {@link VacuumWorldAvatar} on this {@link VacuumWorldLocation}, if any.
+     * 
+     * @return the {@link VacuumWorldAvatarAppearance} of the {@link VacuumWorldAvatar} on this {@link VacuumWorldLocation}, if any, <code>null</code> otherwise.
+     * 
+     */
     public abstract VacuumWorldAvatarAppearance getAvatarAppearanceIfAny();
 }

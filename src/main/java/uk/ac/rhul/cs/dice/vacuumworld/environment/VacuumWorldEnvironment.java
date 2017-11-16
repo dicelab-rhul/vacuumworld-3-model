@@ -67,6 +67,10 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 	setAppearance(new VacuumWorldEnvironmentAppearance(this.grid));
     }
     
+    public boolean getStopFlag() {
+	return this.stopFlag;
+    }
+    
     public void setStopFlag(boolean flag) {
 	this.stopFlag = flag;
     }

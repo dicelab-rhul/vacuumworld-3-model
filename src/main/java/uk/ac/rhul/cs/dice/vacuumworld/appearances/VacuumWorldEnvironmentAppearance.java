@@ -111,6 +111,11 @@ public class VacuumWorldEnvironmentAppearance implements EnvironmentAppearance, 
     }
     
     @Override
+    public Set<VacuumWorldLocationAppearance> getAllLocationsWithActiveBodies() {
+	return ImmutableSet.copyOf(this.grid.values().stream().filter(VacuumWorldLocationAppearance::isAnActiveBodyThere).collect(Collectors.toSet()));
+    }
+    
+    @Override
     public Set<VacuumWorldLocationAppearance> getAllEmptyLocations() {
 	return ImmutableSet.copyOf(this.grid.values().stream().filter(VacuumWorldLocationAppearance::isEmpty).collect(Collectors.toSet()));
     }

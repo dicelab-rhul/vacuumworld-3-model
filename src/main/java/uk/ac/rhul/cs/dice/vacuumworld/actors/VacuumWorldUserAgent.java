@@ -23,6 +23,9 @@ public class VacuumWorldUserAgent extends AbstractAgent {
     private static final long serialVersionUID = -2882228263580151389L;
     private transient ObjectInputStream input;
     private transient ObjectOutputStream output;
+    private volatile boolean stop;
+    private volatile boolean pause;
+    private boolean test;
 
     public VacuumWorldUserAgent(String id, VacuumWorldActorAppearance appearance, List<Sensor> sensors, List<Actuator> actuators, AgentMind mind) {
 	super(id, appearance, sensors, actuators, mind);
@@ -30,6 +33,18 @@ public class VacuumWorldUserAgent extends AbstractAgent {
 
     public VacuumWorldUserAgent(VacuumWorldUserAgent toCopy) {
 	super(toCopy.getID(), toCopy.getAppearance(), toCopy.getAllSensors(), toCopy.getAllActuators(), toCopy.getMind());
+    }
+    
+    public void setStopFlag(boolean stop) {
+	this.stop = stop;
+    }
+    
+    public void setPauseFlag(boolean pause) {
+	this.pause = pause;
+    }
+    
+    public void toggleTest() {
+	this.test = true;
     }
 
     @Override
@@ -53,13 +68,39 @@ public class VacuumWorldUserAgent extends AbstractAgent {
 
     @Override
     public void run() {
-	VacuumWorldAbstractAction action = (VacuumWorldAbstractAction) getMind().decide();
-	getMind().execute((Action<?>) action);
-	sendToActuator((Action<?>) action);
-	setForMind(sendToEnvironment());
-	sendToMind();
+	if(this.test) {
+	    testRun();
+	}
+	else {
+	    realRun();
+	}
     }
     
+    private void realRun() {
+	/*while(!this.stop) {
+	    VacuumWorldAbstractAction action = (VacuumWorldAbstractAction) getMind().decide();
+	    getMind().execute((Action<?>) action);
+	    sendToActuator((Action<?>) action);
+	    setForMind(sendToEnvironment());
+	    sendToMind();
+	}*/
+    }
+
+    private void testRun() {
+	while(!this.stop) {
+	    System.out.println("User " + getID() + " is being executed.");
+	    
+	    try {
+		Thread.sleep(2000);
+	    }
+	    catch (InterruptedException e) {
+		Thread.currentThread().interrupt();
+	    }
+	}
+	
+	System.out.println("User " + getID() + ": stop!");
+    }
+
     private Set<Analyzable> sendToEnvironment() {
 	/* TODO
 	 * create an event

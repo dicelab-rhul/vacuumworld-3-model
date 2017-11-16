@@ -20,7 +20,10 @@ import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldAvatarAppearance;
 
 public class VacuumWorldAvatar extends AbstractAvatar {
     private static final long serialVersionUID = 7363668279670343837L;
-
+    private volatile boolean stop;
+    private volatile boolean pause;
+    private boolean test;
+    
     public VacuumWorldAvatar(String id, AvatarAppearance appearance, List<Sensor> sensors, List<Actuator> actuators, PrincipalListener principalListener) {
 	super(id, appearance, sensors, actuators, principalListener);
     }
@@ -29,6 +32,18 @@ public class VacuumWorldAvatar extends AbstractAvatar {
 	this(toCopy.getID(), toCopy.getAppearance(), toCopy.getAllSensors(), toCopy.getAllActuators(), toCopy.getPrincipalListener());
     }
 
+    public void setStopFlag(boolean stop) {
+	this.stop = stop;
+    }
+    
+    public void setPauseFlag(boolean pause) {
+	this.pause = pause;
+    }
+    
+    public void toggleTest() {
+	this.test = true;
+    }
+    
     @Override
     public void sendFeedbackToPrincipal(Analyzable... feedback) {
 	throw new UnsupportedOperationException(); //TODO maybe change this
@@ -75,10 +90,34 @@ public class VacuumWorldAvatar extends AbstractAvatar {
 
     @Override
     public void run() {
-	VacuumWorldAbstractAction action = (VacuumWorldAbstractAction) getPrincipalListener().decide();
+	if(this.test) {
+	    testRun();
+	}
+	else {
+	    realRun();
+	}
+    }
+    
+    private void realRun() {
+	/*VacuumWorldAbstractAction action = (VacuumWorldAbstractAction) getPrincipalListener().decide();
 	getPrincipalListener().execute((Action<?>) action);
 	sendToActuator((Action<?>) action);
-	sendToEnvironment();
+	sendToEnvironment();*/
+    }
+
+    private void testRun() {
+	while(!this.stop) {
+	    System.out.println("Avatar " + getID() + " is being executed.");
+	    
+	    try {
+		Thread.sleep(2000);
+	    }
+	    catch (InterruptedException e) {
+		Thread.currentThread().interrupt();
+	    }
+	}
+	
+	System.out.println("Avatar " + getID() + ": stop!");
     }
 
     private void sendToEnvironment() {

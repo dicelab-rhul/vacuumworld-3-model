@@ -23,11 +23,11 @@ public class VacuumWorldCleaningAgent extends AbstractAgent {
     private transient ObjectInputStream input;
     private transient ObjectOutputStream output;
     private volatile boolean stop;
+    private volatile boolean pause;
+    private boolean test;
 
     public VacuumWorldCleaningAgent(String id, VacuumWorldActorAppearance appearance, List<Sensor> sensors, List<Actuator> actuators, AgentMind mind) {
 	super(id, appearance, sensors, actuators, mind);
-	
-	this.stop = stop;
     }
 
     public VacuumWorldCleaningAgent(VacuumWorldCleaningAgent toCopy) {
@@ -36,6 +36,14 @@ public class VacuumWorldCleaningAgent extends AbstractAgent {
 
     public void setStopFlag(boolean stop) {
 	this.stop = stop;
+    }
+    
+    public void setPauseFlag(boolean pause) {
+	this.pause = pause;
+    }
+    
+    public void toggleTest() {
+	this.test = true;
     }
     
     @Override
@@ -59,11 +67,23 @@ public class VacuumWorldCleaningAgent extends AbstractAgent {
 
     @Override
     public void run() {
+	if(this.test) {
+	    testRun();
+	}
+	else {
+	    realRun();
+	}
+    }
+    
+    private void realRun() {
 	/*VacuumWorldAbstractAction action = (VacuumWorldAbstractAction) getMind().decide();
 	getMind().execute((Action<?>) action);
 	sendToActuator((Action<?>) action);
 	setForMind(sendToEnvironment());
 	sendToMind();*/
+    }
+
+    private void testRun() {
 	while(!this.stop) {
 	    System.out.println("Agent " + getID() + " is being executed.");
 	    

@@ -236,6 +236,15 @@ public interface VacuumWorldGridPerceptionInterface {
     
     /**
      * 
+     * Returns all the {@link VacuumWorldLocationAppearance}s of the {@link VacuumWorldLocation}s inside the perception which contain an {@link ActiveBody}.
+     * 
+     * @return a {@link Set} of all the {@link VacuumWorldLocationAppearance}s of the {@link VacuumWorldLocation}s inside the perception which contain an {@link ActiveBody}.
+     * 
+     */
+    public abstract Set<VacuumWorldLocationAppearance> getAllLocationsWithActiveBodies();
+    
+    /**
+     * 
      * Returns all the {@link VacuumWorldLocationAppearance}s of the {@link VacuumWorldLocation}s inside the perception, each one included only if the respective {@link VacuumWorldLocationAppearance#isEmpty()} method returns <code>true</code>.
      * 
      * @return a {@link Set} of all the {@link VacuumWorldLocationAppearance}s of the {@link VacuumWorldLocation}s inside the perception, each one included only if the respective {@link VacuumWorldLocationAppearance#isEmpty()} method returns <code>true</code>.

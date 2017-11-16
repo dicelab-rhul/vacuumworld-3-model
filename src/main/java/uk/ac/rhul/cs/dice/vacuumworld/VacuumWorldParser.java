@@ -57,6 +57,10 @@ public class VacuumWorldParser {
 	    return Collections.emptyMap();
 	}
     }
+    
+    public static Map<VacuumWorldCoordinates, VacuumWorldLocation> parseConfiguration(JsonObject json) {
+	return buildMap(json);
+    }
 
     private static Map<VacuumWorldCoordinates, VacuumWorldLocation> buildMap(JsonObject tree) {
 	JsonElement sizeElement = tree.get("size");

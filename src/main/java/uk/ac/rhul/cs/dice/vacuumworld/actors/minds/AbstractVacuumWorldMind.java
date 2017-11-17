@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.cloudstrife9999.logutilities.LogUtils;
+
 import uk.ac.rhul.cs.dice.agent.abstractimpl.AbstractAgentMind;
 import uk.ac.rhul.cs.dice.agent.interfaces.Analyzable;
 import uk.ac.rhul.cs.dice.agentcommon.interfaces.Action;
@@ -69,6 +71,9 @@ public abstract class AbstractVacuumWorldMind extends AbstractAgentMind {
 
     @Override
     public <T extends Action<?>> void execute(T action) {
+	((VacuumWorldAbstractAction) action).setActor("Pippo"); //TODO remove this
+	LogUtils.log(action.getActorID() + " is executing " + action.getClass().getSimpleName());
+	
 	return;
     }
 }

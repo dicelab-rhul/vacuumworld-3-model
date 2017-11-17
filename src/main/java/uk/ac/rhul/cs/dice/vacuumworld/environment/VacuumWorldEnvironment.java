@@ -11,6 +11,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.cloudstrife9999.logutilities.LogUtils;
+
 import com.google.common.collect.ImmutableMap;
 
 import uk.ac.rhul.cs.dice.agent.abstractimpl.AbstractAgent;
@@ -276,18 +278,12 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 
     @Override
     public void run() {
+	LogUtils.log("Environment is being executed.");
+	
 	while(!this.stopFlag) {
-	    //listenAndExecute();
-	    System.out.println("Environment is being executed.");
-	    
-	    try {
-		Thread.sleep(2000);
-	    }
-	    catch (InterruptedException e) {
-		Thread.currentThread().interrupt();
-	    }
+	    listenAndExecute();
 	}
 	
-	System.out.println("Environment: stop!");
+	LogUtils.log("Environment: stop.");
     }
 }

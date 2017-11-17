@@ -3,8 +3,11 @@ package uk.ac.rhul.cs.dice.vacuumworld.actors;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import org.cloudstrife9999.logutilities.LogUtils;
 
 import com.google.gson.JsonObject;
 
@@ -13,10 +16,15 @@ import uk.ac.rhul.cs.dice.agent.enums.ActuatorPurposeEnum;
 import uk.ac.rhul.cs.dice.agent.interfaces.Actuator;
 import uk.ac.rhul.cs.dice.agent.interfaces.AgentMind;
 import uk.ac.rhul.cs.dice.agent.interfaces.Analyzable;
+import uk.ac.rhul.cs.dice.agent.interfaces.Perception;
 import uk.ac.rhul.cs.dice.agent.interfaces.Sensor;
 import uk.ac.rhul.cs.dice.agentactions.enums.EnvironmentalActionType;
 import uk.ac.rhul.cs.dice.agentcommon.interfaces.Action;
+import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldEvent;
+import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractAction;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
+import uk.ac.rhul.cs.dice.vacuumworld.exceptions.VacuumWorldRuntimeException;
+import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldPerception;
 
 public class VacuumWorldCleaningAgent extends AbstractAgent {
     private static final long serialVersionUID = -7231158706838196637L;
@@ -67,6 +75,8 @@ public class VacuumWorldCleaningAgent extends AbstractAgent {
 
     @Override
     public void run() {
+	this.test = false; //TODO remove this
+	
 	if(this.test) {
 	    testRun();
 	}
@@ -76,11 +86,13 @@ public class VacuumWorldCleaningAgent extends AbstractAgent {
     }
     
     private void realRun() {
-	/*VacuumWorldAbstractAction action = (VacuumWorldAbstractAction) getMind().decide();
-	getMind().execute((Action<?>) action);
-	sendToActuator((Action<?>) action);
-	setForMind(sendToEnvironment());
-	sendToMind();*/
+	while(!this.stop) {
+	    System.out.println("Agent " + getID() + " is being executed.");
+	    VacuumWorldAbstractAction action = (VacuumWorldAbstractAction) getMind().decide();
+	    getMind().execute((Action<?>) action);
+	    setForMind(sendToEnvironment(action));
+	    sendToMind();
+	}
     }
 
     private void testRun() {
@@ -98,17 +110,37 @@ public class VacuumWorldCleaningAgent extends AbstractAgent {
 	System.out.println("Agent " + getID() + ": stop!");
     }
     
-    private Set<Analyzable> sendToEnvironment() {
-	/* TODO
-	 * create an event
-	 * send it to the output channel
-	 * wait for all the perceptions
-	 * collect the perceptions into a set
-	 * return the set.
-	 */
-	
-	//TODO change this
-	return Collections.emptySet();
+    private Set<Analyzable> sendToEnvironment(VacuumWorldAbstractAction action) {
+	try {
+	    VacuumWorldEvent event = new VacuumWorldEvent(action);
+	    this.output.writeObject(event);
+	    this.output.flush();
+	    
+	    return collectEnviromentFeedback();
+	}
+	catch(Exception e) {
+	    LogUtils.log(e);
+	    
+	    return Collections.emptySet();
+	}
+    }
+
+    private Set<Analyzable> collectEnviromentFeedback() {
+	try {
+	    Set<Analyzable> perceptions = new HashSet<>();
+	    Perception candidate = (Perception) this.input.readObject();
+	    perceptions.add((candidate));
+	    
+	    while(!(candidate instanceof VacuumWorldPerception)) {
+		candidate = (Perception) this.input.readObject();
+		perceptions.add((candidate));
+	    }
+	    
+	    return perceptions;
+	}
+	catch(Exception e) {
+	    throw new VacuumWorldRuntimeException(e);
+	}
     }
 
     @Override

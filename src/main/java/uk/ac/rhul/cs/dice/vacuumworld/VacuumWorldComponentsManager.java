@@ -61,7 +61,7 @@ public class VacuumWorldComponentsManager {
 
     private void createUniverse(boolean test) {
 	if(test) {
-	    createUniverseForDebug("big_example.json");
+	    createUniverseForDebug("easy.json");
 	}
 	else {
 	    JsonObject initialConfiguration = waitForConnection();

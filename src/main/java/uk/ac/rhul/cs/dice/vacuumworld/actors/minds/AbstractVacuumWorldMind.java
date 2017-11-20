@@ -22,8 +22,8 @@ public abstract class AbstractVacuumWorldMind extends AbstractAgentMind {
     private List<VacuumWorldPerception> lastCyclePerceptions;
     private List<VacuumWorldSpeechPerception> lastCycleReceivedMessages;
     
-    public AbstractVacuumWorldMind() {
-	super();
+    public AbstractVacuumWorldMind(String bodyId) {
+	super(bodyId);
 	
 	this.lastCyclePerceptions = new ArrayList<>();
 	this.lastCycleReceivedMessages = new ArrayList<>();
@@ -71,7 +71,7 @@ public abstract class AbstractVacuumWorldMind extends AbstractAgentMind {
 
     @Override
     public <T extends Action<?>> void execute(T action) {
-	((VacuumWorldAbstractAction) action).setActor("Pippo"); //TODO remove this
+	((VacuumWorldAbstractAction) action).setActor(getBodyId());
 	LogUtils.log(action.getActorID() + " is executing " + action.getClass().getSimpleName());
 	
 	return;

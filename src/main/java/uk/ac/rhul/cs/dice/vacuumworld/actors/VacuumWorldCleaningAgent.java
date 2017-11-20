@@ -1,7 +1,9 @@
 package uk.ac.rhul.cs.dice.vacuumworld.actors;
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -28,6 +30,7 @@ import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldPerception;
 
 public class VacuumWorldCleaningAgent extends AbstractAgent {
     private static final long serialVersionUID = -7231158706838196637L;
+    private transient Socket socket;
     private transient ObjectInputStream input;
     private transient ObjectOutputStream output;
     private volatile boolean stop;
@@ -42,6 +45,10 @@ public class VacuumWorldCleaningAgent extends AbstractAgent {
 	super(toCopy.getID(), toCopy.getAppearance(), toCopy.getAllSensors(), toCopy.getAllActuators(), toCopy.getMind());
     }
 
+    public Socket getSocket() {
+	return this.socket;
+    }
+    
     public void setStopFlag(boolean stop) {
 	this.stop = stop;
     }
@@ -87,7 +94,7 @@ public class VacuumWorldCleaningAgent extends AbstractAgent {
     
     private void realRun() {
 	while(!this.stop) {
-	    System.out.println("Agent " + getID() + " is being executed.");
+	    LogUtils.log(getID() + " is being executed.");
 	    VacuumWorldAbstractAction action = (VacuumWorldAbstractAction) getMind().decide();
 	    getMind().execute((Action<?>) action);
 	    setForMind(sendToEnvironment(action));
@@ -97,7 +104,7 @@ public class VacuumWorldCleaningAgent extends AbstractAgent {
 
     private void testRun() {
 	while(!this.stop) {
-	    System.out.println("Agent " + getID() + " is being executed.");
+	    LogUtils.log(getID() + " is being executed.");
 	    
 	    try {
 		Thread.sleep(2000);
@@ -107,7 +114,7 @@ public class VacuumWorldCleaningAgent extends AbstractAgent {
 	    }
 	}
 	
-	System.out.println("Agent " + getID() + ": stop!");
+	LogUtils.log(getID() + ": stop!");
     }
     
     private Set<Analyzable> sendToEnvironment(VacuumWorldAbstractAction action) {
@@ -128,10 +135,12 @@ public class VacuumWorldCleaningAgent extends AbstractAgent {
     private Set<Analyzable> collectEnviromentFeedback() {
 	try {
 	    Set<Analyzable> perceptions = new HashSet<>();
+	    LogUtils.log(getID() + ": waiting for perception.");
 	    Perception candidate = (Perception) this.input.readObject();
 	    perceptions.add((candidate));
 	    
 	    while(!(candidate instanceof VacuumWorldPerception)) {
+		LogUtils.log(getID() + ": waiting for perception again.");
 		candidate = (Perception) this.input.readObject();
 		perceptions.add((candidate));
 	    }
@@ -163,6 +172,17 @@ public class VacuumWorldCleaningAgent extends AbstractAgent {
 	return this.output;
     }
 
+    @Override
+    public void openSocket(String hostname, int port) throws IOException {
+	this.socket = new Socket(hostname, port);
+	ObjectOutputStream o = new ObjectOutputStream(this.socket.getOutputStream());
+	ObjectInputStream i = new ObjectInputStream(this.socket.getInputStream());
+	o.writeUTF(getID());
+	o.flush();
+	setOutputChannels(o);
+	setInputChannels(i);
+    }
+    
     @Override
     public void setInputChannels(ObjectInputStream input) {
 	this.input = input;

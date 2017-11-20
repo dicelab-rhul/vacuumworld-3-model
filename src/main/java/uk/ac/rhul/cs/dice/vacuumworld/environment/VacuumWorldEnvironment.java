@@ -7,6 +7,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -25,6 +26,7 @@ import uk.ac.rhul.cs.dice.agentcommon.interfaces.Actor;
 import uk.ac.rhul.cs.dice.agentcontainers.abstractimpl.AbstractEnvironment;
 import uk.ac.rhul.cs.dice.agentcontainers.enums.Orientation;
 import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldEvent;
+import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldPrinter;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractActionInterface;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractCommunicativeAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractPhysicalAction;
@@ -33,7 +35,11 @@ import uk.ac.rhul.cs.dice.vacuumworld.actions.messages.VacuumWorldMessage;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.results.VacuumWorldCommunicativeActionResult;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.results.VacuumWorldPhysicalActionResult;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.results.VacuumWorldSensingActionResult;
+import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldAvatar;
+import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldCleaningAgent;
+import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldUserAgent;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
+import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldAvatarAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldEnvironmentAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.physics.VacuumWorldPhysics;
 import uk.ac.rhul.cs.dice.vacuumworld.exceptions.VacuumWorldRuntimeException;
@@ -44,7 +50,8 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
     public static final int MINIMUM_SIZE = 3;
     public static final int MAXIMUM_SIZE = 10;
     private static final double LOADING_FACTOR = 0.75;
-    private static final int SERVER_PORT = 65000;
+    private int port;
+    private String hostname;
     private Map<VacuumWorldCoordinates, VacuumWorldLocation> grid;
     private int size;
     private VacuumWorldPhysics physics;
@@ -54,24 +61,40 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
     private volatile boolean stopFlag;
     private volatile boolean initializationComplete;
     
-    public VacuumWorldEnvironment(int dimension, boolean stopFlag) {
+    public VacuumWorldEnvironment(int dimension, boolean stopFlag, String hostname, int port) {
 	int upperSize = dimension > MAXIMUM_SIZE ? MAXIMUM_SIZE : dimension;
 	this.size = dimension < MINIMUM_SIZE ? MINIMUM_SIZE : upperSize;
 	this.grid = new ConcurrentHashMap<>(1 + (int) (this.size * this.size / LOADING_FACTOR));
-	this.physics = new VacuumWorldPhysics();
-	this.stopFlag = stopFlag;
 	
+	initCommon(stopFlag, hostname, port);
 	initGrid();
 	setAppearance(new VacuumWorldEnvironmentAppearance(this.grid));
     }
-    
-    public VacuumWorldEnvironment(Map<VacuumWorldCoordinates, VacuumWorldLocation> grid, boolean stopFlag) {
+
+    public VacuumWorldEnvironment(Map<VacuumWorldCoordinates, VacuumWorldLocation> grid, boolean stopFlag, String hostname, int port) {
 	this.size = (int) Math.sqrt(grid.size());
 	this.grid = new ConcurrentHashMap<>(grid);
+
+	initCommon(stopFlag, hostname, port);
+	setAppearance(new VacuumWorldEnvironmentAppearance(this.grid));
+    }
+    
+    private void stopServer() {
+	try {
+	    this.server.close();
+	}
+	catch(IOException e) {
+	    LogUtils.log(e);
+	}
+    }
+    
+    private void initCommon(boolean stopFlag, String hostname, int port) {
 	this.physics = new VacuumWorldPhysics();
 	this.stopFlag = stopFlag;
-	
-	setAppearance(new VacuumWorldEnvironmentAppearance(this.grid));
+	this.input = new HashMap<>();
+	this.output = new HashMap<>();
+	this.hostname = hostname;
+	this.port = port;
     }
     
     public void initSocket() {
@@ -84,7 +107,7 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
     }
 
     private void initSocketUnsafe() throws IOException {
-	this.server = new ServerSocket(SERVER_PORT);
+	this.server = new ServerSocket(this.port);
 	
 	while(!this.initializationComplete) {
 	    Socket socket = this.server.accept();
@@ -96,6 +119,14 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 	}
     }
 
+    public String getHostname() {
+	return this.hostname;
+    }
+    
+    public int getPort() {
+	return this.port;
+    }
+    
     public boolean getStopFlag() {
 	return this.stopFlag;
     }
@@ -144,17 +175,56 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
     
     public synchronized void listenAndExecute() {
 	this.input.values().forEach(this::listenForActorAndExecute);
+	VacuumWorldPrinter.dumpModelFromLocations(this.grid);
+	
+	long timestamp = System.nanoTime();
+	
+	while(true) {
+	    if(System.nanoTime() - timestamp > (long) 750000000) {
+		break;
+	    }
+	}
     }
 
     private void listenForActorAndExecute(ObjectInputStream is) {
 	try {
 	    VacuumWorldEvent event = (VacuumWorldEvent) is.readObject();
 	    VacuumWorldAbstractActionInterface action = event.getAction();
+	    printActorDetailsBefore(action);
 	    Result result = attemptExecution(action);
+	    printActorDetailsAfter(action);
 	    provideFeedback(result, getActorFromId(action.getActorID()));
 	}
 	catch(ClassNotFoundException | IOException e) {
 	    throw new VacuumWorldRuntimeException(e);
+	}
+    }
+
+    private void printActorDetailsBefore(VacuumWorldAbstractActionInterface action) {
+	printActorDetails(action);
+    }
+    
+    private void printActorDetailsAfter(VacuumWorldAbstractActionInterface action) {
+	printActorDetails(action);
+    }
+
+    private void printActorDetails(VacuumWorldAbstractActionInterface action) {
+	Actor actor = getActorFromId(action.getActorID());
+	Orientation orientation = getActorOrientation(actor);
+	
+	LogUtils.log(actor.getID() + ": position before attempt: " + this.grid.entrySet().stream().filter(e -> e.getValue().containsSuchActor(actor.getID())).findFirst().map(Entry::getKey).orElse(null) + ".");
+	LogUtils.log(actor.getID() + ": orientation before attempt: " + orientation + ".");
+    }
+
+    private Orientation getActorOrientation(Actor actor) {
+	if(actor instanceof VacuumWorldCleaningAgent || actor instanceof VacuumWorldUserAgent) {
+	    return ((VacuumWorldActorAppearance) ((VacuumWorldCleaningAgent) actor).getAppearance()).getOrientation();
+	}
+	else if(actor instanceof VacuumWorldAvatar) {
+	    return ((VacuumWorldAvatarAppearance) ((VacuumWorldAvatar) actor).getAppearance()).getOrientation();
+	}
+	else {
+	    return null;
 	}
     }
 
@@ -234,6 +304,7 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
     
     private void sendGenericPerception(Perception perception, String recipientId) {
 	try {
+	    LogUtils.log("Sending perception to " + recipientId + ".");
 	    this.output.get(recipientId).writeObject(perception);
 	    this.output.get(recipientId).flush();
 	}
@@ -289,7 +360,13 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
     }
 
     public boolean checkTargetLocation(VacuumWorldCoordinates original, Orientation orientation) {
-	return !this.grid.get(original.getNeighborCoordinates(orientation)).containsAnActor();
+	VacuumWorldLocation location = this.grid.get(original.getNeighborCoordinates(orientation));
+	
+	return checkWallFree(original, orientation) && location != null && !location.containsAnActor();
+    }
+    
+    private boolean checkWallFree(VacuumWorldCoordinates original, Orientation orientation) {
+	return !this.grid.get(original).getAppearance().checkForWall(orientation);
     }
     
     public boolean checkOldLocation(VacuumWorldCoordinates old, String id) {
@@ -310,11 +387,15 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
     @Override
     public void run() {
 	LogUtils.log("Environment is being executed.");
+	LogUtils.log("Initial configuration:");
+	
+	VacuumWorldPrinter.dumpModelFromLocations(this.grid);
 	
 	while(!this.stopFlag) {
 	    listenAndExecute();
 	}
 	
+	stopServer();
 	LogUtils.log("Environment: stop.");
     }
 }

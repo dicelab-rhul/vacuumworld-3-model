@@ -155,7 +155,7 @@ public class VacuumWorldParser {
 
     private static Actor buildAutonomousActor(JsonObject actorRepresentation, String id, AgentColor color, Orientation orientation, List<Sensor> sensors, List<Actuator> actuators, ActorType actorType) {
 	try {
-	    AbstractAgentMind mind = (AbstractAgentMind) Class.forName(actorRepresentation.get("mind").getAsString()).newInstance();
+	    AbstractAgentMind mind = (AbstractAgentMind) Class.forName(actorRepresentation.get("mind").getAsString()).getConstructor(String.class).newInstance(id);
 	    VacuumWorldMindAppearance mindAppearance = new VacuumWorldMindAppearance(actorRepresentation.get("mind").getAsString());
 	    VacuumWorldActorAppearance appearance = new VacuumWorldActorAppearance(id, color, actorType, orientation, mindAppearance, sensors, actuators);
 	    

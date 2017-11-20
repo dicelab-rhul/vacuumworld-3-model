@@ -1,5 +1,6 @@
 package uk.ac.rhul.cs.dice.vacuumworld.actors;
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Collections;
@@ -16,7 +17,6 @@ import uk.ac.rhul.cs.dice.agent.interfaces.Analyzable;
 import uk.ac.rhul.cs.dice.agent.interfaces.Sensor;
 import uk.ac.rhul.cs.dice.agentactions.enums.EnvironmentalActionType;
 import uk.ac.rhul.cs.dice.agentcommon.interfaces.Action;
-import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractAction;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
 
 public class VacuumWorldUserAgent extends AbstractAgent {
@@ -147,5 +147,11 @@ public class VacuumWorldUserAgent extends AbstractAgent {
     @Override
     public JsonObject serialize() {
         return ((VacuumWorldActorAppearance) getAppearance()).serialize();
+    }
+
+    @Override
+    public void openSocket(String hostname, int port) throws IOException {
+	// TODO Auto-generated method stub
+	
     }
 }

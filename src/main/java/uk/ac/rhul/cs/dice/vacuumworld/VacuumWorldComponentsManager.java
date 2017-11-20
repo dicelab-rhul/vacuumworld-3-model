@@ -5,6 +5,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
+import org.cloudstrife9999.logutilities.LogUtils;
 
 import com.google.gson.JsonObject;
 
@@ -14,13 +17,18 @@ import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldUserAgent;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldEnvironment;
 
 public class VacuumWorldComponentsManager {
+    private String hostname;
+    private int port;
     private ObjectInputStream input;
     private ObjectOutputStream output;
     private ExecutorService executor;
     private VacuumWorldUniverse universe;
     
     
-    public VacuumWorldComponentsManager(boolean test) throws IOException {
+    public VacuumWorldComponentsManager(boolean test, String hostname, int port) throws IOException {
+	this.hostname = hostname;
+	this.port = port;
+	
 	setupServer(test);
 	createUniverse(test);
 	startUniverse();
@@ -32,20 +40,29 @@ public class VacuumWorldComponentsManager {
 	    Thread.sleep(10000);
 	}
 	catch (InterruptedException e) {
-	    System.out.println("Main thread interrupted: stopping everything!");
+	    LogUtils.log("Main thread interrupted: stopping everything!");
 	    
 	    shutdown();
 	    Thread.currentThread().interrupt();
 	}
 	
-	System.out.println("Stopping everything!");
+	LogUtils.log("Stopping everything!");
 	
 	shutdown();
 }
     
     private void shutdown() {
-	setStopFlag(true);
-	this.executor.shutdownNow();
+	try {
+	    setStopFlag(true);
+	    this.executor.shutdownNow();
+	    this.executor.awaitTermination(5, TimeUnit.SECONDS);
+	}
+	catch (InterruptedException e) {
+	    Thread.currentThread().interrupt();
+	}
+	finally {
+	    System.exit(0);
+	}
     }
 
     private void startUniverse() {
@@ -82,13 +99,13 @@ public class VacuumWorldComponentsManager {
     }
 
     private void createUniverse(JsonObject initialConfiguration) {
-	VacuumWorldEnvironment env = new VacuumWorldEnvironment(VacuumWorldParser.parseConfiguration(initialConfiguration), false);
-	this.universe = new VacuumWorldUniverse(env);
+	VacuumWorldEnvironment env = new VacuumWorldEnvironment(VacuumWorldParser.parseConfiguration(initialConfiguration), false, this.hostname, this.port);
+	this.universe = new VacuumWorldUniverse(env, this.hostname, this.port);
     }
     
     private void createUniverseForDebug(String path) {
-	VacuumWorldEnvironment env = new VacuumWorldEnvironment(VacuumWorldParser.parseConfiguration(path), false);
-	this.universe = new VacuumWorldUniverse(env);
+	VacuumWorldEnvironment env = new VacuumWorldEnvironment(VacuumWorldParser.parseConfiguration(path), false, this.hostname, this.port);
+	this.universe = new VacuumWorldUniverse(env, this.hostname, this.port);
 	
 	toggleTest();
     }

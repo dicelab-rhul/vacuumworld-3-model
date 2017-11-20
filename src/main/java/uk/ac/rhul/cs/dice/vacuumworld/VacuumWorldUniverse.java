@@ -1,9 +1,6 @@
 package uk.ac.rhul.cs.dice.vacuumworld;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,42 +20,35 @@ import uk.ac.rhul.cs.dice.vacuumworld.exceptions.VacuumWorldRuntimeException;
 public class VacuumWorldUniverse extends AbstractUniverse {
     private volatile boolean stop;
     
-    public VacuumWorldUniverse() {
+    public VacuumWorldUniverse(String hostname, int port) {
 	super(null);
 	
-	createEnvironment();
+	createEnvironment(hostname, port);
 	((VacuumWorldUniverseAppearance) getAppearance()).update(getEnvironment());
 	
-	finalizeUniverse();
+	finalizeUniverse(hostname, port);
     }
 
-    private void finalizeUniverse() {
+    private void finalizeUniverse(String hostname, int port) {
 	connectEnvironment();
-	connectComponents();
+	connectComponents(hostname, port);
 	
 	this.stop = getEnvironment().getStopFlag();
     }
 
-    public VacuumWorldUniverse(VacuumWorldEnvironment environment) {
+    public VacuumWorldUniverse(VacuumWorldEnvironment environment, String hostname, int port) {
 	super(new VacuumWorldUniverseAppearance(environment), environment);
 	
-	finalizeUniverse();
+	finalizeUniverse(hostname, port);
     }
 
-    private void connectComponents() {
-	getAllCleaningAgents().forEach(this::connectToEnvironment);
+    private void connectComponents(String hostname, int port) {
+	getAllCleaningAgents().forEach(a -> connectToEnvironment(a, hostname, port));
     }
     
-    private void connectToEnvironment(VacuumWorldCleaningAgent agent) {
+    private void connectToEnvironment(VacuumWorldCleaningAgent agent, String hostname, int port) {
 	try {
-	    Socket socket = new Socket("127.0.0.1", 65000);
-	    ObjectOutputStream o = new ObjectOutputStream(socket.getOutputStream());
-	    ObjectInputStream i = new ObjectInputStream(socket.getInputStream());
-	    o.writeUTF(agent.getID());
-	    o.flush();
-		
-	    agent.setOutputChannels(o);
-	    agent.setInputChannels(i);
+	    agent.openSocket(hostname, port);
 	}
 	catch(IOException e) {
 	    throw new VacuumWorldRuntimeException(e);
@@ -69,16 +59,15 @@ public class VacuumWorldUniverse extends AbstractUniverse {
 	return (VacuumWorldEnvironment) getMainAmbient();
     }
     
-    private void createEnvironment() {
-	addAmbient(new VacuumWorldEnvironment(VacuumWorldParser.parseConfiguration("easy.json"), this.stop));
+    private void createEnvironment(String hostname, int port) {
+	addAmbient(new VacuumWorldEnvironment(VacuumWorldParser.parseConfiguration("easy.json"), this.stop, hostname, port));
     }
     
     private void connectEnvironment() {
 	try {
-	    Thread t = new Thread(new VacuumWorldEnvironmentBuilderTask(getEnvironment()));
-	    
+	    Thread t = new Thread(new VacuumWorldEnvironmentBuilderTask(getEnvironment()));	    
 	    t.start();
-	    //t.join();
+
 	    LogUtils.log("Environment socket OK.");
 	}
 	catch(Exception e) {

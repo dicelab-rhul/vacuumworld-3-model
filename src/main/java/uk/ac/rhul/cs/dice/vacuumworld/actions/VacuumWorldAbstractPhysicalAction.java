@@ -24,11 +24,15 @@ public abstract class VacuumWorldAbstractPhysicalAction extends VacuumWorldAbstr
     }
     
     @Override
-    public Result attempt(Environment context, Physics physics) {
+    public Result attempt(Environment context, Physics physics) {	
 	if(isPossible(context, physics)) {
+	    LogUtils.log(getActorID() + ": " + getClass().getSimpleName() + " is POSSIBLE.");
+	    
 	    return performAndCheckResult(context, physics);
 	}
 	else {
+	    LogUtils.log(getActorID() + ": " + getClass().getSimpleName() + " is IMPOSSIBLE.");
+	    
 	    return new VacuumWorldPhysicalActionResult(ActionResult.IMPOSSIBLE);
 	}
     }
@@ -46,11 +50,17 @@ public abstract class VacuumWorldAbstractPhysicalAction extends VacuumWorldAbstr
 
     private Result performAndCheckResultHelper(Environment context, Physics physics) {
 	Result result = perform(context, physics);
+	
+	LogUtils.log(getActorID() + ": " + getClass().getSimpleName() + " executed with: " + result.getActionResultType() + ".");
 	    
 	if(ActionResult.FAILURE.equals(result.getActionResultType()) || !succeeded(context, physics)) {
+	    LogUtils.log(getActorID() + ": " + getClass().getSimpleName() + " post-conditions check: FAILURE.");
+	    
 	    return new VacuumWorldPhysicalActionResult(ActionResult.FAILURE);
 	}
 	else {
+	    LogUtils.log(getActorID() + ": " + getClass().getSimpleName() + " post-conditions check: " + result.getActionResultType() + ".");
+	    
 	    return result;
 	}
     }

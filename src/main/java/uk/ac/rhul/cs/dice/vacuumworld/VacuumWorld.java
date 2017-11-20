@@ -1,24 +1,19 @@
 package uk.ac.rhul.cs.dice.vacuumworld;
 
 import java.io.IOException;
-import java.nio.file.Paths;
-
-import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldEnvironment;
 
 public class VacuumWorld {
 
     private VacuumWorld() {}
 
     public static void main(String[] args) throws IOException {
-	/*VacuumWorldEnvironment env = new VacuumWorldEnvironment(VacuumWorldParser.parseConfiguration("example.json"), false);
-	VacuumWorldEnvironment emptyEnv = new VacuumWorldEnvironment(10, false);
-	VacuumWorldEnvironment bigEnv = new VacuumWorldEnvironment(VacuumWorldParser.parseConfiguration("big_example.json"), false);
-	VacuumWorldPrinter.dumpModelFromLocations(env.getGrid());
-	VacuumWorldPrinter.dumpModelFromLocations(emptyEnv.getGrid());
-	VacuumWorldPrinter.dumpModelFromLocations(bigEnv.getGrid());
-	VacuumWorldSerializer.dumpToFile(Paths.get(".", "example_new.json"), VacuumWorldSerializer.serialize(env));
-	VacuumWorldSerializer.dumpToFile(Paths.get(".", "empty_new.json"), VacuumWorldSerializer.serialize(emptyEnv));
-	VacuumWorldSerializer.dumpToFile(Paths.get(".", "big_example_new.json"), VacuumWorldSerializer.serialize(bigEnv));*/
-	new VacuumWorldComponentsManager(true);
+	//String[] hostDetails = parseHostDetails(args);
+	
+	new VacuumWorldComponentsManager(true, "127.0.0.1", 65000); //TODO change
+    }
+
+    private static String[] parseHostDetails(String[] args) {
+	// TODO Auto-generated method stub
+	return null;
     }
 }

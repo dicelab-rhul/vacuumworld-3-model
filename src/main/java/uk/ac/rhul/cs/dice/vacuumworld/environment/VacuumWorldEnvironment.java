@@ -3,6 +3,8 @@ package uk.ac.rhul.cs.dice.vacuumworld.environment;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -42,12 +44,15 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
     public static final int MINIMUM_SIZE = 3;
     public static final int MAXIMUM_SIZE = 10;
     private static final double LOADING_FACTOR = 0.75;
+    private static final int SERVER_PORT = 65000;
     private Map<VacuumWorldCoordinates, VacuumWorldLocation> grid;
     private int size;
     private VacuumWorldPhysics physics;
+    private ServerSocket server;
     private Map<String, ObjectInputStream> input;
     private Map<String, ObjectOutputStream> output;
     private volatile boolean stopFlag;
+    private volatile boolean initializationComplete;
     
     public VacuumWorldEnvironment(int dimension, boolean stopFlag) {
 	int upperSize = dimension > MAXIMUM_SIZE ? MAXIMUM_SIZE : dimension;
@@ -69,12 +74,38 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 	setAppearance(new VacuumWorldEnvironmentAppearance(this.grid));
     }
     
+    public void initSocket() {
+	try {
+	    initSocketUnsafe();
+	}
+	catch(IOException e) {
+	    throw new VacuumWorldRuntimeException(e);
+	}
+    }
+
+    private void initSocketUnsafe() throws IOException {
+	this.server = new ServerSocket(SERVER_PORT);
+	
+	while(!this.initializationComplete) {
+	    Socket socket = this.server.accept();
+	    ObjectOutputStream o = new ObjectOutputStream(socket.getOutputStream());
+	    ObjectInputStream i = new ObjectInputStream(socket.getInputStream());
+	    String recipientId = i.readUTF();
+	    this.input.put(recipientId, i);
+	    this.output.put(recipientId, o);
+	}
+    }
+
     public boolean getStopFlag() {
 	return this.stopFlag;
     }
     
     public void setStopFlag(boolean flag) {
 	this.stopFlag = flag;
+    }
+    
+    public void finishInitialization() {
+	this.initializationComplete = true;
     }
     
     public void setInputStreams(Map<String, ObjectInputStream> input) {

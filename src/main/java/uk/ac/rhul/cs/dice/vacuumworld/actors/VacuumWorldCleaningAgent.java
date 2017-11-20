@@ -28,7 +28,7 @@ import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.exceptions.VacuumWorldRuntimeException;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldPerception;
 
-public class VacuumWorldCleaningAgent extends AbstractAgent {
+public class VacuumWorldCleaningAgent extends AbstractAgent implements VacuumWorldActiveBodyInterface {
     private static final long serialVersionUID = -7231158706838196637L;
     private transient Socket socket;
     private transient ObjectInputStream input;

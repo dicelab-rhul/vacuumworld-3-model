@@ -18,7 +18,7 @@ import uk.ac.rhul.cs.dice.agentactions.enums.EnvironmentalActionType;
 import uk.ac.rhul.cs.dice.agentcommon.interfaces.Action;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldAvatarAppearance;
 
-public class VacuumWorldAvatar extends AbstractAvatar {
+public class VacuumWorldAvatar extends AbstractAvatar implements VacuumWorldActiveBodyInterface {
     private static final long serialVersionUID = 7363668279670343837L;
     private volatile boolean stop;
     private volatile boolean pause;

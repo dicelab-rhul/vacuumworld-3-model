@@ -19,7 +19,7 @@ import uk.ac.rhul.cs.dice.agentactions.enums.EnvironmentalActionType;
 import uk.ac.rhul.cs.dice.agentcommon.interfaces.Action;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
 
-public class VacuumWorldUserAgent extends AbstractAgent {
+public class VacuumWorldUserAgent extends AbstractAgent implements VacuumWorldActiveBodyInterface {
     private static final long serialVersionUID = -2882228263580151389L;
     private transient ObjectInputStream input;
     private transient ObjectOutputStream output;

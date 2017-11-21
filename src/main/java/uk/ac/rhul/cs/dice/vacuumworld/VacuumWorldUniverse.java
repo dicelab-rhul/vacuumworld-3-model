@@ -3,6 +3,7 @@ package uk.ac.rhul.cs.dice.vacuumworld;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.cloudstrife9999.logutilities.LogUtils;
 
@@ -75,10 +76,12 @@ public class VacuumWorldUniverse extends AbstractUniverse {
     
     private void connectEnvironment() {
 	try {
+	    LogUtils.log(this.getClass().getSimpleName() + ": creating environment...");
+	    
 	    Thread t = new Thread(new VacuumWorldEnvironmentBuilderTask(getEnvironment()));	    
 	    t.start();
 
-	    LogUtils.log("Environment socket OK.");
+	    LogUtils.log(this.getClass().getSimpleName() + ": environment socket OK.");
 	}
 	catch(Exception e) {
 	    LogUtils.log(e);
@@ -87,32 +90,19 @@ public class VacuumWorldUniverse extends AbstractUniverse {
     }
     
     public Set<VacuumWorldCleaningAgent> getAllCleaningAgents() {
-	Set<VacuumWorldCleaningAgent> agents = new HashSet<>();
-	getMainAmbient().getGrid().values().stream().filter(VacuumWorldLocation::containsACleaningAgent).map(VacuumWorldLocation::getAgentIfAny).forEach(agents::add);
-	
-	return agents;
+	return getMainAmbient().getGrid().values().stream().filter(VacuumWorldLocation::containsACleaningAgent).map(VacuumWorldLocation::getAgentIfAny).collect(Collectors.toSet());
     }
     
     public Set<VacuumWorldUserAgent> getAllUsers() {
-	Set<VacuumWorldUserAgent> users = new HashSet<>();
-	getMainAmbient().getGrid().values().stream().filter(VacuumWorldLocation::containsAUser).map(VacuumWorldLocation::getUserIfAny).forEach(users::add);	
-	
-	return users;
+	return getMainAmbient().getGrid().values().stream().filter(VacuumWorldLocation::containsAUser).map(VacuumWorldLocation::getUserIfAny).collect(Collectors.toSet());	
     }
     
     public Set<VacuumWorldAvatar> getAllAvatars() {
-	Set<VacuumWorldAvatar> avatars = new HashSet<>();
-	getMainAmbient().getGrid().values().stream().filter(VacuumWorldLocation::containsAnAvatar).map(VacuumWorldLocation::getAvatarIfAny).forEach(avatars::add);	
-	
-	return avatars;
+	return getMainAmbient().getGrid().values().stream().filter(VacuumWorldLocation::containsAnAvatar).map(VacuumWorldLocation::getAvatarIfAny).collect(Collectors.toSet());	
     }
     
     public Set<VacuumWorldActor> getAllActors() {
-	Set<VacuumWorldActor> actors = new HashSet<>();
-	
-	getMainAmbient().getGrid().values().stream().filter(VacuumWorldLocation::containsAnActor).map(VacuumWorldLocation::getActorIfAny).forEach(actors::add);
-	
-	return actors;
+	return getMainAmbient().getGrid().values().stream().filter(VacuumWorldLocation::containsAnActor).map(VacuumWorldLocation::getActorIfAny).collect(Collectors.toSet());
     }
     
     public int countActiveBodies() {

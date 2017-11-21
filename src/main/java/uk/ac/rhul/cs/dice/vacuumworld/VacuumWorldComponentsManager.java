@@ -37,13 +37,13 @@ public class VacuumWorldComponentsManager {
 	    Thread.sleep(10000);
 	}
 	catch (InterruptedException e) {
-	    LogUtils.log("Main thread interrupted: stopping everything!");
+	    LogUtils.log(this.getClass().getSimpleName() + ": main thread interrupted: stopping everything!");
 	    
 	    shutdown();
 	    Thread.currentThread().interrupt();
 	}
 	
-	LogUtils.log("Stopping everything!");
+	LogUtils.log(this.getClass().getSimpleName() + ": time up! Stopping everything!");
 	
 	shutdown();
 }
@@ -62,15 +62,20 @@ public class VacuumWorldComponentsManager {
 	}
     }
 
-    private void startUniverse() {
+    private void startUniverse() {	
 	this.executor = Executors.newFixedThreadPool(1 + this.universe.countActiveBodies());
+	
+	LogUtils.log(this.getClass().getSimpleName() + ": starting environment...");
 	this.executor.submit(this.universe.getEnvironment());
 	
+	LogUtils.log(this.getClass().getSimpleName() + ": starting actors...");
 	this.universe.getAllActors().forEach(actor -> actor.setStopFlag(this.universe.getEnvironment().getStopFlag()));
 	this.universe.getAllActors().forEach(this.executor::submit);
     }
 
     private void createUniverse(boolean fromFile, boolean simulatedRun) {
+	LogUtils.log(this.getClass().getSimpleName() + ": starting universe...");
+	
 	if(fromFile) {
 	    createUniverseForDebug("easy.json", simulatedRun);
 	}
@@ -86,6 +91,8 @@ public class VacuumWorldComponentsManager {
     }
 
     private void setupServer(boolean fromFile) throws IOException {
+	LogUtils.log(this.getClass().getSimpleName() + ": starting listener for Controller...");
+	
 	if(!fromFile) {
 	    this.output = new ObjectOutputStream(System.out);
 	    this.input = new ObjectInputStream(System.in);

@@ -27,6 +27,7 @@ import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractAction;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldAutonomousActorAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.exceptions.VacuumWorldRuntimeException;
+import uk.ac.rhul.cs.dice.vacuumworld.perception.StopPerception;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldPerception;
 
 public class VacuumWorldCleaningAgent extends AbstractAgent implements VacuumWorldActor {
@@ -137,22 +138,35 @@ public class VacuumWorldCleaningAgent extends AbstractAgent implements VacuumWor
     private Set<Analyzable> collectEnviromentFeedback() {
 	try {
 	    Set<Analyzable> perceptions = new HashSet<>();
-	    LogUtils.log(getID() + ": waiting for perception.");
-	    Perception candidate = (Perception) this.input.readObject();
-	    LogUtils.log(getID() + ": got perception.");
-	    perceptions.add((candidate));
 	    
-	    while(!(candidate instanceof VacuumWorldPerception)) {
-		LogUtils.log(getID() + ": waiting for perception again.");
+	    Perception candidate = null;
+	    
+	    do {
+		LogUtils.log(getID() + ": waiting for perception.");
 		candidate = (Perception) this.input.readObject();
+		checkStop(candidate);
 		LogUtils.log(getID() + ": got perception.");
 		perceptions.add((candidate));
 	    }
+	    while(!(candidate instanceof VacuumWorldPerception));
 	    
 	    return perceptions;
 	}
+	catch(IOException e) {
+	    LogUtils.log(getID() + ": stop.");
+	    LogUtils.fakeLog(e);
+	    this.stop = true;
+	    
+	    return Collections.emptySet();
+	}
 	catch(Exception e) {
 	    throw new VacuumWorldRuntimeException(e);
+	}
+    }
+
+    private void checkStop(Perception candidate) throws IOException {
+	if(candidate instanceof StopPerception) {
+	    throw new IOException();
 	}
     }
 

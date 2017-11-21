@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -144,6 +145,10 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
     
     public void setOutputStreams(Map<String, ObjectOutputStream> output) {
 	this.output = output;
+    }
+    
+    public Collection<ObjectOutputStream> getAllOutputStreams() {
+	return this.output.values();
     }
 
     private void initGrid() {

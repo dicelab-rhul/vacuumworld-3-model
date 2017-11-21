@@ -12,6 +12,7 @@ import org.cloudstrife9999.logutilities.LogUtils;
 import com.google.gson.JsonObject;
 
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldEnvironment;
+import uk.ac.rhul.cs.dice.vacuumworld.perception.StopPerception;
 
 public class VacuumWorldComponentsManager {
     private String hostname;
@@ -51,6 +52,7 @@ public class VacuumWorldComponentsManager {
     private void shutdown() {
 	try {
 	    setStopFlag(true);
+	    this.universe.getMainAmbient().getAllOutputStreams().forEach(this::shutdownChannel);
 	    this.executor.shutdownNow();
 	    this.executor.awaitTermination(5, TimeUnit.SECONDS);
 	}
@@ -58,7 +60,17 @@ public class VacuumWorldComponentsManager {
 	    Thread.currentThread().interrupt();
 	}
 	finally {
-	    System.exit(0);
+	    System.exit(0); //just in case.
+	}
+    }
+
+    private void shutdownChannel(ObjectOutputStream o) {
+	try {
+	    o.writeObject(new StopPerception());
+	    o.flush();
+	}
+	catch(IOException e) {
+	    LogUtils.log(e);
 	}
     }
 

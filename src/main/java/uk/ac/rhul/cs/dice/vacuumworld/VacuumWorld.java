@@ -66,7 +66,7 @@ public class VacuumWorld {
     }
 
     private static String parsePort(String portFlag, String port) {
-	return parseString("--ip", portFlag, port);
+	return parseString("--port", portFlag, port);
     }
 
     private static String parseString(String match, String flag, String candidate) {

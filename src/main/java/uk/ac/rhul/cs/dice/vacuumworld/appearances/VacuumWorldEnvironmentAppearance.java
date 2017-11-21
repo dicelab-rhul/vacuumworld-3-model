@@ -134,7 +134,7 @@ public class VacuumWorldEnvironmentAppearance implements EnvironmentAppearance, 
     public boolean isWallOneStepAhead(String id) {
 	VacuumWorldLocationAppearance location = getLocationFromActiveBodyId(id);
 	Orientation orientation = location.getActiveBodyOrientation();
-	VacuumWorldCoordinates ahead = (VacuumWorldCoordinates) location.getCoordinates().getForwardCoordinates(orientation);
+	VacuumWorldCoordinates ahead = location.getCoordinates().getForwardCoordinates(orientation);
 	
 	return doesSuchLocationExistInPerception(ahead) && this.grid.get(ahead).checkForWall(orientation);
     }
@@ -143,7 +143,7 @@ public class VacuumWorldEnvironmentAppearance implements EnvironmentAppearance, 
     public boolean isWallOneStepOnTheLeft(String id) {
 	VacuumWorldLocationAppearance location = getLocationFromActiveBodyId(id);
 	Orientation orientation = location.getActiveBodyOrientation();
-	VacuumWorldCoordinates left = (VacuumWorldCoordinates) location.getCoordinates().getLeftCoordinates(orientation);
+	VacuumWorldCoordinates left = location.getCoordinates().getLeftCoordinates(orientation);
 	
 	return doesSuchLocationExistInPerception(left) && this.grid.get(left).checkForWall(orientation.getLeft());
     }
@@ -152,7 +152,7 @@ public class VacuumWorldEnvironmentAppearance implements EnvironmentAppearance, 
     public boolean isWallOneStepOnTheRight(String id) {
 	VacuumWorldLocationAppearance location = getLocationFromActiveBodyId(id);
 	Orientation orientation = location.getActiveBodyOrientation();
-	VacuumWorldCoordinates right = (VacuumWorldCoordinates) location.getCoordinates().getRightCoordinates(orientation);
+	VacuumWorldCoordinates right = location.getCoordinates().getRightCoordinates(orientation);
 	
 	return doesSuchLocationExistInPerception(right) && this.grid.get(right).checkForWall(orientation.getRight());
     }
@@ -203,23 +203,23 @@ public class VacuumWorldEnvironmentAppearance implements EnvironmentAppearance, 
     }
     
     private VacuumWorldCoordinates getForwardCoordinates(String id) {
-	return (VacuumWorldCoordinates) getLocationFromActiveBodyId(id).getCoordinates().getForwardCoordinates(getActiveBodyOrientation(id));
+	return getLocationFromActiveBodyId(id).getCoordinates().getForwardCoordinates(getActiveBodyOrientation(id));
     }
     
     private VacuumWorldCoordinates getLeftCoordinates(String id) {
-	return (VacuumWorldCoordinates) getLocationFromActiveBodyId(id).getCoordinates().getLeftCoordinates(getActiveBodyOrientation(id));
+	return getLocationFromActiveBodyId(id).getCoordinates().getLeftCoordinates(getActiveBodyOrientation(id));
     }
     
     private VacuumWorldCoordinates getRightCoordinates(String id) {
-	return (VacuumWorldCoordinates) getLocationFromActiveBodyId(id).getCoordinates().getRightCoordinates(getActiveBodyOrientation(id));
+	return getLocationFromActiveBodyId(id).getCoordinates().getRightCoordinates(getActiveBodyOrientation(id));
     }
     
     private VacuumWorldCoordinates getForwardLeftCoordinates(String id) {
-	return (VacuumWorldCoordinates) getLocationFromActiveBodyId(id).getCoordinates().getForwardLeftCoordinates(getActiveBodyOrientation(id));
+	return getLocationFromActiveBodyId(id).getCoordinates().getForwardLeftCoordinates(getActiveBodyOrientation(id));
     }
     
     private VacuumWorldCoordinates getForwardRightCoordinates(String id) {
-	return (VacuumWorldCoordinates) getLocationFromActiveBodyId(id).getCoordinates().getForwardRightCoordinates(getActiveBodyOrientation(id));
+	return getLocationFromActiveBodyId(id).getCoordinates().getForwardRightCoordinates(getActiveBodyOrientation(id));
     }
     
     @Override

@@ -139,11 +139,13 @@ public class VacuumWorldCleaningAgent extends AbstractAgent implements VacuumWor
 	    Set<Analyzable> perceptions = new HashSet<>();
 	    LogUtils.log(getID() + ": waiting for perception.");
 	    Perception candidate = (Perception) this.input.readObject();
+	    LogUtils.log(getID() + ": got perception.");
 	    perceptions.add((candidate));
 	    
 	    while(!(candidate instanceof VacuumWorldPerception)) {
 		LogUtils.log(getID() + ": waiting for perception again.");
 		candidate = (Perception) this.input.readObject();
+		LogUtils.log(getID() + ": got perception.");
 		perceptions.add((candidate));
 	    }
 	    

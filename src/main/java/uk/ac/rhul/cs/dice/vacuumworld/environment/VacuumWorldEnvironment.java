@@ -174,7 +174,10 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
     
     public synchronized void listenAndExecute() {
 	this.input.values().forEach(this::listenForActorAndExecute);
+	LogUtils.log(this.getClass().getSimpleName() + ": printing current configuration...");
 	VacuumWorldPrinter.dumpModelFromLocations(this.grid);
+	LogUtils.log(this.getClass().getSimpleName() + ": end of the cycle.\n\n--------------------\n");
+	LogUtils.log(this.getClass().getSimpleName() + ": start of the cycle.\n");
 	
 	long timestamp = System.nanoTime();
 	
@@ -295,9 +298,10 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
     
     private void sendGenericPerception(Perception perception, String recipientId) {
 	try {
-	    LogUtils.log("Sending perception to " + recipientId + ".");
+	    LogUtils.log(this.getClass().getSimpleName() + ": sending perception to " + recipientId + ".");
 	    this.output.get(recipientId).writeObject(perception);
 	    this.output.get(recipientId).flush();
+	    LogUtils.log(this.getClass().getSimpleName() + ": sent perception to " + recipientId + ".");
 	}
 	catch(IOException e) {
 	    throw new VacuumWorldRuntimeException(e);
@@ -375,16 +379,18 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 
     @Override
     public void run() {
-	LogUtils.log("Environment is being executed.");
-	LogUtils.log("Initial configuration:");
+	LogUtils.log(this.getClass().getSimpleName() + " is being executed.");
+	LogUtils.log(this.getClass().getSimpleName() + ": printing initial configuration...");
 	
 	VacuumWorldPrinter.dumpModelFromLocations(this.grid);
+	LogUtils.log(this.getClass().getSimpleName() + ": printed initial configuration\n\n--------------------\n");
+	LogUtils.log(this.getClass().getSimpleName() + ": start of the cycle.\n");
 	
 	while(!this.stopFlag) {
 	    listenAndExecute();
 	}
 	
 	stopServer();
-	LogUtils.log("Environment: stop.");
+	LogUtils.log(this.getClass().getSimpleName() + ": stop.");
     }
 }

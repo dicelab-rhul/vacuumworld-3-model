@@ -30,7 +30,7 @@ public class VacuumWorldPrinter {
 	int size = (int) Math.sqrt(model.size());
 	String representation = size == 1 ? getSingleLocationRepresentation(model) : buildRows(model, size);
 	
-	LogUtils.log(representation);
+	LogUtils.log("\n" + representation);
     }
     
     private static String getSingleLocationRepresentation(Map<VacuumWorldCoordinates, VacuumWorldLocationAppearance> model) {

@@ -73,6 +73,11 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 	setAppearance(new VacuumWorldEnvironmentAppearance(this.grid));
     }
     
+    @Override
+    public VacuumWorldEnvironmentAppearance getAppearance() {
+        return (VacuumWorldEnvironmentAppearance) super.getAppearance();
+    }
+    
     private void stopServer() {
 	try {
 	    this.server.close();
@@ -195,19 +200,19 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
     }
 
     private void printActorDetailsBefore(VacuumWorldAbstractActionInterface action) {
-	printActorDetails(action);
+	printActorDetails(action, "before");
     }
     
     private void printActorDetailsAfter(VacuumWorldAbstractActionInterface action) {
-	printActorDetails(action);
+	printActorDetails(action, "after");
     }
 
-    private void printActorDetails(VacuumWorldAbstractActionInterface action) {
+    private void printActorDetails(VacuumWorldAbstractActionInterface action, String moment) {
 	VacuumWorldActor actor = getActorFromId(action.getActorID());
 	Orientation orientation = getActorOrientation(actor);
 	
-	LogUtils.log(actor.getID() + ": position before attempt: " + this.grid.entrySet().stream().filter(e -> e.getValue().containsSuchActor(actor.getID())).findFirst().map(Entry::getKey).orElse(null) + ".");
-	LogUtils.log(actor.getID() + ": orientation before attempt: " + orientation + ".");
+	LogUtils.log(actor.getID() + ": position " + moment + " attempt: " + this.grid.entrySet().stream().filter(e -> e.getValue().containsSuchActor(actor.getID())).findFirst().map(Entry::getKey).orElse(null) + ".");
+	LogUtils.log(actor.getID() + ": orientation " + moment + " attempt: " + orientation + ".");
     }
 
     private Orientation getActorOrientation(VacuumWorldActor actor) {

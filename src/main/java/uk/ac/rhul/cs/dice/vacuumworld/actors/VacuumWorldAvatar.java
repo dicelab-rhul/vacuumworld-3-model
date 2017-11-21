@@ -145,7 +145,7 @@ public class VacuumWorldAvatar extends AbstractAvatar implements VacuumWorldActo
     
     @Override
     public JsonObject serialize() {
-        return ((VacuumWorldAvatarAppearance) this.getAppearance()).serialize();
+        return this.getAppearance().serialize();
     }
 
     @Override

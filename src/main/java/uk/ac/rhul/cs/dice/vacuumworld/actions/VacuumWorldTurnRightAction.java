@@ -4,6 +4,7 @@ import uk.ac.rhul.cs.dice.agentactions.enums.ActionResult;
 import uk.ac.rhul.cs.dice.agentactions.interfaces.Result;
 import uk.ac.rhul.cs.dice.agentcontainers.interfaces.Environment;
 import uk.ac.rhul.cs.dice.agentcontainers.interfaces.Physics;
+import uk.ac.rhul.cs.dice.vacuumworld.actions.enums.TurnDirection;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.enums.VacuumWorldPhysicalActionsEnum;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.results.VacuumWorldPhysicalActionResult;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldEnvironment;
@@ -13,7 +14,7 @@ public class VacuumWorldTurnRightAction extends VacuumWorldTurnAction {
     private static final long serialVersionUID = -2393171986958596979L;
 
     public VacuumWorldTurnRightAction() {
-	super(VacuumWorldPhysicalActionsEnum.TURN_RIGHT);
+	super(VacuumWorldPhysicalActionsEnum.TURN_RIGHT, TurnDirection.RIGHT);
     }
 
     @Override

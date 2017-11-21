@@ -84,11 +84,6 @@ public class VacuumWorldLocation implements VacuumWorldLocationInterface, Compar
     }
     
     @Override
-    public boolean containsSuchActor(String id) {
-	return containsAnActor() && id.equals(getActorIfAny().getID());
-    }
-    
-    @Override
     public boolean containsCleaningAgentOfColor(AgentColor color) {
 	if(color == null) {
 	    throw new IllegalArgumentException();
@@ -225,22 +220,6 @@ public class VacuumWorldLocation implements VacuumWorldLocationInterface, Compar
 	}
 	else {
 	    return null;
-	}
-    }
-    
-    @Override
-    public void addActor(VacuumWorldActor actor) {
-	if(actor instanceof VacuumWorldCleaningAgent) {
-	    addAgent((VacuumWorldCleaningAgent) actor);
-	}
-	else if(actor instanceof VacuumWorldUserAgent) {
-	    addUser((VacuumWorldUserAgent) actor);
-	}
-	else if(actor instanceof VacuumWorldAvatar) {
-	    addAvatar((VacuumWorldAvatar) actor);
-	}
-	else {
-	    throw new IllegalArgumentException();
 	}
     }
     

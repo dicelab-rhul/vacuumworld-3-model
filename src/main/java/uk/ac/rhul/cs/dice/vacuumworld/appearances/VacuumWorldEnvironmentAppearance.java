@@ -131,26 +131,6 @@ public class VacuumWorldEnvironmentAppearance implements EnvironmentAppearance, 
     }
     
     @Override
-    public boolean isWallJustAhead(String id) {
-	return getLocationFromActiveBodyId(id).isWallInFront(id);
-    }
-    
-    @Override
-    public boolean isWallJustOnTheLeft(String id) {
-	return getLocationFromActiveBodyId(id).isWallOnTheLeft(id);
-    }
-    
-    @Override
-    public boolean isWallJustOnTheRight(String id) {
-	return getLocationFromActiveBodyId(id).isWallOnTheRight(id);
-    }
-    
-    @Override
-    public boolean isWallJustBehind(String id) {
-	return getLocationFromActiveBodyId(id).isWallBehind(id);
-    }
-    
-    @Override
     public boolean isWallOneStepAhead(String id) {
 	VacuumWorldLocationAppearance location = getLocationFromActiveBodyId(id);
 	Orientation orientation = location.getActiveBodyOrientation();
@@ -317,13 +297,6 @@ public class VacuumWorldEnvironmentAppearance implements EnvironmentAppearance, 
 	VacuumWorldCoordinates coordinates = getForwardRightCoordinates(id);
 	
 	return doesSuchLocationExistInPerception(coordinates) && this.grid.get(coordinates).isDirtThere();
-    }
-    
-    @Override
-    public AgentColor getAgentColorIfApplicable(String id) {
-	VacuumWorldLocationAppearance location = getLocationFromActiveBodyId(id);
-	
-	return location.isACleaningAgentThere() ? location.getAgentAppearanceIfAny().getColor() : null;
     }
     
     @Override

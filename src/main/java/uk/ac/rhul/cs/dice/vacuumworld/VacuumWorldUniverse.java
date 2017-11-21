@@ -11,7 +11,6 @@ import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldActor;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldAvatar;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldCleaningAgent;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldUserAgent;
-import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldEnvironmentAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldUniverseAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.buildtasks.VacuumWorldEnvironmentBuilderTask;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldEnvironment;
@@ -25,22 +24,36 @@ public class VacuumWorldUniverse extends AbstractUniverse {
 	super(null);
 	
 	createEnvironment(hostname, port);
-	((VacuumWorldUniverseAppearance) getAppearance()).update(getEnvironment());
+	getAppearance().update(getEnvironment());
 	
-	finalizeUniverse(hostname, port);
-    }
-
-    private void finalizeUniverse(String hostname, int port) {
-	connectEnvironment();
-	connectComponents(hostname, port);
-	
-	this.stop = getEnvironment().getStopFlag();
+	bootUniverse(hostname, port);
     }
 
     public VacuumWorldUniverse(VacuumWorldEnvironment environment, String hostname, int port) {
 	super(new VacuumWorldUniverseAppearance(environment), environment);
 	
-	finalizeUniverse(hostname, port);
+	bootUniverse(hostname, port);
+    }
+    
+    @Override
+    public VacuumWorldUniverseAppearance getAppearance() {
+        return (VacuumWorldUniverseAppearance) super.getAppearance();
+    }
+    
+    @Override
+    public VacuumWorldEnvironment getMainAmbient() {
+        return (VacuumWorldEnvironment) super.getMainAmbient();
+    }
+    
+    public VacuumWorldEnvironment getEnvironment() {
+	return getMainAmbient();
+    }
+    
+    private void bootUniverse(String hostname, int port) {
+	connectEnvironment();
+	connectComponents(hostname, port);
+	
+	this.stop = getEnvironment().getStopFlag();
     }
 
     private void connectComponents(String hostname, int port) {
@@ -54,10 +67,6 @@ public class VacuumWorldUniverse extends AbstractUniverse {
 	catch(IOException e) {
 	    throw new VacuumWorldRuntimeException(e);
 	}
-    }
-
-    public VacuumWorldEnvironment getEnvironment() {
-	return (VacuumWorldEnvironment) getMainAmbient();
     }
     
     private void createEnvironment(String hostname, int port) {
@@ -79,21 +88,21 @@ public class VacuumWorldUniverse extends AbstractUniverse {
     
     public Set<VacuumWorldCleaningAgent> getAllCleaningAgents() {
 	Set<VacuumWorldCleaningAgent> agents = new HashSet<>();
-	((VacuumWorldEnvironment) getMainAmbient()).getGrid().values().stream().filter(VacuumWorldLocation::containsACleaningAgent).map(VacuumWorldLocation::getAgentIfAny).forEach(agents::add);
+	getMainAmbient().getGrid().values().stream().filter(VacuumWorldLocation::containsACleaningAgent).map(VacuumWorldLocation::getAgentIfAny).forEach(agents::add);
 	
 	return agents;
     }
     
     public Set<VacuumWorldUserAgent> getAllUsers() {
 	Set<VacuumWorldUserAgent> users = new HashSet<>();
-	((VacuumWorldEnvironment) getMainAmbient()).getGrid().values().stream().filter(VacuumWorldLocation::containsAUser).map(VacuumWorldLocation::getUserIfAny).forEach(users::add);	
+	getMainAmbient().getGrid().values().stream().filter(VacuumWorldLocation::containsAUser).map(VacuumWorldLocation::getUserIfAny).forEach(users::add);	
 	
 	return users;
     }
     
     public Set<VacuumWorldAvatar> getAllAvatars() {
 	Set<VacuumWorldAvatar> avatars = new HashSet<>();
-	((VacuumWorldEnvironment) getMainAmbient()).getGrid().values().stream().filter(VacuumWorldLocation::containsAnAvatar).map(VacuumWorldLocation::getAvatarIfAny).forEach(avatars::add);	
+	getMainAmbient().getGrid().values().stream().filter(VacuumWorldLocation::containsAnAvatar).map(VacuumWorldLocation::getAvatarIfAny).forEach(avatars::add);	
 	
 	return avatars;
     }
@@ -101,12 +110,12 @@ public class VacuumWorldUniverse extends AbstractUniverse {
     public Set<VacuumWorldActor> getAllActors() {
 	Set<VacuumWorldActor> actors = new HashSet<>();
 	
-	((VacuumWorldEnvironment) getMainAmbient()).getGrid().values().stream().filter(VacuumWorldLocation::containsAnActor).map(VacuumWorldLocation::getActorIfAny).forEach(actors::add);
+	getMainAmbient().getGrid().values().stream().filter(VacuumWorldLocation::containsAnActor).map(VacuumWorldLocation::getActorIfAny).forEach(actors::add);
 	
 	return actors;
     }
     
     public int countActiveBodies() {
-	return ((VacuumWorldEnvironmentAppearance) ((VacuumWorldEnvironment) getMainAmbient()).getAppearance()).getAllLocationsWithActiveBodies().size();
+	return getMainAmbient().getAppearance().getAllLocationsWithActiveBodies().size();
     }
 }

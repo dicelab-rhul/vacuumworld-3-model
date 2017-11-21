@@ -204,6 +204,6 @@ public class VacuumWorldCleaningAgent extends AbstractAgent implements VacuumWor
     
     @Override
     public JsonObject serialize() {
-        return ((VacuumWorldAutonomousActorAppearance) getAppearance()).serialize();
+        return getAppearance().serialize();
     }
 }

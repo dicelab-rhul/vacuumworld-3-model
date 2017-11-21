@@ -17,7 +17,11 @@ public interface VacuumWorldLocationInterface extends Location {
     public abstract boolean containsACleaningAgent();
     public abstract boolean containsAUser();
     public abstract boolean containsAnAvatar();
-    public abstract boolean containsSuchActor(String id);
+    
+    public default boolean containsSuchActor(String id) {
+	return containsAnActor() && id.equals(getActorIfAny().getID());
+    }
+    
     public abstract boolean containsCleaningAgentOfColor(AgentColor color);
     public abstract boolean containsDirt();
     public abstract boolean isCleanableBy(AgentColor color);
@@ -34,7 +38,22 @@ public interface VacuumWorldLocationInterface extends Location {
     public abstract VacuumWorldAvatar removeAvatar();
     public abstract void addAvatar(VacuumWorldAvatar avatar);
     public abstract VacuumWorldActor removeActor();    
-    public abstract void addActor(VacuumWorldActor actor);
+
+    public default void addActor(VacuumWorldActor actor) {
+	if(actor instanceof VacuumWorldCleaningAgent) {
+	    addAgent((VacuumWorldCleaningAgent) actor);
+	}
+	else if(actor instanceof VacuumWorldUserAgent) {
+	    addUser((VacuumWorldUserAgent) actor);
+	}
+	else if(actor instanceof VacuumWorldAvatar) {
+	    addAvatar((VacuumWorldAvatar) actor);
+	}
+	else {
+	    throw new IllegalArgumentException();
+	}
+    }
+    
     public abstract VacuumWorldDirt removeDirt();
     public abstract void addDirt(VacuumWorldDirt dirt);
     

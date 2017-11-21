@@ -1,5 +1,6 @@
 package uk.ac.rhul.cs.dice.vacuumworld.environment.physics;
 
+import uk.ac.rhul.cs.dice.agentcontainers.interfaces.Physics;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldBroadcastingAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldCleanAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldDropDirtAction;
@@ -13,7 +14,7 @@ import uk.ac.rhul.cs.dice.vacuumworld.actions.results.VacuumWorldPhysicalActionR
 import uk.ac.rhul.cs.dice.vacuumworld.actions.results.VacuumWorldSensingActionResult;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldEnvironment;
 
-public interface VacuumWorldPhysicsInterface {
+public interface VacuumWorldPhysicsInterface extends Physics {
     public abstract boolean isPossible(VacuumWorldMoveAction action, VacuumWorldEnvironment context);
     public abstract boolean isPossible(VacuumWorldTurnLeftAction action, VacuumWorldEnvironment context);
     public abstract boolean isPossible(VacuumWorldTurnRightAction action, VacuumWorldEnvironment context);

@@ -5,12 +5,12 @@ import java.io.Serializable;
 import com.google.gson.JsonObject;
 
 import uk.ac.rhul.cs.dice.agent.interfaces.ActiveBody;
-import uk.ac.rhul.cs.dice.agentcommon.interfaces.Appearance;
 import uk.ac.rhul.cs.dice.agentcontainers.enums.Orientation;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.AgentColor;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldAvatar;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldCleaningAgent;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldUserAgent;
+import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldAutonomousActorAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldAvatarAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldDirtAppearance;
@@ -35,12 +35,12 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
     
     /**
      * 
-     * Returns the {@link Appearance} of the {@link ActiveBody} that is present on this {@link VacuumWorldLocation}, if any, <code>null</code> otherwise.
+     * Returns the {@link VacuumWorldActorAppearance} of the {@link ActiveBody} that is present on this {@link VacuumWorldLocation}, if any, <code>null</code> otherwise.
      * 
-     * @return the {@link Appearance} of the {@link ActiveBody} that is present on this {@link VacuumWorldLocation}, if any, <code>null</code> otherwise.
+     * @return the {@link VacuumWorldActorAppearance} of the {@link ActiveBody} that is present on this {@link VacuumWorldLocation}, if any, <code>null</code> otherwise.
      * 
      */
-    public abstract Appearance getActiveBodyAppearanceIfAny();
+    public abstract VacuumWorldActorAppearance getActiveBodyAppearanceIfAny();
     
     /**
      * 
@@ -163,7 +163,16 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * @return the {@link Orientation} of the {@link ActiveBody} present on this {@link VacuumWorldLocation}.
      * 
      */
-    public abstract Orientation getActiveBodyOrientation();
+    public default Orientation getActiveBodyOrientation() {
+	Orientation orientation = getActiveBodyOrientationIfAny();
+	
+	if(orientation != null) {
+	    return orientation;
+	}
+	else {
+	    throw new IllegalArgumentException();
+	}
+    }
     
     /**
      * 
@@ -172,7 +181,9 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * @return the {@link Orientation} of the {@link ActiveBody} present on this {@link VacuumWorldLocation}, if any, <code>null</code> otherwise.
      * 
      */
-    public abstract Orientation getActiveBodyOrientationIfAny();
+    public default Orientation getActiveBodyOrientationIfAny() {
+	return isAnActiveBodyThere() ? getActiveBodyAppearanceIfAny().getOrientation() : null;
+    }
     
     /**
      * 
@@ -346,7 +357,9 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * @return whether or not an {@link ActiveBody} ({@link VacuumWorldCleaningAgent}, {@link VacuumWorldUserAgent}, or {@link VacuumWorldAvatar}) whose ID matches <code>id</code> is present on this {@link VacuumWorldLocation}.
      * 
      */
-    public abstract boolean containsSuchActiveBody(String id);
+    public default boolean containsSuchActiveBody(String id) {
+	return containsSuchCleaningAgent(id) || containsSuchUser(id) || containsSuchAvatar(id);
+    }
     
     /**
      * 
@@ -357,7 +370,9 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * @return whether or not a {@link VacuumWorldCleaningAgent} whose ID matches <code>id</code> is present on this {@link VacuumWorldLocation}.
      * 
      */
-    public abstract boolean containsSuchCleaningAgent(String id);
+    public default boolean containsSuchCleaningAgent(String id) {
+	return isACleaningAgentThere() && id.equals(this.getAgentAppearanceIfAny().getId());
+    }
     
     /**
      * 
@@ -368,7 +383,9 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * @return whether or not a {@link VacuumWorldUserAgent} whose ID matches <code>id</code> is present on this {@link VacuumWorldLocation}.
      * 
      */
-    public abstract boolean containsSuchUser(String id);
+    public default boolean containsSuchUser(String id) {
+	return isAUserThere() && id.equals(this.getUserAppearanceIfAny().getId());
+    }
     
     /**
      * 
@@ -379,7 +396,9 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * @return whether or not a {@link VacuumWorldAvatar} whose ID matches <code>id</code> is present on this {@link VacuumWorldLocation}.
      * 
      */
-    public abstract boolean containsSuchAvatar(String id);
+    public default boolean containsSuchAvatar(String id) {
+	return isAnAvatarThere() && id.equals(this.getAvatarAppearanceIfAny().getId());
+    }
     
     /**
      * 

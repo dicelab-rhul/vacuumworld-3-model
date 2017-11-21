@@ -17,12 +17,12 @@ import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldTurnRightAction;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldPerception;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldSpeechPerception;
 
-public abstract class AbstractVacuumWorldMind extends AbstractAgentMind {
+public abstract class VacuumWorldAbstractMind extends AbstractAgentMind {
     private static final long serialVersionUID = 5415182091402486290L;
     private List<VacuumWorldPerception> lastCyclePerceptions;
     private List<VacuumWorldSpeechPerception> lastCycleReceivedMessages;
     
-    public AbstractVacuumWorldMind(String bodyId) {
+    public VacuumWorldAbstractMind(String bodyId) {
 	super(bodyId);
 	
 	this.lastCyclePerceptions = new ArrayList<>();

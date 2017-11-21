@@ -281,7 +281,9 @@ public interface VacuumWorldGridPerceptionInterface {
      * @return whether or not the {@link Actor} whose ID matches <code>id</code>, has a wall in front of it.
      * 
      */
-    public abstract boolean isWallJustAhead(String id);
+    public default boolean isWallJustAhead(String id) {
+	return getLocationFromActiveBodyId(id).isWallInFront(id);
+    }
     
     /**
      * 
@@ -292,7 +294,9 @@ public interface VacuumWorldGridPerceptionInterface {
      * @return whether or not the {@link Actor} whose ID matches <code>id</code>, has a wall on its immediate left.
      * 
      */
-    public abstract boolean isWallJustOnTheLeft(String id);
+    public default boolean isWallJustOnTheLeft(String id) {
+	return getLocationFromActiveBodyId(id).isWallOnTheLeft(id);
+    }
     
     /**
      * 
@@ -303,7 +307,9 @@ public interface VacuumWorldGridPerceptionInterface {
      * @return whether or not the {@link Actor} whose ID matches <code>id</code>, has a wall on its immediate right.
      * 
      */
-    public abstract boolean isWallJustOnTheRight(String id);
+    public default boolean isWallJustOnTheRight(String id) {
+	return getLocationFromActiveBodyId(id).isWallOnTheRight(id);
+    }
     
     /**
      * 
@@ -314,7 +320,9 @@ public interface VacuumWorldGridPerceptionInterface {
      * @return whether or not the {@link Actor} whose ID matches <code>id</code>, has a wall on its back.
      * 
      */
-    public abstract boolean isWallJustBehind(String id);
+    public default boolean isWallJustBehind(String id) {
+	return getLocationFromActiveBodyId(id).isWallBehind(id);
+    }
     
     /**
      * 
@@ -550,7 +558,11 @@ public interface VacuumWorldGridPerceptionInterface {
      * @return the {@link AgentColor} of the {@link VacuumWorldCleaningAgent} whose ID matches <code>id</code>.
      * 
      */
-    public abstract AgentColor getAgentColorIfApplicable(String id);
+    public default AgentColor getAgentColorIfApplicable(String id) {
+	VacuumWorldLocationAppearance location = getLocationFromActiveBodyId(id);
+	
+	return location.isACleaningAgentThere() ? location.getAgentAppearanceIfAny().getColor() : null;
+    }
     
     /**
      * 

@@ -1,14 +1,14 @@
 package uk.ac.rhul.cs.dice.vacuumworld.environment.physics;
 
-import uk.ac.rhul.cs.dice.agent.abstractimpl.AbstractAgent;
 import uk.ac.rhul.cs.dice.agentactions.enums.ActionResult;
-import uk.ac.rhul.cs.dice.agentcontainers.interfaces.Physics;
+import uk.ac.rhul.cs.dice.agentcontainers.enums.Orientation;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldBroadcastingAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldCleanAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldDropDirtAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldMoveAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldSensingAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldSpeakAction;
+import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldTurnAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldTurnLeftAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldTurnRightAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.results.VacuumWorldCommunicativeActionResult;
@@ -17,12 +17,11 @@ import uk.ac.rhul.cs.dice.vacuumworld.actions.results.VacuumWorldSensingActionRe
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldActor;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldCleaningAgent;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldUserAgent;
-import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldAutonomousActorAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.dirt.VacuumWorldDirt;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldEnvironment;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldLocation;
 
-public class VacuumWorldPhysics implements Physics, VacuumWorldPhysicsInterface {
+public class VacuumWorldPhysics implements VacuumWorldPhysicsInterface {
 
     @Override
     public synchronized boolean isPossible(VacuumWorldMoveAction action, VacuumWorldEnvironment context) {
@@ -49,7 +48,7 @@ public class VacuumWorldPhysics implements Physics, VacuumWorldPhysicsInterface 
 	VacuumWorldActor actor = context.getActorFromId(actorID);
 	VacuumWorldLocation currentLocation = context.getLocationFromActorId(actorID);
 	
-	return actor != null && actor instanceof VacuumWorldCleaningAgent && currentLocation.isCleanableBy(((VacuumWorldAutonomousActorAppearance) ((VacuumWorldCleaningAgent) actor).getAppearance()).getColor());
+	return actor != null && actor instanceof VacuumWorldCleaningAgent && currentLocation.isCleanableBy(actor.getAppearance().getColor());
     }
 
     @Override
@@ -95,22 +94,15 @@ public class VacuumWorldPhysics implements Physics, VacuumWorldPhysicsInterface 
 
     @Override
     public synchronized VacuumWorldPhysicalActionResult perform(VacuumWorldTurnLeftAction action, VacuumWorldEnvironment context) {
-	String actorID = action.getActorID();
-	VacuumWorldActor actor = context.getActorFromId(actorID);
-	
-	if(actor == null) {
-	    throw new UnsupportedOperationException("The actor is null!");
-	}
-	else {
-	    action.setOriginalOrientation(context.getOrientation(actor));
-	    actor.turnLeft();
-	    
-	    return new VacuumWorldPhysicalActionResult(ActionResult.SUCCESS);
-	}
+	return performTurn(action, context);
     }
 
     @Override
     public synchronized VacuumWorldPhysicalActionResult perform(VacuumWorldTurnRightAction action, VacuumWorldEnvironment context) {
+	return performTurn(action, context);
+    }
+
+    private VacuumWorldPhysicalActionResult performTurn(VacuumWorldTurnAction action, VacuumWorldEnvironment context) {
 	String actorID = action.getActorID();
 	VacuumWorldActor actor = context.getActorFromId(actorID);
 	
@@ -119,7 +111,7 @@ public class VacuumWorldPhysics implements Physics, VacuumWorldPhysicsInterface 
 	}
 	else {
 	    action.setOriginalOrientation(context.getOrientation(actor));
-	    actor.turnRight();
+	    actor.turn(action.getTurnDirection());
 	    
 	    return new VacuumWorldPhysicalActionResult(ActionResult.SUCCESS);
 	}
@@ -182,18 +174,33 @@ public class VacuumWorldPhysics implements Physics, VacuumWorldPhysicsInterface 
 
     @Override
     public synchronized boolean succeeded(VacuumWorldTurnLeftAction action, VacuumWorldEnvironment context) {
-	String actorId = action.getActorID();
-	VacuumWorldActor actor = context.getActorFromId(actorId);
-	
-	return actor != null && action.getOriginalOrientation().getLeft().equals(((VacuumWorldAutonomousActorAppearance) ((AbstractAgent) actor).getAppearance()).getOrientation());
+	return turnSucceeded(action, context);
     }
 
     @Override
     public synchronized boolean succeeded(VacuumWorldTurnRightAction action, VacuumWorldEnvironment context) {
+	return turnSucceeded(action, context);
+    }
+    
+    private boolean turnSucceeded(VacuumWorldTurnAction action, VacuumWorldEnvironment context) {
 	String actorId = action.getActorID();
 	VacuumWorldActor actor = context.getActorFromId(actorId);
+	Orientation expected = getExpectedOrientation(action);
 	
-	return actor != null && action.getOriginalOrientation().getRight().equals(((VacuumWorldAutonomousActorAppearance) ((AbstractAgent) actor).getAppearance()).getOrientation());
+	return actor != null && expected.equals(actor.getAppearance().getOrientation());
+    }
+
+    private Orientation getExpectedOrientation(VacuumWorldTurnAction action) {
+	Orientation base = action.getOriginalOrientation();
+	
+	switch(action.getTurnDirection()) {
+	case LEFT:
+	    return base.getLeft();
+	case RIGHT:
+	    return base.getRight();
+	default:
+	    throw new IllegalArgumentException();
+	}
     }
 
     @Override
@@ -201,7 +208,7 @@ public class VacuumWorldPhysics implements Physics, VacuumWorldPhysicsInterface 
 	String actorId = action.getActorID();
 	VacuumWorldLocation current = context.getLocationFromActorId(actorId);
 	
-	return action.getCleanedDirtColor().canBeCleanedBy(((VacuumWorldAutonomousActorAppearance) ((AbstractAgent) context.getActorFromId(actorId)).getAppearance()).getColor()) && !current.containsDirt();
+	return action.getCleanedDirtColor().canBeCleanedBy(context.getActorFromId(actorId).getAppearance().getColor()) && !current.containsDirt();
     }
 
     @Override

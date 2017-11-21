@@ -2,6 +2,8 @@ package uk.ac.rhul.cs.dice.vacuumworld.appearances;
 
 import java.util.List;
 
+import com.google.gson.JsonObject;
+
 import uk.ac.rhul.cs.dice.agent.interfaces.ActorAppearance;
 import uk.ac.rhul.cs.dice.agent.interfaces.Actuator;
 import uk.ac.rhul.cs.dice.agent.interfaces.AvatarAppearance;
@@ -62,4 +64,7 @@ public interface VacuumWorldActorAppearance extends ActorAppearance, AvatarAppea
     public abstract List<Actuator> getActuators();
     
     public abstract List<Sensor> getSensors();
+    
+    @Override
+    public abstract JsonObject serialize();
 }

@@ -16,11 +16,6 @@ public class VacuumWorldUniverseAppearance implements UniverseAppearance {
     }
     
     public void update(VacuumWorldEnvironment env) {
-	if(env != null) {
-	    this.environment = (VacuumWorldEnvironmentAppearance) env.getAppearance();
-	}
-	else {
-	    this.environment = null;
-	}
+	this.environment = env != null ? env.getAppearance() : null;
     }
 }

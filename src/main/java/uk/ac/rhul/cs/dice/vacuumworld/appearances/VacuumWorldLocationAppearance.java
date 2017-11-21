@@ -147,23 +147,6 @@ public class VacuumWorldLocationAppearance implements Appearance, VacuumWorldLoc
     }
     
     @Override
-    public Orientation getActiveBodyOrientation() {
-	Orientation orientation = getActiveBodyOrientationIfAny();
-	
-	if(orientation != null) {
-	    return orientation;
-	}
-	else {
-	    throw new IllegalArgumentException();
-	}
-    }
-    
-    @Override
-    public Orientation getActiveBodyOrientationIfAny() {
-	return isAnActiveBodyThere() ? getActiveBodyAppearanceIfAny().getOrientation() : null;
-    }
-    
-    @Override
     public boolean isACleaningAgentThere() {
 	return isAnActiveBodyThere() && this.activeBodyAppearance.isCleaningAgent();
     }
@@ -241,26 +224,6 @@ public class VacuumWorldLocationAppearance implements Appearance, VacuumWorldLoc
     @Override
     public boolean isOrangeDirtThere() {
 	return isDirtThere() && VacuumWorldDirtColor.ORANGE.equals(this.dirtAppearance.getColor());
-    }
-    
-    @Override
-    public boolean containsSuchActiveBody(String id) {
-	return containsSuchCleaningAgent(id) || containsSuchUser(id) || containsSuchAvatar(id);
-    }
-    
-    @Override
-    public boolean containsSuchCleaningAgent(String id) {
-	return isACleaningAgentThere() && id.equals(this.getAgentAppearanceIfAny().getId());
-    }
-    
-    @Override
-    public boolean containsSuchUser(String id) {
-	return isAUserThere() && id.equals(this.getUserAppearanceIfAny().getId());
-    }
-    
-    @Override
-    public boolean containsSuchAvatar(String id) {
-	return isAnAvatarThere() && id.equals(this.getAvatarAppearanceIfAny().getId());
     }
     
     @Override
@@ -398,10 +361,10 @@ public class VacuumWorldLocationAppearance implements Appearance, VacuumWorldLoc
 
     private String getMiddleLineWithAgent() {
 	if(isDirtThere()) {
-	    return "  " + ((VacuumWorldAutonomousActorAppearance) this.activeBodyAppearance).getColor().toChar() + "+" + this.dirtAppearance.getColor().toChar() + "  "  + TEXTUAL_BORDER;
+	    return "  " + this.activeBodyAppearance.getColor().toChar() + "+" + this.dirtAppearance.getColor().toChar() + "  "  + TEXTUAL_BORDER;
 	}
 	else {
-	    return "   " + ((VacuumWorldAutonomousActorAppearance) this.activeBodyAppearance).getColor().toChar() + "   "  + TEXTUAL_BORDER;
+	    return "   " + this.activeBodyAppearance.getColor().toChar() + "   "  + TEXTUAL_BORDER;
 	}
     }
 }

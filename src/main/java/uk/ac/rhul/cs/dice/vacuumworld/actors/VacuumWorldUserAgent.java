@@ -26,7 +26,7 @@ public class VacuumWorldUserAgent extends AbstractAgent implements VacuumWorldAc
     private transient ObjectOutputStream output;
     private volatile boolean stop;
     private volatile boolean pause;
-    private boolean test;
+    private boolean simulatedRun;
 
     public VacuumWorldUserAgent(String id, VacuumWorldAutonomousActorAppearance appearance, List<Sensor> sensors, List<Actuator> actuators, AgentMind mind) {
 	super(id, appearance, sensors, actuators, mind);
@@ -47,8 +47,8 @@ public class VacuumWorldUserAgent extends AbstractAgent implements VacuumWorldAc
     }
     
     @Override
-    public void toggleTest() {
-	this.test = true;
+    public void setRunFlag(boolean simulatedRun) {
+	this.simulatedRun = simulatedRun;
     }
 
     @Override
@@ -72,7 +72,7 @@ public class VacuumWorldUserAgent extends AbstractAgent implements VacuumWorldAc
 
     @Override
     public void run() {
-	if(this.test) {
+	if(this.simulatedRun) {
 	    testRun();
 	}
 	else {

@@ -11,7 +11,6 @@ import org.cloudstrife9999.logutilities.LogUtils;
 
 import com.google.gson.JsonObject;
 
-import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldActor;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldEnvironment;
 
 public class VacuumWorldComponentsManager {
@@ -23,12 +22,12 @@ public class VacuumWorldComponentsManager {
     private VacuumWorldUniverse universe;
     
     
-    public VacuumWorldComponentsManager(boolean test, String hostname, int port) throws IOException {
+    public VacuumWorldComponentsManager(boolean fromFile, boolean simulatedRun, String hostname, int port) throws IOException {
 	this.hostname = hostname;
 	this.port = port;
 	
-	setupServer(test);
-	createUniverse(test);
+	setupServer(fromFile);
+	createUniverse(fromFile, simulatedRun);
 	startUniverse();
 	stopUniverse();
     }
@@ -71,9 +70,9 @@ public class VacuumWorldComponentsManager {
 	this.universe.getAllActors().forEach(this.executor::submit);
     }
 
-    private void createUniverse(boolean test) {
-	if(test) {
-	    createUniverseForDebug("easy.json");
+    private void createUniverse(boolean fromFile, boolean simulatedRun) {
+	if(fromFile) {
+	    createUniverseForDebug("easy.json", simulatedRun);
 	}
 	else {
 	    JsonObject initialConfiguration = waitForConnection();
@@ -86,8 +85,8 @@ public class VacuumWorldComponentsManager {
 	return null;
     }
 
-    private void setupServer(boolean test) throws IOException {
-	if(!test) {
+    private void setupServer(boolean fromFile) throws IOException {
+	if(!fromFile) {
 	    this.output = new ObjectOutputStream(System.out);
 	    this.input = new ObjectInputStream(System.in);
 	}
@@ -98,10 +97,10 @@ public class VacuumWorldComponentsManager {
 	this.universe = new VacuumWorldUniverse(env, this.hostname, this.port);
     }
     
-    private void createUniverseForDebug(String path) {
+    private void createUniverseForDebug(String path, boolean simulatedRun) {
 	VacuumWorldEnvironment env = new VacuumWorldEnvironment(VacuumWorldParser.parseConfiguration(path), false, this.hostname, this.port);
 	this.universe = new VacuumWorldUniverse(env, this.hostname, this.port);
-	this.universe.getAllActors().forEach(VacuumWorldActor::toggleTest);
+	this.universe.getAllActors().forEach(actor -> actor.setRunFlag(simulatedRun));
     }
 
     private void setStopFlag(boolean flag) {

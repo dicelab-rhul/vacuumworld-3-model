@@ -10,12 +10,15 @@ public class VacuumWorld {
 
     public static void main(String[] args) throws IOException {
 	//String[] hostDetails = parseHostDetails(args);
-	//checkHostDetails(hostDetails[0], hostDetails[1]);
+	String[] hostDetails = new String[] { "127.0.0.1", "65000" };
 	
-	boolean test = true; //TODO configure this
+	checkHostDetails(hostDetails[0], hostDetails[1]);
 	
-	//new VacuumWorldComponentsManager(test, hostDetails[0], Integer.valueOf(hostDetails[1]));
-	new VacuumWorldComponentsManager(test, "127.0.0.1", 65000);
+	//TODO these flags should become parameters.
+	boolean fromFile = true;
+	boolean simulatedRun = false;
+	
+	new VacuumWorldComponentsManager(fromFile, simulatedRun, hostDetails[0], Integer.valueOf(hostDetails[1]));
     }
 
     private static void checkHostDetails(String ip, String port) {
@@ -27,7 +30,7 @@ public class VacuumWorld {
 	    quitWithUsage();
 	}
 	
-	if(testPort(port)) {
+	if(!testPort(port)) {
 	    quitWithUsage();
 	}
     }

@@ -23,7 +23,7 @@ public class VacuumWorldAvatar extends AbstractAvatar implements VacuumWorldActo
     private static final long serialVersionUID = 7363668279670343837L;
     private volatile boolean stop;
     private volatile boolean pause;
-    private boolean test;
+    private boolean simulatedRun;
     
     public VacuumWorldAvatar(String id, AvatarAppearance appearance, List<Sensor> sensors, List<Actuator> actuators, PrincipalListener principalListener) {
 	super(id, appearance, sensors, actuators, principalListener);
@@ -44,8 +44,8 @@ public class VacuumWorldAvatar extends AbstractAvatar implements VacuumWorldActo
     }
     
     @Override
-    public void toggleTest() {
-	this.test = true;
+    public void setRunFlag(boolean simulatedRun) {
+	this.simulatedRun = simulatedRun;
     }
     
     @Override
@@ -94,7 +94,7 @@ public class VacuumWorldAvatar extends AbstractAvatar implements VacuumWorldActo
 
     @Override
     public void run() {
-	if(this.test) {
+	if(this.simulatedRun) {
 	    testRun();
 	}
 	else {

@@ -38,5 +38,5 @@ public interface VacuumWorldActor extends Actor, Avatar {
     
     public abstract void setPauseFlag(boolean pause);
     
-    public abstract void toggleTest();
+    public abstract void setRunFlag(boolean simulatedRun);
 }

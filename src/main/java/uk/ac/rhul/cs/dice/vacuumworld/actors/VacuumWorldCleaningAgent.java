@@ -36,7 +36,7 @@ public class VacuumWorldCleaningAgent extends AbstractAgent implements VacuumWor
     private transient ObjectOutputStream output;
     private volatile boolean stop;
     private volatile boolean pause;
-    private boolean test;
+    private boolean simulatedRun;
 
     public VacuumWorldCleaningAgent(String id, VacuumWorldAutonomousActorAppearance appearance, List<Sensor> sensors, List<Actuator> actuators, AgentMind mind) {
 	super(id, appearance, sensors, actuators, mind);
@@ -61,8 +61,8 @@ public class VacuumWorldCleaningAgent extends AbstractAgent implements VacuumWor
     }
     
     @Override
-    public void toggleTest() {
-	this.test = true;
+    public void setRunFlag(boolean simulatedRun) {
+	this.simulatedRun = simulatedRun;
     }
     
     @Override
@@ -86,9 +86,7 @@ public class VacuumWorldCleaningAgent extends AbstractAgent implements VacuumWor
 
     @Override
     public void run() {
-	this.test = false; //TODO remove this
-	
-	if(this.test) {
+	if(this.simulatedRun) {
 	    testRun();
 	}
 	else {

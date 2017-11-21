@@ -24,7 +24,7 @@ public class VacuumWorldLocationAppearance implements Appearance, VacuumWorldLoc
     private static final long serialVersionUID = -2552147509566518640L;
     private static final int MAX_WALLS = 4;
     private static final String TEXTUAL_BORDER = "X\n";
-    private Appearance activeBodyAppearance;
+    private VacuumWorldActorAppearance activeBodyAppearance;
     private VacuumWorldDirtAppearance dirtAppearance;
     private VacuumWorldCoordinates coordinates;
     private boolean wallOnNorth;
@@ -42,7 +42,7 @@ public class VacuumWorldLocationAppearance implements Appearance, VacuumWorldLoc
      * @param walls the {@link Boolean} flags for the walls (NORTH, SOUTH, WEST, and EAST).
      * 
      */
-    public VacuumWorldLocationAppearance(VacuumWorldCoordinates coordinates, Appearance activeBodyAppearance, VacuumWorldDirtAppearance dirtAppearance, boolean... walls) {
+    public VacuumWorldLocationAppearance(VacuumWorldCoordinates coordinates, VacuumWorldActorAppearance activeBodyAppearance, VacuumWorldDirtAppearance dirtAppearance, boolean... walls) {
 	this.activeBodyAppearance = activeBodyAppearance;
 	this.dirtAppearance = dirtAppearance;
 	this.coordinates = coordinates;
@@ -62,7 +62,7 @@ public class VacuumWorldLocationAppearance implements Appearance, VacuumWorldLoc
     }
 
     @Override
-    public Appearance getActiveBodyAppearanceIfAny() {
+    public VacuumWorldActorAppearance getActiveBodyAppearanceIfAny() {
 	return this.activeBodyAppearance;
     }
     
@@ -160,55 +160,47 @@ public class VacuumWorldLocationAppearance implements Appearance, VacuumWorldLoc
     
     @Override
     public Orientation getActiveBodyOrientationIfAny() {
-	if(isACleaningAgentThere() || isAUserThere()) {
-	    return ((VacuumWorldActorAppearance) getActiveBodyAppearanceIfAny()).getOrientation();
-	}
-	else if(isAnAvatarThere()) {
-	    return ((VacuumWorldAvatarAppearance) getActiveBodyAppearanceIfAny()).getOrientation();
-	}
-	else {
-	    return null;
-	}
+	return isAnActiveBodyThere() ? getActiveBodyAppearanceIfAny().getOrientation() : null;
     }
     
     @Override
     public boolean isACleaningAgentThere() {
-	return this.activeBodyAppearance != null && VacuumWorldActorAppearance.class.isAssignableFrom(this.activeBodyAppearance.getClass()) && ((VacuumWorldActorAppearance) this.activeBodyAppearance).isCleaningAgent();
+	return isAnActiveBodyThere() && this.activeBodyAppearance.isCleaningAgent();
     }
     
     @Override
     public boolean isAGreenAgentThere() {
-	return this.activeBodyAppearance != null && VacuumWorldActorAppearance.class.isAssignableFrom(this.activeBodyAppearance.getClass()) && ((VacuumWorldActorAppearance) this.activeBodyAppearance).isGreenAgent();
+	return isAnActiveBodyThere() && this.activeBodyAppearance.isGreenAgent();
     }
     
     @Override
     public boolean isAnOrangeAgentThere() {
-	return this.activeBodyAppearance != null && VacuumWorldActorAppearance.class.isAssignableFrom(this.activeBodyAppearance.getClass()) && ((VacuumWorldActorAppearance) this.activeBodyAppearance).isOrangeAgent();
+	return isAnActiveBodyThere() && this.activeBodyAppearance.isOrangeAgent();
     }
     
     @Override
     public boolean isAWhiteAgentThere() {
-	return this.activeBodyAppearance != null && VacuumWorldActorAppearance.class.isAssignableFrom(this.activeBodyAppearance.getClass()) && ((VacuumWorldActorAppearance) this.activeBodyAppearance).isWhiteAgent();
+	return isAnActiveBodyThere() && this.activeBodyAppearance.isWhiteAgent();
     }
     
     @Override
     public boolean isACleaningAgentWithSuchColorThere(AgentColor color) {
-	return isACleaningAgentThere() && color.equals(((VacuumWorldActorAppearance) this.activeBodyAppearance).getColor());
+	return isACleaningAgentThere() && color.equals(this.activeBodyAppearance.getColor());
     }
     
     @Override
     public boolean isACleaningAgentCompatibleWithSuchDirtThere(VacuumWorldDirtColor color) {
-	return isACleaningAgentThere() && color.canBeCleanedBy(((VacuumWorldActorAppearance) this.activeBodyAppearance).getColor());
+	return isACleaningAgentThere() && color.canBeCleanedBy(this.activeBodyAppearance.getColor());
     }
     
     @Override
     public boolean isAUserThere() {
-	return this.activeBodyAppearance != null && VacuumWorldActorAppearance.class.isAssignableFrom(this.activeBodyAppearance.getClass()) && ((VacuumWorldActorAppearance) this.activeBodyAppearance).isUser();
+	return isAnActiveBodyThere() && this.activeBodyAppearance.isUser();
     }
     
     @Override
     public boolean isAnAvatarThere() {
-	return this.activeBodyAppearance != null && VacuumWorldAvatarAppearance.class.isAssignableFrom(this.activeBodyAppearance.getClass());
+	return isAnActiveBodyThere() && this.activeBodyAppearance.isAvatar();
     }
     
     @Override
@@ -227,28 +219,28 @@ public class VacuumWorldLocationAppearance implements Appearance, VacuumWorldLoc
     }
     
     @Override
+    public boolean isFreeFromDirt() {
+	return this.dirtAppearance == null;
+    }
+    
+    @Override
     public boolean isSuchDirtThere(VacuumWorldDirtColor color) {
-	return this.dirtAppearance != null && color != null && color.equals(this.dirtAppearance.getColor());
+	return isDirtThere() && color != null && color.equals(this.dirtAppearance.getColor());
     }
     
     @Override
     public boolean isCompatibleDirtThere(AgentColor color) {
-	return this.dirtAppearance != null && color != null && color.canClean(this.dirtAppearance.getColor());
+	return isDirtThere() && color != null && color.canClean(this.dirtAppearance.getColor());
     }
     
     @Override
     public boolean isGreenDirtThere() {
-	return this.dirtAppearance != null && VacuumWorldDirtColor.GREEN.equals(this.dirtAppearance.getColor());
+	return isDirtThere() && VacuumWorldDirtColor.GREEN.equals(this.dirtAppearance.getColor());
     }
     
     @Override
     public boolean isOrangeDirtThere() {
-	return this.dirtAppearance != null && VacuumWorldDirtColor.ORANGE.equals(this.dirtAppearance.getColor());
-    }
-    
-    @Override
-    public boolean isEmpty() {
-	return this.activeBodyAppearance == null && this.dirtAppearance == null;
+	return isDirtThere() && VacuumWorldDirtColor.ORANGE.equals(this.dirtAppearance.getColor());
     }
     
     @Override
@@ -272,13 +264,13 @@ public class VacuumWorldLocationAppearance implements Appearance, VacuumWorldLoc
     }
     
     @Override
-    public VacuumWorldActorAppearance getAgentAppearanceIfAny() {
-	return isACleaningAgentThere() ? (VacuumWorldActorAppearance) this.activeBodyAppearance : null;
+    public VacuumWorldAutonomousActorAppearance getAgentAppearanceIfAny() {
+	return isACleaningAgentThere() ? (VacuumWorldAutonomousActorAppearance) this.activeBodyAppearance : null;
     }
     
     @Override
-    public VacuumWorldActorAppearance getUserAppearanceIfAny() {
-	return isAUserThere() ? (VacuumWorldActorAppearance) this.activeBodyAppearance : null;
+    public VacuumWorldAutonomousActorAppearance getUserAppearanceIfAny() {
+	return isAUserThere() ? (VacuumWorldAutonomousActorAppearance) this.activeBodyAppearance : null;
     }
     
     @Override
@@ -406,10 +398,10 @@ public class VacuumWorldLocationAppearance implements Appearance, VacuumWorldLoc
 
     private String getMiddleLineWithAgent() {
 	if(isDirtThere()) {
-	    return "  " + ((VacuumWorldActorAppearance) this.activeBodyAppearance).getColor().toChar() + "+" + this.dirtAppearance.getColor().toChar() + "  "  + TEXTUAL_BORDER;
+	    return "  " + ((VacuumWorldAutonomousActorAppearance) this.activeBodyAppearance).getColor().toChar() + "+" + this.dirtAppearance.getColor().toChar() + "  "  + TEXTUAL_BORDER;
 	}
 	else {
-	    return "   " + ((VacuumWorldActorAppearance) this.activeBodyAppearance).getColor().toChar() + "   "  + TEXTUAL_BORDER;
+	    return "   " + ((VacuumWorldAutonomousActorAppearance) this.activeBodyAppearance).getColor().toChar() + "   "  + TEXTUAL_BORDER;
 	}
     }
 }

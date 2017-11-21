@@ -1,8 +1,8 @@
 package uk.ac.rhul.cs.dice.vacuumworld.environment;
 
-import uk.ac.rhul.cs.dice.agentcommon.interfaces.Actor;
 import uk.ac.rhul.cs.dice.agentcontainers.interfaces.Location;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.AgentColor;
+import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldActor;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldAvatar;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldCleaningAgent;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldUserAgent;
@@ -26,15 +26,15 @@ public interface VacuumWorldLocationInterface extends Location {
     public abstract VacuumWorldUserAgent getUserIfAny();
     public abstract VacuumWorldAvatar getAvatarIfAny();
     public abstract VacuumWorldDirt getDirtIfAny();
-    public abstract Actor getActorIfAny();
+    public abstract VacuumWorldActor getActorIfAny();
     public abstract VacuumWorldCleaningAgent removeAgent();
     public abstract void addAgent(VacuumWorldCleaningAgent agent);
     public abstract VacuumWorldUserAgent removeUser();
     public abstract void addUser(VacuumWorldUserAgent user);
     public abstract VacuumWorldAvatar removeAvatar();
     public abstract void addAvatar(VacuumWorldAvatar avatar);
-    public abstract Actor removeActor();    
-    public abstract void addActor(Actor actor);
+    public abstract VacuumWorldActor removeActor();    
+    public abstract void addActor(VacuumWorldActor actor);
     public abstract VacuumWorldDirt removeDirt();
     public abstract void addDirt(VacuumWorldDirt dirt);
     

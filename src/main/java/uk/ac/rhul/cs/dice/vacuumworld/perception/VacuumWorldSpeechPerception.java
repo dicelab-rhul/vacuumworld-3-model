@@ -6,7 +6,7 @@ import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
 
 /**
  * 
- * Wrapper for a {@link VacuumWorldMessage} and the {@link VacuumWorldActorAppearance} of its sender. It implements {@link Perception}.
+ * Wrapper for a {@link VacuumWorldMessage} and the {@link VacuumWorldctorAppearance} of its sender. It implements {@link Perception}.
  * 
  * @author cloudstrife9999
  *

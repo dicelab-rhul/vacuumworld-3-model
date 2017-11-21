@@ -18,11 +18,9 @@ import org.cloudstrife9999.logutilities.LogUtils;
 
 import com.google.common.collect.ImmutableMap;
 
-import uk.ac.rhul.cs.dice.agent.abstractimpl.AbstractAgent;
 import uk.ac.rhul.cs.dice.agent.interfaces.Perception;
 import uk.ac.rhul.cs.dice.agentactions.enums.ActionResult;
 import uk.ac.rhul.cs.dice.agentactions.interfaces.Result;
-import uk.ac.rhul.cs.dice.agentcommon.interfaces.Actor;
 import uk.ac.rhul.cs.dice.agentcontainers.abstractimpl.AbstractEnvironment;
 import uk.ac.rhul.cs.dice.agentcontainers.enums.Orientation;
 import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldEvent;
@@ -35,11 +33,7 @@ import uk.ac.rhul.cs.dice.vacuumworld.actions.messages.VacuumWorldMessage;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.results.VacuumWorldCommunicativeActionResult;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.results.VacuumWorldPhysicalActionResult;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.results.VacuumWorldSensingActionResult;
-import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldAvatar;
-import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldCleaningAgent;
-import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldUserAgent;
-import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
-import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldAvatarAppearance;
+import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldActor;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldEnvironmentAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.physics.VacuumWorldPhysics;
 import uk.ac.rhul.cs.dice.vacuumworld.exceptions.VacuumWorldRuntimeException;
@@ -209,26 +203,18 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
     }
 
     private void printActorDetails(VacuumWorldAbstractActionInterface action) {
-	Actor actor = getActorFromId(action.getActorID());
+	VacuumWorldActor actor = getActorFromId(action.getActorID());
 	Orientation orientation = getActorOrientation(actor);
 	
 	LogUtils.log(actor.getID() + ": position before attempt: " + this.grid.entrySet().stream().filter(e -> e.getValue().containsSuchActor(actor.getID())).findFirst().map(Entry::getKey).orElse(null) + ".");
 	LogUtils.log(actor.getID() + ": orientation before attempt: " + orientation + ".");
     }
 
-    private Orientation getActorOrientation(Actor actor) {
-	if(actor instanceof VacuumWorldCleaningAgent || actor instanceof VacuumWorldUserAgent) {
-	    return ((VacuumWorldActorAppearance) ((VacuumWorldCleaningAgent) actor).getAppearance()).getOrientation();
-	}
-	else if(actor instanceof VacuumWorldAvatar) {
-	    return ((VacuumWorldAvatarAppearance) ((VacuumWorldAvatar) actor).getAppearance()).getOrientation();
-	}
-	else {
-	    return null;
-	}
+    private Orientation getActorOrientation(VacuumWorldActor actor) {
+	return actor.getAppearance().getOrientation();
     }
 
-    private void provideFeedback(Result result, Actor actor) {
+    private void provideFeedback(Result result, VacuumWorldActor actor) {
 	if(result instanceof VacuumWorldPhysicalActionResult) {
 	    provideFeedback((VacuumWorldPhysicalActionResult) result, actor);
 	}
@@ -243,38 +229,38 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 	}
     }
     
-    private void provideFeedback(VacuumWorldPhysicalActionResult result, Actor actor) {
+    private void provideFeedback(VacuumWorldPhysicalActionResult result, VacuumWorldActor actor) {
 	VacuumWorldPerception perception = buildPerception(result.getActionResultType(), actor);
 	sendPerception(perception, actor);
     }
     
-    private void provideFeedback(VacuumWorldCommunicativeActionResult result, Actor actor) {
+    private void provideFeedback(VacuumWorldCommunicativeActionResult result, VacuumWorldActor actor) {
 	VacuumWorldSpeechPerception speechPerception = buildSpeechPerception(result.getMessage(), actor);
 	VacuumWorldPerception perception = buildPerception(result.getActionResultType(), actor);
 	sendPerception(perception, actor);
 	sendSpeechPerception(speechPerception, getRecipientsFromIDs(result.getRecipients()));
     }
     
-    private VacuumWorldSpeechPerception buildSpeechPerception(VacuumWorldMessage message, Actor actor) {
-	return new VacuumWorldSpeechPerception(message, (VacuumWorldActorAppearance) ((AbstractAgent) actor).getAppearance());
+    private VacuumWorldSpeechPerception buildSpeechPerception(VacuumWorldMessage message, VacuumWorldActor actor) {
+	return new VacuumWorldSpeechPerception(message, actor.getAppearance());
     }
 
-    private Set<Actor> getRecipientsFromIDs(Set<String> recipients) {
+    private Set<VacuumWorldActor> getRecipientsFromIDs(Set<String> recipients) {
 	return recipients.stream().map(this::getActorFromId).filter(Objects::nonNull).collect(Collectors.toSet());
     }
 
-    private void provideFeedback(VacuumWorldSensingActionResult result, Actor actor) {
+    private void provideFeedback(VacuumWorldSensingActionResult result, VacuumWorldActor actor) {
 	VacuumWorldPerception perception = buildPerception(result.getActionResultType(), actor);
 	sendPerception(perception, actor);
     }
     
-    private VacuumWorldPerception buildPerception(ActionResult result, Actor actor) {
+    private VacuumWorldPerception buildPerception(ActionResult result, VacuumWorldActor actor) {
 	VacuumWorldEnvironmentAppearance appearance = buildEnvironmentAppearance(actor);
 	return new VacuumWorldPerception(result, appearance);
     }
     
-    private VacuumWorldEnvironmentAppearance buildEnvironmentAppearance(Actor actor) {
-	Orientation orientation = ((VacuumWorldActorAppearance) ((AbstractAgent) actor).getAppearance()).getOrientation();
+    private VacuumWorldEnvironmentAppearance buildEnvironmentAppearance(VacuumWorldActor actor) {
+	Orientation orientation = getActorOrientation(actor);
 	
 	VacuumWorldLocation location = getLocationFromActorId(actor.getID());
 	VacuumWorldLocation forward = this.grid.get(location.getCoordinates().getForwardCoordinates(orientation));
@@ -294,12 +280,12 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 	return new VacuumWorldEnvironmentAppearance(locationsMap);
     }
 
-    private void sendPerception(VacuumWorldPerception perception, Actor actor) {
+    private void sendPerception(VacuumWorldPerception perception, VacuumWorldActor actor) {
 	sendGenericPerception(perception, actor.getID());
     }
     
-    private void sendSpeechPerception(VacuumWorldSpeechPerception perception, Set<Actor> actors) {
-	actors.stream().map(Actor::getID).forEach(id -> sendGenericPerception(perception, id));
+    private void sendSpeechPerception(VacuumWorldSpeechPerception perception, Set<VacuumWorldActor> actors) {
+	actors.stream().map(VacuumWorldActor::getID).forEach(id -> sendGenericPerception(perception, id));
     }
     
     private void sendGenericPerception(Perception perception, String recipientId) {
@@ -336,7 +322,7 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 	return this.grid.values().stream().filter(location -> location.containsSuchActor(id)).findFirst().orElse(null);
     }
     
-    public Actor getActorFromId(String id) {
+    public VacuumWorldActor getActorFromId(String id) {
 	if(id == null) {
 	    throw new IllegalArgumentException();
 	}
@@ -346,7 +332,7 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
     
     public void moveActor(String actorId) {
 	VacuumWorldLocation location = getLocationFromActorId(actorId);	
-	Actor actor = location.removeActor();
+	VacuumWorldActor actor = location.removeActor();
 	VacuumWorldCoordinates original = location.getCoordinates();
 	Orientation orientation = getOrientation(actor);
 	
@@ -373,15 +359,13 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 	return !this.grid.get(old).containsSuchActor(id);
     }
 
-    public Orientation getOrientation(Actor actor) {
+    public Orientation getOrientation(VacuumWorldActor actor) {
 	if(actor == null) {
 	    throw new IllegalArgumentException();
 	}
-	else if(actor instanceof AbstractAgent) {
-	    return ((VacuumWorldActorAppearance) ((AbstractAgent) actor).getAppearance()).getOrientation();
+	else {
+	    return getActorOrientation(actor);
 	}
-	
-	throw new IllegalArgumentException();
     }
 
     @Override

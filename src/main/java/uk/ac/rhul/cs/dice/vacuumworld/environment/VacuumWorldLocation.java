@@ -2,9 +2,8 @@ package uk.ac.rhul.cs.dice.vacuumworld.environment;
 
 import com.google.gson.JsonObject;
 
-import uk.ac.rhul.cs.dice.agentcommon.interfaces.Actor;
-import uk.ac.rhul.cs.dice.agentcommon.interfaces.Appearance;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.AgentColor;
+import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldActor;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldAvatar;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldCleaningAgent;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldUserAgent;
@@ -49,7 +48,7 @@ public class VacuumWorldLocation implements VacuumWorldLocationInterface, Compar
 	return this.dirt == null ? null : this.dirt.getAppearance();
     }
 
-    private Appearance getActorAppearance() {
+    private VacuumWorldActorAppearance getActorAppearance() {
 	if(this.agent != null) {
 	    return this.agent.getAppearance();
 	}
@@ -95,7 +94,7 @@ public class VacuumWorldLocation implements VacuumWorldLocationInterface, Compar
 	    throw new IllegalArgumentException();
 	}
 	
-	return containsACleaningAgent() && color.equals(((VacuumWorldActorAppearance) this.agent.getAppearance()).getColor());
+	return containsACleaningAgent() && color.equals(this.agent.getAppearance().getColor());
     }
     
     @Override
@@ -138,7 +137,7 @@ public class VacuumWorldLocation implements VacuumWorldLocationInterface, Compar
     }
     
     @Override
-    public Actor getActorIfAny() {
+    public VacuumWorldActor getActorIfAny() {
 	if(this.agent != null) {
 	    return this.agent;
 	}
@@ -214,7 +213,7 @@ public class VacuumWorldLocation implements VacuumWorldLocationInterface, Compar
     }
     
     @Override
-    public Actor removeActor() {
+    public VacuumWorldActor removeActor() {
 	if(this.agent != null) {
 	    return removeAgent();
 	}
@@ -230,7 +229,7 @@ public class VacuumWorldLocation implements VacuumWorldLocationInterface, Compar
     }
     
     @Override
-    public void addActor(Actor actor) {
+    public void addActor(VacuumWorldActor actor) {
 	if(actor instanceof VacuumWorldCleaningAgent) {
 	    addAgent((VacuumWorldCleaningAgent) actor);
 	}

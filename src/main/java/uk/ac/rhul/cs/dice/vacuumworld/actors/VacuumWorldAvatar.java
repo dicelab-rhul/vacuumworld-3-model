@@ -16,9 +16,10 @@ import uk.ac.rhul.cs.dice.agent.interfaces.PrincipalListener;
 import uk.ac.rhul.cs.dice.agent.interfaces.Sensor;
 import uk.ac.rhul.cs.dice.agentactions.enums.EnvironmentalActionType;
 import uk.ac.rhul.cs.dice.agentcommon.interfaces.Action;
+import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldAvatarAppearance;
 
-public class VacuumWorldAvatar extends AbstractAvatar implements VacuumWorldActiveBodyInterface {
+public class VacuumWorldAvatar extends AbstractAvatar implements VacuumWorldActor {
     private static final long serialVersionUID = 7363668279670343837L;
     private volatile boolean stop;
     private volatile boolean pause;
@@ -32,14 +33,17 @@ public class VacuumWorldAvatar extends AbstractAvatar implements VacuumWorldActi
 	this(toCopy.getID(), toCopy.getAppearance(), toCopy.getAllSensors(), toCopy.getAllActuators(), toCopy.getPrincipalListener());
     }
 
+    @Override
     public void setStopFlag(boolean stop) {
 	this.stop = stop;
     }
     
+    @Override
     public void setPauseFlag(boolean pause) {
 	this.pause = pause;
     }
     
+    @Override
     public void toggleTest() {
 	this.test = true;
     }
@@ -124,6 +128,11 @@ public class VacuumWorldAvatar extends AbstractAvatar implements VacuumWorldActi
 	//TODO
     }
 
+    @Override
+    public VacuumWorldActorAppearance getAppearance() {
+        return (VacuumWorldActorAppearance) super.getAppearance();
+    }
+    
     @Override
     public void turnLeft() {
 	((VacuumWorldAvatarAppearance) getAppearance()).turnLeft();

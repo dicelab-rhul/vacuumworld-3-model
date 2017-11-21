@@ -21,17 +21,17 @@ import uk.ac.rhul.cs.dice.agent.enums.SensorPurposeEnum;
 import uk.ac.rhul.cs.dice.agent.interfaces.Actuator;
 import uk.ac.rhul.cs.dice.agent.interfaces.AvatarAppearance;
 import uk.ac.rhul.cs.dice.agent.interfaces.Sensor;
-import uk.ac.rhul.cs.dice.agentcommon.interfaces.Actor;
 import uk.ac.rhul.cs.dice.agentcontainers.enums.Orientation;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.ActorType;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.AgentColor;
+import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldActor;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldActuator;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldAvatar;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldCleaningAgent;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldSensor;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldUserAgent;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.minds.VacuumWorldPrincipalListener;
-import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
+import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldAutonomousActorAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldAvatarAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldDirtColor;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldMindAppearance;
@@ -129,7 +129,7 @@ public class VacuumWorldParser {
 	return toReturn;
     }
     
-    private static Actor buildActor(JsonObject actorRepresentation) {
+    private static VacuumWorldActor buildActor(JsonObject actorRepresentation) {
 	String id = actorRepresentation.get("id").getAsString();
 	JsonElement colorRepresentation = actorRepresentation.get("color");
 	AgentColor color = colorRepresentation.isJsonNull() ? null : AgentColor.valueOf(colorRepresentation.getAsString().toUpperCase());
@@ -141,7 +141,7 @@ public class VacuumWorldParser {
 	return buildActorSwitcher(actorRepresentation, id, color, orientation, sensors, actuators, actorType);
     }
 
-    private static Actor buildActorSwitcher(JsonObject actorRepresentation, String id, AgentColor color, Orientation orientation, List<Sensor> sensors, List<Actuator> actuators, ActorType actorType) {
+    private static VacuumWorldActor buildActorSwitcher(JsonObject actorRepresentation, String id, AgentColor color, Orientation orientation, List<Sensor> sensors, List<Actuator> actuators, ActorType actorType) {
 	switch(actorType) {
 	case CLEANING_AGENT:
 	case USER:
@@ -153,11 +153,11 @@ public class VacuumWorldParser {
 	}
     }
 
-    private static Actor buildAutonomousActor(JsonObject actorRepresentation, String id, AgentColor color, Orientation orientation, List<Sensor> sensors, List<Actuator> actuators, ActorType actorType) {
+    private static VacuumWorldActor buildAutonomousActor(JsonObject actorRepresentation, String id, AgentColor color, Orientation orientation, List<Sensor> sensors, List<Actuator> actuators, ActorType actorType) {
 	try {
 	    AbstractAgentMind mind = (AbstractAgentMind) Class.forName(actorRepresentation.get("mind").getAsString()).getConstructor(String.class).newInstance(id);
 	    VacuumWorldMindAppearance mindAppearance = new VacuumWorldMindAppearance(actorRepresentation.get("mind").getAsString());
-	    VacuumWorldActorAppearance appearance = new VacuumWorldActorAppearance(id, color, actorType, orientation, mindAppearance, sensors, actuators);
+	    VacuumWorldAutonomousActorAppearance appearance = new VacuumWorldAutonomousActorAppearance(id, color, actorType, orientation, mindAppearance, sensors, actuators);
 	    
 	    return buildAutonomousActor(id, appearance, sensors, actuators, mind);
 	}
@@ -166,7 +166,7 @@ public class VacuumWorldParser {
 	}
     }
 
-    private static Actor buildAvatar(JsonObject actorRepresentation, String id, Orientation orientation, List<Sensor> sensors, List<Actuator> actuators) {
+    private static VacuumWorldActor buildAvatar(JsonObject actorRepresentation, String id, Orientation orientation, List<Sensor> sensors, List<Actuator> actuators) {
 	try {
 	    int port = actorRepresentation.get("port").getAsInt();
 	    VacuumWorldPrincipalListener listener = new VacuumWorldPrincipalListener(new ServerSocket(port));
@@ -180,7 +180,7 @@ public class VacuumWorldParser {
 	}
     }
 
-    private static Actor buildAutonomousActor(String id, VacuumWorldActorAppearance appearance, List<Sensor> sensors, List<Actuator> actuators, AbstractAgentMind mind) {
+    private static VacuumWorldActor buildAutonomousActor(String id, VacuumWorldAutonomousActorAppearance appearance, List<Sensor> sensors, List<Actuator> actuators, AbstractAgentMind mind) {
 	switch(appearance.getType()) {
 	case CLEANING_AGENT:
 	    return new VacuumWorldCleaningAgent(id, appearance, sensors, actuators, mind);

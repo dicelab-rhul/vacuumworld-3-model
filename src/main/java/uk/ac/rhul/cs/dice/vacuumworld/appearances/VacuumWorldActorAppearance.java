@@ -2,100 +2,64 @@ package uk.ac.rhul.cs.dice.vacuumworld.appearances;
 
 import java.util.List;
 
-import com.google.common.collect.ImmutableList;
-import com.google.gson.JsonObject;
-
 import uk.ac.rhul.cs.dice.agent.interfaces.ActorAppearance;
 import uk.ac.rhul.cs.dice.agent.interfaces.Actuator;
+import uk.ac.rhul.cs.dice.agent.interfaces.AvatarAppearance;
 import uk.ac.rhul.cs.dice.agent.interfaces.Sensor;
 import uk.ac.rhul.cs.dice.agentcontainers.enums.Orientation;
-import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldSerializer;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.ActorType;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.AgentColor;
 
-public class VacuumWorldActorAppearance implements ActorAppearance {
-    private static final long serialVersionUID = 1958091110354446585L;
-    private String id;
-    private AgentColor color; //will be UNDEFINED for avatars and users.
-    private ActorType type;
-    private Orientation orientation;
-    private VacuumWorldMindAppearance mindAppearance;
-    private List<Sensor> sensors;
-    private List<Actuator> actuators;
+public interface VacuumWorldActorAppearance extends ActorAppearance, AvatarAppearance {
     
-    public VacuumWorldActorAppearance(String id, AgentColor color, ActorType type, Orientation orientation, VacuumWorldMindAppearance mindappearance, List<Sensor> sensors, List<Actuator> actuators) {
-	this.id = id;
-	this.color = color;
-	this.type = type;
-	this.orientation = orientation;
-	this.mindAppearance = mindappearance;
-	this.sensors = ImmutableList.copyOf(sensors);
-	this.actuators = ImmutableList.copyOf(actuators);
+    public default AgentColor getColor() {
+	return AgentColor.UNDEFINED;
     }
     
-    public String getId() {
-	return this.id;
+    public default boolean isGreenAgent() {
+	return isCleaningAgent() && AgentColor.GREEN.equals(getColor());
     }
     
-    public AgentColor getColor() {
-	return this.color;
+    public default boolean isOrangeAgent() {
+	return isCleaningAgent() && AgentColor.ORANGE.equals(getColor());
     }
     
-    public boolean isGreenAgent() {
-	return AgentColor.GREEN.equals(this.color);
+    public default boolean isWhiteAgent() {
+	return isCleaningAgent() && AgentColor.WHITE.equals(getColor());
     }
     
-    public boolean isOrangeAgent() {
-	return AgentColor.ORANGE.equals(this.color);
+    public default boolean isCleaningAgent() {
+	return ActorType.CLEANING_AGENT.equals(getType());
     }
     
-    public boolean isWhiteAgent() {
-	return AgentColor.WHITE.equals(this.color);
+    public default boolean isUser() {
+	return ActorType.USER.equals(getType());
     }
     
-    public ActorType getType() {
-	return this.type;
+    public default boolean isAvatar() {
+	return ActorType.AVATAR.equals(getType());
     }
     
-    public boolean isCleaningAgent() {
-	return ActorType.CLEANING_AGENT.equals(this.type);
+    public default void turnLeft() {
+	setOrientation(getOrientation().getLeft());
     }
     
-    public boolean isUser() {
-	return ActorType.USER.equals(this.type);
-    }
-    
-    public boolean isAvatar() {
-	return ActorType.AVATAR.equals(this.type);
-    }
-    
-    public Orientation getOrientation() {
-	return this.orientation;
+    public default void turnRight() {
+	setOrientation(getOrientation().getRight());
     }
     
     @Override
-    public VacuumWorldMindAppearance getMindAppearance() {
-	return this.mindAppearance;
+    public default int getListeningPort() {
+        throw new UnsupportedOperationException("Not an Avatar!");
     }
     
-    public List<Actuator> getActuators() {
-	return this.actuators;
-    }
+    public abstract ActorType getType();
     
-    public List<Sensor> getSensors() {
-	return this.sensors;
-    }
+    public abstract Orientation getOrientation();
     
-    public void turnLeft() {
-	this.orientation = this.orientation.getLeft();
-    }
+    public abstract void setOrientation(Orientation orientation);
     
-    public void turnRight() {
-	this.orientation = this.orientation.getRight();
-    }
+    public abstract List<Actuator> getActuators();
     
-    @Override
-    public JsonObject serialize() {
-        return VacuumWorldSerializer.serialize(this);
-    }
+    public abstract List<Sensor> getSensors();
 }

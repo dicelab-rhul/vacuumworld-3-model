@@ -11,9 +11,7 @@ import org.cloudstrife9999.logutilities.LogUtils;
 
 import com.google.gson.JsonObject;
 
-import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldAvatar;
-import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldCleaningAgent;
-import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldUserAgent;
+import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldActor;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldEnvironment;
 
 public class VacuumWorldComponentsManager {
@@ -69,11 +67,8 @@ public class VacuumWorldComponentsManager {
 	this.executor = Executors.newFixedThreadPool(1 + this.universe.countActiveBodies());
 	this.executor.submit(this.universe.getEnvironment());
 	
-	setStopFlagForActiveBodies(); //this sets the stop flag to false --> it starts active bodies.
-	
-	this.universe.getAllCleaningAgents().forEach(this.executor::submit);
-	this.universe.getAllUsers().forEach(this.executor::submit);
-	this.universe.getAllAvatars().forEach(this.executor::submit);
+	this.universe.getAllActors().forEach(actor -> actor.setStopFlag(this.universe.getEnvironment().getStopFlag()));
+	this.universe.getAllActors().forEach(this.executor::submit);
     }
 
     private void createUniverse(boolean test) {
@@ -106,25 +101,11 @@ public class VacuumWorldComponentsManager {
     private void createUniverseForDebug(String path) {
 	VacuumWorldEnvironment env = new VacuumWorldEnvironment(VacuumWorldParser.parseConfiguration(path), false, this.hostname, this.port);
 	this.universe = new VacuumWorldUniverse(env, this.hostname, this.port);
-	
-	toggleTest();
-    }
-    
-    private void toggleTest() {
-	this.universe.getAllCleaningAgents().forEach(VacuumWorldCleaningAgent::toggleTest);
-	this.universe.getAllUsers().forEach(VacuumWorldUserAgent::toggleTest);
-	this.universe.getAllAvatars().forEach(VacuumWorldAvatar::toggleTest);
+	this.universe.getAllActors().forEach(VacuumWorldActor::toggleTest);
     }
 
     private void setStopFlag(boolean flag) {
 	this.universe.getEnvironment().setStopFlag(flag);
-	
-	setStopFlagForActiveBodies();
-    }
-    
-    private void setStopFlagForActiveBodies() {
-	this.universe.getAllCleaningAgents().forEach(agent -> agent.setStopFlag(this.universe.getEnvironment().getStopFlag()));
-	this.universe.getAllUsers().forEach(user -> user.setStopFlag(this.universe.getEnvironment().getStopFlag()));
-	this.universe.getAllAvatars().forEach(avatar -> avatar.setStopFlag(this.universe.getEnvironment().getStopFlag()));
+	this.universe.getAllActors().forEach(actor -> actor.setStopFlag(this.universe.getEnvironment().getStopFlag()));
     }
 }

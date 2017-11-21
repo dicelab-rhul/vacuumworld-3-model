@@ -16,7 +16,7 @@ import com.google.gson.stream.JsonWriter;
 
 import uk.ac.rhul.cs.dice.agent.interfaces.Actuator;
 import uk.ac.rhul.cs.dice.agent.interfaces.Sensor;
-import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
+import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldAutonomousActorAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldAvatarAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldDirtAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldLocationAppearance;
@@ -124,7 +124,7 @@ public class VacuumWorldSerializer {
 	return dirtObject;
     }
     
-    public static JsonObject serialize(VacuumWorldActorAppearance actor) {
+    public static JsonObject serialize(VacuumWorldAutonomousActorAppearance actor) {
 	JsonObject actorObject = new JsonObject();
 	
 	actorObject.addProperty("type", actor.isCleaningAgent() ? "cleaning_agent" : "user");
@@ -139,7 +139,7 @@ public class VacuumWorldSerializer {
 	return actorObject;
     }
     
-    private static JsonObject addActorSensorsIfAny(JsonObject actorObject, VacuumWorldActorAppearance actor) {
+    private static JsonObject addActorSensorsIfAny(JsonObject actorObject, VacuumWorldAutonomousActorAppearance actor) {
 	List<Sensor> sensors = actor.getSensors();
 	
 	if(!sensors.isEmpty()) {
@@ -149,7 +149,7 @@ public class VacuumWorldSerializer {
 	return actorObject;
     }
 
-    private static JsonObject addActorActuatorsIfAny(JsonObject actorObject, VacuumWorldActorAppearance actor) {
+    private static JsonObject addActorActuatorsIfAny(JsonObject actorObject, VacuumWorldAutonomousActorAppearance actor) {
 	List<Actuator> actuators = actor.getActuators();
 	
 	if(!actuators.isEmpty()) {

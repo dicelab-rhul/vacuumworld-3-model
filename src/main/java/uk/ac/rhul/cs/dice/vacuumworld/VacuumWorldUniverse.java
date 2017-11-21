@@ -7,6 +7,7 @@ import java.util.Set;
 import org.cloudstrife9999.logutilities.LogUtils;
 
 import uk.ac.rhul.cs.dice.agentcontainers.abstractimpl.AbstractUniverse;
+import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldActor;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldAvatar;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldCleaningAgent;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldUserAgent;
@@ -43,12 +44,12 @@ public class VacuumWorldUniverse extends AbstractUniverse {
     }
 
     private void connectComponents(String hostname, int port) {
-	getAllCleaningAgents().forEach(a -> connectToEnvironment(a, hostname, port));
+	getAllActors().forEach(a -> connectToEnvironment(a, hostname, port));
     }
     
-    private void connectToEnvironment(VacuumWorldCleaningAgent agent, String hostname, int port) {
+    private void connectToEnvironment(VacuumWorldActor actor, String hostname, int port) {
 	try {
-	    agent.openSocket(hostname, port);
+	    actor.openSocket(hostname, port);
 	}
 	catch(IOException e) {
 	    throw new VacuumWorldRuntimeException(e);
@@ -95,6 +96,14 @@ public class VacuumWorldUniverse extends AbstractUniverse {
 	((VacuumWorldEnvironment) getMainAmbient()).getGrid().values().stream().filter(VacuumWorldLocation::containsAnAvatar).map(VacuumWorldLocation::getAvatarIfAny).forEach(avatars::add);	
 	
 	return avatars;
+    }
+    
+    public Set<VacuumWorldActor> getAllActors() {
+	Set<VacuumWorldActor> actors = new HashSet<>();
+	
+	((VacuumWorldEnvironment) getMainAmbient()).getGrid().values().stream().filter(VacuumWorldLocation::containsAnActor).map(VacuumWorldLocation::getActorIfAny).forEach(actors::add);
+	
+	return actors;
     }
     
     public int countActiveBodies() {

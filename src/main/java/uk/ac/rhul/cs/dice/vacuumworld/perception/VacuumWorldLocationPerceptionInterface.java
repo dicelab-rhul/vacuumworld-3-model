@@ -11,7 +11,7 @@ import uk.ac.rhul.cs.dice.vacuumworld.actors.AgentColor;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldAvatar;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldCleaningAgent;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldUserAgent;
-import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
+import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldAutonomousActorAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldAvatarAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldDirtAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldDirtColor;
@@ -279,6 +279,15 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
     
     /**
      * 
+     * Checks whether a {@link VacuumWorldDirt} is not present on this {@link VacuumWorldLocation}.
+     * 
+     * @return whether or not a {@link VacuumWorldDirt} is not present on this {@link VacuumWorldLocation}.
+     * 
+     */
+    public abstract boolean isFreeFromDirt();
+    
+    /**
+     * 
      * Checks whether a {@link VacuumWorldDirt} whose {@link VacuumWorldDirtColor} matches <code>color</code> is present on this {@link VacuumWorldLocation}.
      * 
      * @param color the {@link VacuumWorldDirtColor} of the {@link VacuumWorldDirt} this method is looking for on this {@link VacuumWorldLocation}..
@@ -324,7 +333,9 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * @return  whether or not no instance of an {@link ActiveBody} ({@link VacuumWorldCleaningAgent}, {@link VacuumWorldUserAgent}, or {@link VacuumWorldAvatar}) and no instance of a {@link VacuumWorldDirt} are present on this {@link VacuumWorldLocation}.
      * 
      */
-    public abstract boolean isEmpty();
+    public default boolean isEmpty() {
+	return isFreeFromActiveBodies() && isFreeFromDirt();
+    }
     
     /**
      * 
@@ -372,21 +383,21 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
     
     /**
      * 
-     * Returns the {@link VacuumWorldActorAppearance} of the {@link VacuumWorldCleaningAgent} on this {@link VacuumWorldLocation}, if any.
+     * Returns the {@link VacuumWorldAutonomousActorAppearance} of the {@link VacuumWorldCleaningAgent} on this {@link VacuumWorldLocation}, if any.
      * 
-     * @return the {@link VacuumWorldActorAppearance} of the {@link VacuumWorldCleaningAgent} on this {@link VacuumWorldLocation}, if any, <code>null</code> otherwise.
+     * @return the {@link VacuumWorldAutonomousActorAppearance} of the {@link VacuumWorldCleaningAgent} on this {@link VacuumWorldLocation}, if any, <code>null</code> otherwise.
      * 
      */
-    public abstract VacuumWorldActorAppearance getAgentAppearanceIfAny();
+    public abstract VacuumWorldAutonomousActorAppearance getAgentAppearanceIfAny();
     
     /**
      * 
-     * Returns the {@link VacuumWorldActorAppearance} of the {@link VacuumWorldUserAgent} on this {@link VacuumWorldLocation}, if any.
+     * Returns the {@link VacuumWorldAutonomousActorAppearance} of the {@link VacuumWorldUserAgent} on this {@link VacuumWorldLocation}, if any.
      * 
-     * @return the {@link VacuumWorldActorAppearance} of the {@link VacuumWorldUserAgent} on this {@link VacuumWorldLocation}, if any, <code>null</code> otherwise.
+     * @return the {@link VacuumWorldAutonomousActorAppearance} of the {@link VacuumWorldUserAgent} on this {@link VacuumWorldLocation}, if any, <code>null</code> otherwise.
      * 
      */
-    public abstract VacuumWorldActorAppearance getUserAppearanceIfAny();
+    public abstract VacuumWorldAutonomousActorAppearance getUserAppearanceIfAny();
     
     /**
      * 

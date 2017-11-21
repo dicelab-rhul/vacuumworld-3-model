@@ -2,7 +2,6 @@ package uk.ac.rhul.cs.dice.vacuumworld.environment.physics;
 
 import uk.ac.rhul.cs.dice.agent.abstractimpl.AbstractAgent;
 import uk.ac.rhul.cs.dice.agentactions.enums.ActionResult;
-import uk.ac.rhul.cs.dice.agentcommon.interfaces.Actor;
 import uk.ac.rhul.cs.dice.agentcontainers.interfaces.Physics;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldBroadcastingAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldCleanAction;
@@ -15,9 +14,10 @@ import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldTurnRightAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.results.VacuumWorldCommunicativeActionResult;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.results.VacuumWorldPhysicalActionResult;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.results.VacuumWorldSensingActionResult;
+import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldActor;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldCleaningAgent;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldUserAgent;
-import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
+import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldAutonomousActorAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.dirt.VacuumWorldDirt;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldEnvironment;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldLocation;
@@ -27,7 +27,7 @@ public class VacuumWorldPhysics implements Physics, VacuumWorldPhysicsInterface 
     @Override
     public synchronized boolean isPossible(VacuumWorldMoveAction action, VacuumWorldEnvironment context) {
 	String actorID = action.getActorID();
-	Actor actor = context.getActorFromId(actorID);
+	VacuumWorldActor actor = context.getActorFromId(actorID);
 	VacuumWorldLocation currentLocation = context.getLocationFromActorId(actorID);
 	
 	return actor != null && context.checkTargetLocation(currentLocation.getCoordinates(), context.getOrientation(actor));
@@ -46,10 +46,10 @@ public class VacuumWorldPhysics implements Physics, VacuumWorldPhysicsInterface 
     @Override
     public synchronized boolean isPossible(VacuumWorldCleanAction action, VacuumWorldEnvironment context) {
 	String actorID = action.getActorID();
-	Actor actor = context.getActorFromId(actorID);
+	VacuumWorldActor actor = context.getActorFromId(actorID);
 	VacuumWorldLocation currentLocation = context.getLocationFromActorId(actorID);
 	
-	return actor != null && actor instanceof VacuumWorldCleaningAgent && currentLocation.isCleanableBy(((VacuumWorldActorAppearance) ((VacuumWorldCleaningAgent) actor).getAppearance()).getColor());
+	return actor != null && actor instanceof VacuumWorldCleaningAgent && currentLocation.isCleanableBy(((VacuumWorldAutonomousActorAppearance) ((VacuumWorldCleaningAgent) actor).getAppearance()).getColor());
     }
 
     @Override
@@ -70,7 +70,7 @@ public class VacuumWorldPhysics implements Physics, VacuumWorldPhysicsInterface 
     @Override
     public synchronized boolean isPossible(VacuumWorldDropDirtAction action, VacuumWorldEnvironment context) {
 	String actorID = action.getActorID();
-	Actor actor = context.getActorFromId(actorID);
+	VacuumWorldActor actor = context.getActorFromId(actorID);
 	VacuumWorldLocation currentLocation = context.getLocationFromActorId(actorID);
 	
 	return actor != null && actor instanceof VacuumWorldUserAgent && !currentLocation.containsDirt();
@@ -96,7 +96,7 @@ public class VacuumWorldPhysics implements Physics, VacuumWorldPhysicsInterface 
     @Override
     public synchronized VacuumWorldPhysicalActionResult perform(VacuumWorldTurnLeftAction action, VacuumWorldEnvironment context) {
 	String actorID = action.getActorID();
-	Actor actor = context.getActorFromId(actorID);
+	VacuumWorldActor actor = context.getActorFromId(actorID);
 	
 	if(actor == null) {
 	    throw new UnsupportedOperationException("The actor is null!");
@@ -112,7 +112,7 @@ public class VacuumWorldPhysics implements Physics, VacuumWorldPhysicsInterface 
     @Override
     public synchronized VacuumWorldPhysicalActionResult perform(VacuumWorldTurnRightAction action, VacuumWorldEnvironment context) {
 	String actorID = action.getActorID();
-	Actor actor = context.getActorFromId(actorID);
+	VacuumWorldActor actor = context.getActorFromId(actorID);
 	
 	if(actor == null) {
 	    throw new UnsupportedOperationException("The actor is null!");
@@ -159,7 +159,7 @@ public class VacuumWorldPhysics implements Physics, VacuumWorldPhysicsInterface 
     @Override
     public synchronized VacuumWorldPhysicalActionResult perform(VacuumWorldDropDirtAction action, VacuumWorldEnvironment context) {
 	String actorID = action.getActorID();
-	Actor actor = context.getActorFromId(actorID);
+	VacuumWorldActor actor = context.getActorFromId(actorID);
 	VacuumWorldLocation actorLocation = context.getLocationFromActorId(actorID);
 	
 	if(!(actor instanceof VacuumWorldUserAgent) || actorLocation.containsDirt()) {
@@ -183,17 +183,17 @@ public class VacuumWorldPhysics implements Physics, VacuumWorldPhysicsInterface 
     @Override
     public synchronized boolean succeeded(VacuumWorldTurnLeftAction action, VacuumWorldEnvironment context) {
 	String actorId = action.getActorID();
-	Actor actor = context.getActorFromId(actorId);
+	VacuumWorldActor actor = context.getActorFromId(actorId);
 	
-	return actor != null && action.getOriginalOrientation().getLeft().equals(((VacuumWorldActorAppearance) ((AbstractAgent) actor).getAppearance()).getOrientation());
+	return actor != null && action.getOriginalOrientation().getLeft().equals(((VacuumWorldAutonomousActorAppearance) ((AbstractAgent) actor).getAppearance()).getOrientation());
     }
 
     @Override
     public synchronized boolean succeeded(VacuumWorldTurnRightAction action, VacuumWorldEnvironment context) {
 	String actorId = action.getActorID();
-	Actor actor = context.getActorFromId(actorId);
+	VacuumWorldActor actor = context.getActorFromId(actorId);
 	
-	return actor != null && action.getOriginalOrientation().getRight().equals(((VacuumWorldActorAppearance) ((AbstractAgent) actor).getAppearance()).getOrientation());
+	return actor != null && action.getOriginalOrientation().getRight().equals(((VacuumWorldAutonomousActorAppearance) ((AbstractAgent) actor).getAppearance()).getOrientation());
     }
 
     @Override
@@ -201,7 +201,7 @@ public class VacuumWorldPhysics implements Physics, VacuumWorldPhysicsInterface 
 	String actorId = action.getActorID();
 	VacuumWorldLocation current = context.getLocationFromActorId(actorId);
 	
-	return action.getCleanedDirtColor().canBeCleanedBy(((VacuumWorldActorAppearance) ((AbstractAgent) context.getActorFromId(actorId)).getAppearance()).getColor()) && !current.containsDirt();
+	return action.getCleanedDirtColor().canBeCleanedBy(((VacuumWorldAutonomousActorAppearance) ((AbstractAgent) context.getActorFromId(actorId)).getAppearance()).getColor()) && !current.containsDirt();
     }
 
     @Override

@@ -18,8 +18,9 @@ import uk.ac.rhul.cs.dice.agent.interfaces.Sensor;
 import uk.ac.rhul.cs.dice.agentactions.enums.EnvironmentalActionType;
 import uk.ac.rhul.cs.dice.agentcommon.interfaces.Action;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
+import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldAutonomousActorAppearance;
 
-public class VacuumWorldUserAgent extends AbstractAgent implements VacuumWorldActiveBodyInterface {
+public class VacuumWorldUserAgent extends AbstractAgent implements VacuumWorldActor {
     private static final long serialVersionUID = -2882228263580151389L;
     private transient ObjectInputStream input;
     private transient ObjectOutputStream output;
@@ -27,7 +28,7 @@ public class VacuumWorldUserAgent extends AbstractAgent implements VacuumWorldAc
     private volatile boolean pause;
     private boolean test;
 
-    public VacuumWorldUserAgent(String id, VacuumWorldActorAppearance appearance, List<Sensor> sensors, List<Actuator> actuators, AgentMind mind) {
+    public VacuumWorldUserAgent(String id, VacuumWorldAutonomousActorAppearance appearance, List<Sensor> sensors, List<Actuator> actuators, AgentMind mind) {
 	super(id, appearance, sensors, actuators, mind);
     }
 
@@ -35,14 +36,17 @@ public class VacuumWorldUserAgent extends AbstractAgent implements VacuumWorldAc
 	super(toCopy.getID(), toCopy.getAppearance(), toCopy.getAllSensors(), toCopy.getAllActuators(), toCopy.getMind());
     }
     
+    @Override
     public void setStopFlag(boolean stop) {
 	this.stop = stop;
     }
     
+    @Override
     public void setPauseFlag(boolean pause) {
 	this.pause = pause;
     }
     
+    @Override
     public void toggleTest() {
 	this.test = true;
     }
@@ -115,13 +119,18 @@ public class VacuumWorldUserAgent extends AbstractAgent implements VacuumWorldAc
     }
     
     @Override
+    public VacuumWorldActorAppearance getAppearance() {
+        return (VacuumWorldActorAppearance) super.getAppearance();
+    }
+    
+    @Override
     public void turnLeft() {
-	((VacuumWorldActorAppearance) getAppearance()).turnLeft();
+	((VacuumWorldAutonomousActorAppearance) getAppearance()).turnLeft();
     }
     
     @Override
     public void turnRight() {
-	((VacuumWorldActorAppearance) getAppearance()).turnRight();
+	((VacuumWorldAutonomousActorAppearance) getAppearance()).turnRight();
     }
     
     @Override
@@ -146,7 +155,7 @@ public class VacuumWorldUserAgent extends AbstractAgent implements VacuumWorldAc
     
     @Override
     public JsonObject serialize() {
-        return ((VacuumWorldActorAppearance) getAppearance()).serialize();
+        return ((VacuumWorldAutonomousActorAppearance) getAppearance()).serialize();
     }
 
     @Override

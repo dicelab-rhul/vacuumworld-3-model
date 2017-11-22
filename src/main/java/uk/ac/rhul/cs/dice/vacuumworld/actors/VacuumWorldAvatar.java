@@ -1,26 +1,21 @@
 package uk.ac.rhul.cs.dice.vacuumworld.actors;
 
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.util.List;
 
-import com.google.gson.JsonObject;
-
 import uk.ac.rhul.cs.dice.agent.abstractimpl.AbstractAvatar;
-import uk.ac.rhul.cs.dice.agent.enums.ActuatorPurposeEnum;
 import uk.ac.rhul.cs.dice.agent.interfaces.Actuator;
 import uk.ac.rhul.cs.dice.agent.interfaces.Analyzable;
 import uk.ac.rhul.cs.dice.agent.interfaces.AvatarAppearance;
 import uk.ac.rhul.cs.dice.agent.interfaces.PrincipalListener;
 import uk.ac.rhul.cs.dice.agent.interfaces.Sensor;
-import uk.ac.rhul.cs.dice.agentactions.enums.EnvironmentalActionType;
-import uk.ac.rhul.cs.dice.agentcommon.interfaces.Action;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
-import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldAvatarAppearance;
 
 public class VacuumWorldAvatar extends AbstractAvatar implements VacuumWorldActor {
     private static final long serialVersionUID = 7363668279670343837L;
+    private transient Socket socketWithEnvironment; //TODO initialize this
     private volatile boolean stop;
     private volatile boolean pause;
     private boolean simulatedRun;
@@ -33,6 +28,16 @@ public class VacuumWorldAvatar extends AbstractAvatar implements VacuumWorldActo
 	this(toCopy.getID(), toCopy.getAppearance(), toCopy.getAllSensors(), toCopy.getAllActuators(), toCopy.getPrincipalListener());
     }
 
+    @Override
+    public Socket getSocketWithEnvironment() {
+	return this.socketWithEnvironment;
+    }
+    
+    @Override
+    public void setSocketWithEnvironment(Socket socket) {
+        this.socketWithEnvironment = socket;
+    }
+    
     @Override
     public void setStopFlag(boolean stop) {
 	this.stop = stop;
@@ -51,25 +56,6 @@ public class VacuumWorldAvatar extends AbstractAvatar implements VacuumWorldActo
     @Override
     public void sendFeedbackToPrincipal(Analyzable... feedback) {
 	throw new UnsupportedOperationException(); //TODO maybe change this
-    }
-
-    @Override
-    public void sendToActuator(Action<?> action) {
-	EnvironmentalActionType type = (EnvironmentalActionType) action.getGenericType();
-	((VacuumWorldActuator) getActuatorFromActionType(type)).validateExecution(action);
-    }
-    
-    private Actuator getActuatorFromActionType(EnvironmentalActionType type) {
-	switch (type) {
-	case PHYSICAL:
-	    return getSpecificActuators(ActuatorPurposeEnum.ACT_PHYSICALLY).get(0);
-	case COMMUNICATIVE:
-	    return getSpecificActuators(ActuatorPurposeEnum.SPEAK).get(0);
-	case SENSING:
-	    return getSpecificActuators(ActuatorPurposeEnum.OTHER).get(0);
-	default:
-	    throw new UnsupportedOperationException("No compatible actuator found.");
-	}
     }
 
     @Override
@@ -131,26 +117,5 @@ public class VacuumWorldAvatar extends AbstractAvatar implements VacuumWorldActo
     @Override
     public VacuumWorldActorAppearance getAppearance() {
         return (VacuumWorldActorAppearance) super.getAppearance();
-    }
-    
-    @Override
-    public void turnLeft() {
-	((VacuumWorldAvatarAppearance) getAppearance()).turnLeft();
-    }
-
-    @Override
-    public void turnRight() {
-	((VacuumWorldAvatarAppearance) getAppearance()).turnRight();
-    }
-    
-    @Override
-    public JsonObject serialize() {
-        return this.getAppearance().serialize();
-    }
-
-    @Override
-    public void openSocket(String hostname, int port) throws IOException {
-	// TODO Auto-generated method stub
-	
     }
 }

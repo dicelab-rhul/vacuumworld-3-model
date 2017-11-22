@@ -1,6 +1,5 @@
 package uk.ac.rhul.cs.dice.vacuumworld.actors;
 
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -8,36 +7,38 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import org.cloudstrife9999.logutilities.LogUtils;
-
-import com.google.gson.JsonObject;
-
 import uk.ac.rhul.cs.dice.agent.abstractimpl.AbstractAgent;
-import uk.ac.rhul.cs.dice.agent.enums.ActuatorPurposeEnum;
 import uk.ac.rhul.cs.dice.agent.interfaces.Actuator;
 import uk.ac.rhul.cs.dice.agent.interfaces.AgentMind;
 import uk.ac.rhul.cs.dice.agent.interfaces.Analyzable;
 import uk.ac.rhul.cs.dice.agent.interfaces.Sensor;
-import uk.ac.rhul.cs.dice.agentactions.enums.EnvironmentalActionType;
-import uk.ac.rhul.cs.dice.agentcommon.interfaces.Action;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
-import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldAutonomousActorAppearance;
 
 public class VacuumWorldUserAgent extends AbstractAgent implements VacuumWorldActor {
     private static final long serialVersionUID = -2882228263580151389L;
-    private Socket socket; //TODO initialize this
+    private transient Socket socketWithEnvironment; //TODO initialize this
     private transient ObjectInputStream input;
     private transient ObjectOutputStream output;
     private volatile boolean stop;
     private volatile boolean pause;
     private boolean simulatedRun;
 
-    public VacuumWorldUserAgent(String id, VacuumWorldAutonomousActorAppearance appearance, List<Sensor> sensors, List<Actuator> actuators, AgentMind mind) {
+    public VacuumWorldUserAgent(String id, VacuumWorldActorAppearance appearance, List<Sensor> sensors, List<Actuator> actuators, AgentMind mind) {
 	super(id, appearance, sensors, actuators, mind);
     }
 
     public VacuumWorldUserAgent(VacuumWorldUserAgent toCopy) {
-	super(toCopy.getID(), toCopy.getAppearance(), toCopy.getAllSensors(), toCopy.getAllActuators(), toCopy.getMind());
+	this(toCopy.getID(), toCopy.getAppearance(), toCopy.getAllSensors(), toCopy.getAllActuators(), toCopy.getMind());
+    }
+    
+    @Override
+    public Socket getSocketWithEnvironment() {
+	return this.socketWithEnvironment;
+    }
+    
+    @Override
+    public void setSocketWithEnvironment(Socket socket) {
+        this.socketWithEnvironment = socket;
     }
     
     @Override
@@ -53,25 +54,6 @@ public class VacuumWorldUserAgent extends AbstractAgent implements VacuumWorldAc
     @Override
     public void setRunFlag(boolean simulatedRun) {
 	this.simulatedRun = simulatedRun;
-    }
-
-    @Override
-    public void sendToActuator(Action<?> action) {
-	EnvironmentalActionType type = (EnvironmentalActionType) action.getGenericType();
-	((VacuumWorldActuator) getActuatorFromActionType(type)).validateExecution(action);
-    }
-    
-    private Actuator getActuatorFromActionType(EnvironmentalActionType type) {
-	switch (type) {
-	case PHYSICAL:
-	    return getSpecificActuators(ActuatorPurposeEnum.ACT_PHYSICALLY).get(0);
-	case COMMUNICATIVE:
-	    return getSpecificActuators(ActuatorPurposeEnum.SPEAK).get(0);
-	case SENSING:
-	    return getSpecificActuators(ActuatorPurposeEnum.OTHER).get(0);
-	default:
-	    throw new UnsupportedOperationException("No compatible actuator found.");
-	}
     }
 
     @Override
@@ -128,16 +110,6 @@ public class VacuumWorldUserAgent extends AbstractAgent implements VacuumWorldAc
     }
     
     @Override
-    public void turnLeft() {
-	((VacuumWorldAutonomousActorAppearance) getAppearance()).turnLeft();
-    }
-    
-    @Override
-    public void turnRight() {
-	((VacuumWorldAutonomousActorAppearance) getAppearance()).turnRight();
-    }
-    
-    @Override
     public ObjectInputStream getInputChannels() {
 	return this.input;
     }
@@ -155,16 +127,5 @@ public class VacuumWorldUserAgent extends AbstractAgent implements VacuumWorldAc
     @Override
     public void setOutputChannels(ObjectOutputStream output) {
 	this.output = output;
-    }
-    
-    @Override
-    public JsonObject serialize() {
-        return getAppearance().serialize();
-    }
-
-    @Override
-    public void openSocket(String hostname, int port) throws IOException {
-	// TODO Auto-generated method stub
-	
     }
 }

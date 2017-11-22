@@ -1,7 +1,6 @@
 package uk.ac.rhul.cs.dice.vacuumworld;
 
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -59,6 +58,7 @@ public class VacuumWorldUniverse extends AbstractUniverse {
 
     private void connectComponents(String hostname, int port) {
 	getAllActors().forEach(a -> connectToEnvironment(a, hostname, port));
+	getMainAmbient().finishInitialization();
     }
     
     private void connectToEnvironment(VacuumWorldActor actor, String hostname, int port) {

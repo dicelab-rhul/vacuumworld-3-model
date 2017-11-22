@@ -11,44 +11,45 @@ import java.util.Set;
 
 import org.cloudstrife9999.logutilities.LogUtils;
 
-import com.google.gson.JsonObject;
-
 import uk.ac.rhul.cs.dice.agent.abstractimpl.AbstractAgent;
-import uk.ac.rhul.cs.dice.agent.enums.ActuatorPurposeEnum;
 import uk.ac.rhul.cs.dice.agent.interfaces.Actuator;
 import uk.ac.rhul.cs.dice.agent.interfaces.AgentMind;
 import uk.ac.rhul.cs.dice.agent.interfaces.Analyzable;
 import uk.ac.rhul.cs.dice.agent.interfaces.Perception;
 import uk.ac.rhul.cs.dice.agent.interfaces.Sensor;
-import uk.ac.rhul.cs.dice.agentactions.enums.EnvironmentalActionType;
 import uk.ac.rhul.cs.dice.agentcommon.interfaces.Action;
 import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldEvent;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractAction;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
-import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldAutonomousActorAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.exceptions.VacuumWorldRuntimeException;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.StopPerception;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldPerception;
 
 public class VacuumWorldCleaningAgent extends AbstractAgent implements VacuumWorldActor {
     private static final long serialVersionUID = -7231158706838196637L;
-    private transient Socket socket;
+    private transient Socket socketWithEnvironment;
     private transient ObjectInputStream input;
     private transient ObjectOutputStream output;
     private volatile boolean stop;
     private volatile boolean pause;
     private boolean simulatedRun;
 
-    public VacuumWorldCleaningAgent(String id, VacuumWorldAutonomousActorAppearance appearance, List<Sensor> sensors, List<Actuator> actuators, AgentMind mind) {
+    public VacuumWorldCleaningAgent(String id, VacuumWorldActorAppearance appearance, List<Sensor> sensors, List<Actuator> actuators, AgentMind mind) {
 	super(id, appearance, sensors, actuators, mind);
     }
 
     public VacuumWorldCleaningAgent(VacuumWorldCleaningAgent toCopy) {
-	super(toCopy.getID(), toCopy.getAppearance(), toCopy.getAllSensors(), toCopy.getAllActuators(), toCopy.getMind());
+	this(toCopy.getID(), toCopy.getAppearance(), toCopy.getAllSensors(), toCopy.getAllActuators(), toCopy.getMind());
     }
 
-    public Socket getSocket() {
-	return this.socket;
+    @Override
+    public Socket getSocketWithEnvironment() {
+	return this.socketWithEnvironment;
+    }
+    
+    @Override
+    public void setSocketWithEnvironment(Socket socket) {
+        this.socketWithEnvironment = socket;
     }
     
     @Override
@@ -64,25 +65,6 @@ public class VacuumWorldCleaningAgent extends AbstractAgent implements VacuumWor
     @Override
     public void setRunFlag(boolean simulatedRun) {
 	this.simulatedRun = simulatedRun;
-    }
-    
-    @Override
-    public void sendToActuator(Action<?> action) {
-	EnvironmentalActionType type = (EnvironmentalActionType) action.getGenericType();
-	((VacuumWorldActuator) getActuatorFromActionType(type)).validateExecution(action);
-    }
-    
-    private Actuator getActuatorFromActionType(EnvironmentalActionType type) {
-	switch (type) {
-	case PHYSICAL:
-	    return getSpecificActuators(ActuatorPurposeEnum.ACT_PHYSICALLY).get(0);
-	case COMMUNICATIVE:
-	    return getSpecificActuators(ActuatorPurposeEnum.SPEAK).get(0);
-	case SENSING:
-	    return getSpecificActuators(ActuatorPurposeEnum.OTHER).get(0);
-	default:
-	    throw new UnsupportedOperationException("No compatible actuator found.");
-	}
     }
 
     @Override
@@ -137,20 +119,7 @@ public class VacuumWorldCleaningAgent extends AbstractAgent implements VacuumWor
 
     private Set<Analyzable> collectEnviromentFeedback() {
 	try {
-	    Set<Analyzable> perceptions = new HashSet<>();
-	    
-	    Perception candidate = null;
-	    
-	    do {
-		LogUtils.log(getID() + ": waiting for perception.");
-		candidate = (Perception) this.input.readObject();
-		checkStop(candidate);
-		LogUtils.log(getID() + ": got perception.");
-		perceptions.add((candidate));
-	    }
-	    while(!(candidate instanceof VacuumWorldPerception));
-	    
-	    return perceptions;
+	    return collectPerceptions();
 	}
 	catch(IOException e) {
 	    LogUtils.log(getID() + ": stop.");
@@ -164,20 +133,26 @@ public class VacuumWorldCleaningAgent extends AbstractAgent implements VacuumWor
 	}
     }
 
+    private Set<Analyzable> collectPerceptions() throws ClassNotFoundException, IOException {
+	Set<Analyzable> perceptions = new HashSet<>();
+	Perception candidate = null;
+
+	do {
+	    LogUtils.log(getID() + ": waiting for perception.");
+	    candidate = (Perception) this.input.readObject();
+	    checkStop(candidate);
+	    LogUtils.log(getID() + ": got perception: " + candidate.getClass().getSimpleName() + ".");
+	    perceptions.add((candidate));
+	}
+	while(!(candidate instanceof VacuumWorldPerception));
+	    
+	return perceptions;
+    }
+
     private void checkStop(Perception candidate) throws IOException {
 	if(candidate instanceof StopPerception) {
 	    throw new IOException();
 	}
-    }
-
-    @Override
-    public void turnLeft() {
-	((VacuumWorldAutonomousActorAppearance) getAppearance()).turnLeft();
-    }
-    
-    @Override
-    public void turnRight() {
-	((VacuumWorldAutonomousActorAppearance) getAppearance()).turnRight();
     }
     
     @Override
@@ -194,17 +169,6 @@ public class VacuumWorldCleaningAgent extends AbstractAgent implements VacuumWor
     public ObjectOutputStream getOutputChannels() {
 	return this.output;
     }
-
-    @Override
-    public void openSocket(String hostname, int port) throws IOException {
-	this.socket = new Socket(hostname, port);
-	ObjectOutputStream o = new ObjectOutputStream(this.socket.getOutputStream());
-	ObjectInputStream i = new ObjectInputStream(this.socket.getInputStream());
-	o.writeUTF(getID());
-	o.flush();
-	setOutputChannels(o);
-	setInputChannels(i);
-    }
     
     @Override
     public void setInputChannels(ObjectInputStream input) {
@@ -214,10 +178,5 @@ public class VacuumWorldCleaningAgent extends AbstractAgent implements VacuumWor
     @Override
     public void setOutputChannels(ObjectOutputStream output) {
 	this.output = output;
-    }
-    
-    @Override
-    public JsonObject serialize() {
-        return getAppearance().serialize();
     }
 }

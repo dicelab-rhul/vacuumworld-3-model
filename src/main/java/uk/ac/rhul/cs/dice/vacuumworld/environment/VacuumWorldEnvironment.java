@@ -55,6 +55,7 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
     private Map<String, ObjectOutputStream> output;
     private volatile boolean stopFlag;
     private volatile boolean initializationComplete;
+    private volatile boolean goodToGo;
     
     public VacuumWorldEnvironment(int dimension, boolean stopFlag, String hostname, int port) {
 	int upperSize = dimension > MAXIMUM_SIZE ? MAXIMUM_SIZE : dimension;
@@ -117,6 +118,8 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 	    this.input.put(recipientId, i);
 	    this.output.put(recipientId, o);
 	}
+	
+	this.goodToGo = true;
     }
 
     public String getHostname() {
@@ -177,8 +180,10 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 	return ImmutableMap.copyOf(this.grid);
     }
     
-    public synchronized void listenAndExecute() {
-	this.input.values().forEach(this::listenForActorAndExecute);
+    public void listenAndExecute() {
+	waitForInitialization();
+	this.input.entrySet().forEach(this::listenForActorAndExecute);
+	
 	LogUtils.log(this.getClass().getSimpleName() + ": printing current configuration...");
 	VacuumWorldPrinter.dumpModelFromLocations(this.grid);
 	LogUtils.log(this.getClass().getSimpleName() + ": end of the cycle.\n\n--------------------\n");
@@ -193,9 +198,20 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 	}
     }
 
-    private void listenForActorAndExecute(ObjectInputStream is) {
+    private void waitForInitialization() {
+	while(true) {
+	    if(this.initializationComplete && this.goodToGo) {
+		break;
+	    }
+	}
+    }
+
+    private void listenForActorAndExecute(Entry<String, ObjectInputStream> input) {
 	try {
+	    ObjectInputStream is = input.getValue();
+	    LogUtils.log(this.getClass().getSimpleName() + ": waiting for action from " + input.getKey() + "...");
 	    VacuumWorldEvent event = (VacuumWorldEvent) is.readObject();
+	    LogUtils.log(this.getClass().getSimpleName() + ": got " + event.getAction().getClass().getSimpleName() + " from " + input.getKey() + "...");
 	    VacuumWorldAbstractActionInterface action = event.getAction();
 	    printActorDetailsBefore(action);
 	    Result result = attemptExecution(action);

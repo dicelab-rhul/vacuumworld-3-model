@@ -6,7 +6,7 @@
             "y": 1,
             "actor": {
                 "type": "cleaning_agent",
-                "id": "Agent-1",
+                "id": "Agent-1-ORANGE",
                 "color": "orange",
                 "orientation": "north",
                 "mind": "uk.ac.rhul.cs.dice.vacuumworld.actors.minds.VacuumWorldDefaultMind",
@@ -48,7 +48,7 @@
             "y": 9,
             "actor": {
                 "type": "cleaning_agent",
-                "id": "Agent-2",
+                "id": "Agent-2-GREEN",
                 "color": "green",
                 "orientation": "south",
                 "mind": "uk.ac.rhul.cs.dice.vacuumworld.actors.minds.VacuumWorldDefaultMind",

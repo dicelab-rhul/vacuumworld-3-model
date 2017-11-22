@@ -6,35 +6,35 @@
             "y": 1,
             "actor": {
                 "type": "cleaning_agent",
-                "id": "Agent-qwertyuiop",
+                "id": "Agent-1-ORANGE",
                 "color": "orange",
                 "orientation": "north",
                 "mind": "uk.ac.rhul.cs.dice.vacuumworld.actors.minds.VacuumWorldDefaultMind",
                 "sensors": [
                     {
-                        "id": "Sensor-asdasdasd",
+                        "id": "Sensor-1",
                         "purpose": "see"
                     },
                     {
-                        "id": "Sensor-donaldgoofy",
+                        "id": "Sensor-2",
                         "purpose": "listen"
                     },
                     {
-                        "id": "Sensor-whatever",
+                        "id": "Sensor-3",
                         "purpose": "other"
                     }
                 ],
                 "actuators": [
                     {
-                        "id": "Actuator-gwuhgjshgosh",
+                        "id": "Actuator-1",
                         "purpose": "act_physically"
                     },
                     {
-                        "id": "Actuator-kewthoghdoisgh",
+                        "id": "Actuator-2",
                         "purpose": "speak"
                     },
                     {
-                        "id": "Actuator-arohgofghl",
+                        "id": "Actuator-3",
                         "purpose": "other"
                     }
                 ]
@@ -55,35 +55,35 @@
             "y": 2,
             "actor": {
                 "type": "user",
-                "id": "User-qwertyuiop",
+                "id": "User-1",
                 "color": null,
                 "orientation": "west",
                 "mind": "uk.ac.rhul.cs.dice.vacuumworld.actors.minds.VacuumWorldDefaultMind",
                 "sensors": [
                     {
-                        "id": "Sensor-kghsfhgusfhgl",
+                        "id": "Sensor-1",
                         "purpose": "see"
                     },
                     {
-                        "id": "Sensor-dgushdgkhgsd",
+                        "id": "Sensor-2",
                         "purpose": "listen"
                     },
                     {
-                        "id": "Sensor-dfaughdauoa",
+                        "id": "Sensor-3",
                         "purpose": "other"
                     }
                 ],
                 "actuators": [
                     {
-                        "id": "Actuator-fkagfkdgusd",
+                        "id": "Actuator-1",
                         "purpose": "act_physically"
                     },
                     {
-                        "id": "Actuator-etghfsuogsrg",
+                        "id": "Actuator-2",
                         "purpose": "speak"
                     },
                     {
-                        "id": "Actuator-gkhgsiuohgeuoihs",
+                        "id": "Actuator-3",
                         "purpose": "other"
                     }
                 ]
@@ -94,36 +94,36 @@
             "y": 2,
             "actor": {
                 "type": "avatar",
-                "id": "Avatar-qwertyuiop",
+                "id": "Avatar-1",
                 "color": null,
                 "orientation": "east",
                 "port": 12345,
                 "mind": "uk.ac.rhul.cs.dice.vacuumworld.actors.minds.VacuumWorldPrincipalListener",
                 "sensors": [
                     {
-                        "id": "Sensor-kghsfhgusfhgl",
+                        "id": "Sensor-1",
                         "purpose": "see"
                     },
                     {
-                        "id": "Sensor-dgushdgkhgsd",
+                        "id": "Sensor-2",
                         "purpose": "listen"
                     },
                     {
-                        "id": "Sensor-dfaughdauoa",
+                        "id": "Sensor-3",
                         "purpose": "other"
                     }
                 ],
                 "actuators": [
                     {
-                        "id": "Actuator-fkagfkdgusd",
+                        "id": "Actuator-1",
                         "purpose": "act_physically"
                     },
                     {
-                        "id": "Actuator-etghfsuogsrg",
+                        "id": "Actuator-2",
                         "purpose": "speak"
                     },
                     {
-                        "id": "Actuator-gkhgsiuohgeuoihs",
+                        "id": "Actuator-3",
                         "purpose": "other"
                     }
                 ]

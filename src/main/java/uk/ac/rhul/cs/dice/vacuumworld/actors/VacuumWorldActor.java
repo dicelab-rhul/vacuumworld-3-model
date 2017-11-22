@@ -100,4 +100,6 @@ public interface VacuumWorldActor extends Actor, Avatar {
     public abstract void setSocketWithEnvironment(Socket socket);
     
     public abstract Socket getSocketWithEnvironment();
+    
+    public abstract boolean isPaused();
 }

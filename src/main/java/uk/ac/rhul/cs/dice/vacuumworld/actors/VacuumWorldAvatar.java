@@ -15,7 +15,7 @@ import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
 
 public class VacuumWorldAvatar extends AbstractAvatar implements VacuumWorldActor {
     private static final long serialVersionUID = 7363668279670343837L;
-    private transient Socket socketWithEnvironment; //TODO initialize this
+    private transient Socket socketWithEnvironment;
     private volatile boolean stop;
     private volatile boolean pause;
     private boolean simulatedRun;
@@ -46,6 +46,11 @@ public class VacuumWorldAvatar extends AbstractAvatar implements VacuumWorldActo
     @Override
     public void setPauseFlag(boolean pause) {
 	this.pause = pause;
+    }
+    
+    @Override
+    public boolean isPaused() {
+        return this.pause;
     }
     
     @Override

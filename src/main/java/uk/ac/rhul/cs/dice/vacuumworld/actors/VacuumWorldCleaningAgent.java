@@ -63,6 +63,11 @@ public class VacuumWorldCleaningAgent extends AbstractAgent implements VacuumWor
     }
     
     @Override
+    public boolean isPaused() {
+        return this.pause;
+    }
+    
+    @Override
     public void setRunFlag(boolean simulatedRun) {
 	this.simulatedRun = simulatedRun;
     }

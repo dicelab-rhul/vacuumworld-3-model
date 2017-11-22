@@ -21,6 +21,7 @@ public class VacuumWorldComponentsManager {
     private ObjectOutputStream output;
     private ExecutorService executor;
     private VacuumWorldUniverse universe;
+    private static final String DEBUG_CONFIGURATION = "two_agents.json";
     
     
     public VacuumWorldComponentsManager(boolean fromFile, boolean simulatedRun, String hostname, int port) throws IOException {
@@ -89,7 +90,7 @@ public class VacuumWorldComponentsManager {
 	LogUtils.log(this.getClass().getSimpleName() + ": starting universe...");
 	
 	if(fromFile) {
-	    createUniverseForDebug("easy.json", simulatedRun);
+	    createUniverseForDebug(DEBUG_CONFIGURATION, simulatedRun);
 	}
 	else {
 	    JsonObject initialConfiguration = waitForConnection();

@@ -10,8 +10,7 @@ public class VacuumWorld {
     private VacuumWorld() {}
 
     public static void main(String[] args) throws IOException {
-	//String[] hostDetails = parseHostDetails(args);
-	String[] hostDetails = new String[] { InetAddress.getLocalHost().getHostAddress(), "65000" };
+	String[] hostDetails = getHostDetails(args);
 	
 	if(!checkHostDetails(hostDetails[0], hostDetails[1])) {
 	    return;
@@ -19,6 +18,18 @@ public class VacuumWorld {
 	else {
 	    startSystem(hostDetails);
 	}
+    }
+
+    private static String[] getHostDetails(String[] args) throws IOException {
+	String[] hostDetails = parseHostDetails(args);
+	
+	for(String detail : hostDetails) {
+	    if(detail == null) {
+		return new String[] { InetAddress.getLocalHost().getHostAddress(), "65000" };
+	    }
+	}
+	
+	return hostDetails;
     }
 
     private static void startSystem(String[] hostDetails) throws IOException {

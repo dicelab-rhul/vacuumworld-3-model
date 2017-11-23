@@ -17,6 +17,10 @@ public abstract class VacuumWorldAbstractAction implements VacuumWorldAbstractAc
     
     public VacuumWorldAbstractAction() {}
     
+    public VacuumWorldAbstractAction(String actor) {
+	this.actor = actor;
+    }
+    
     private static BiMap<Enum<?>, Character> initMapping() {
 	BiMap<Enum<?>, Character> map = HashBiMap.create();
 	
@@ -25,10 +29,6 @@ public abstract class VacuumWorldAbstractAction implements VacuumWorldAbstractAc
 	Stream.of(VacuumWorldCommunicativeActionsEnum.values()).forEach( v -> map.put(v, v.getCode()));
 	
 	return map;
-    }
-
-    public VacuumWorldAbstractAction(String actor) {
-	this.actor = actor;
     }
     
     @Override

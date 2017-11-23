@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.cloudstrife9999.logutilities.LogUtils;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -54,6 +56,8 @@ public class VacuumWorldParser {
 	    return buildMap(tree);
 	}
 	catch(IOException e) {
+	    LogUtils.log(e);
+	    
 	    return Collections.emptyMap();
 	}
     }

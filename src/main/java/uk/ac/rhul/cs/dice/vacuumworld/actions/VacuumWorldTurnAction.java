@@ -26,4 +26,15 @@ public abstract class VacuumWorldTurnAction extends VacuumWorldAbstractPhysicalA
     public TurnDirection getTurnDirection() {
 	return this.direction;
     }
+    
+    public static VacuumWorldTurnAction generate(TurnDirection direction) {
+	switch(direction) {
+	case LEFT:
+	    return new VacuumWorldTurnLeftAction();
+	case RIGHT:
+	    return new VacuumWorldTurnRightAction();
+	default:
+	    throw new IllegalArgumentException();
+	}
+    }
 }

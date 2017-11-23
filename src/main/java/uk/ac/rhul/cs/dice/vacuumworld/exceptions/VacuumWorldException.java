@@ -3,7 +3,9 @@ package uk.ac.rhul.cs.dice.vacuumworld.exceptions;
 public class VacuumWorldException extends Exception {
     private static final long serialVersionUID = -4984847693714446958L;
 
-    public VacuumWorldException() {}
+    public VacuumWorldException() {
+	super();
+    }
 
     public VacuumWorldException(String message) {
 	super(message);

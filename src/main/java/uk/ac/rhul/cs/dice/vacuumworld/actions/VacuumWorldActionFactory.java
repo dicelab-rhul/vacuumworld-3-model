@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import uk.ac.rhul.cs.dice.vacuumworld.actions.enums.TurnDirection;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.enums.VacuumWorldCommunicativeActionsEnum;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.enums.VacuumWorldPhysicalActionsEnum;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.enums.VacuumWorldSensingActionsEnum;
@@ -33,14 +34,20 @@ public class VacuumWorldActionFactory {
 	case MOVE:
 	    return new VacuumWorldMoveAction();
 	case TURN_LEFT:
-	    return new VacuumWorldTurnLeftAction();
 	case TURN_RIGHT:
-	    return new VacuumWorldTurnRightAction();
+	    return VacuumWorldTurnAction.generate(TurnDirection.fromActionType(code));
 	case CLEAN:
 	    return new VacuumWorldCleanAction();
-	case DROP_DIRT:
-	    return new VacuumWorldDropDirtAction(null); //i.e., random color.
 	default:
+	    return attemptCreationOfUserActions(code);
+	}
+    }
+
+    private static VacuumWorldAbstractAction attemptCreationOfUserActions(VacuumWorldPhysicalActionsEnum code) {
+	if(VacuumWorldPhysicalActionsEnum.DROP_DIRT.equals(code)) {
+	    return new VacuumWorldDropDirtAction(null); //i.e., random color.
+	}
+	else {
 	    throw new IllegalArgumentException();
 	}
     }

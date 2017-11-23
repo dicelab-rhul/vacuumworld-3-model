@@ -1,6 +1,7 @@
 package uk.ac.rhul.cs.dice.vacuumworld;
 
 import java.io.IOException;
+import java.net.InetAddress;
 
 import org.cloudstrife9999.logutilities.LogUtils;
 
@@ -10,10 +11,17 @@ public class VacuumWorld {
 
     public static void main(String[] args) throws IOException {
 	//String[] hostDetails = parseHostDetails(args);
-	String[] hostDetails = new String[] { "127.0.0.1", "65000" };
+	String[] hostDetails = new String[] { InetAddress.getLocalHost().getHostAddress(), "65000" };
 	
-	checkHostDetails(hostDetails[0], hostDetails[1]);
-	
+	if(!checkHostDetails(hostDetails[0], hostDetails[1])) {
+	    return;
+	}
+	else {
+	    startSystem(hostDetails);
+	}
+    }
+
+    private static void startSystem(String[] hostDetails) throws IOException {
 	//TODO these flags should become parameters.
 	boolean fromFile = true;
 	boolean simulatedRun = false;
@@ -21,18 +29,20 @@ public class VacuumWorld {
 	new VacuumWorldComponentsManager(fromFile, simulatedRun, hostDetails[0], Integer.valueOf(hostDetails[1]));
     }
 
-    private static void checkHostDetails(String ip, String port) {
+    private static boolean checkHostDetails(String ip, String port) {
 	if(ip == null || port == null) {
-	    quitWithUsage();
+	    return quitWithUsage();
 	}
 	
 	if(!ip.matches("\\A(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)(\\.(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)){3}\\z")) {
-	    quitWithUsage();
+	    return quitWithUsage();
 	}
 	
 	if(!testPort(port)) {
-	    quitWithUsage();
+	    return quitWithUsage();
 	}
+	
+	return true;
     }
 
     private static boolean testPort(String portRepresentation) {
@@ -82,9 +92,9 @@ public class VacuumWorld {
 	LogUtils.log("Usage: java -jar vw3.jar --ip <listening-ip> --port <listening-port>.");
     }
     
-    private static void quitWithUsage() {
+    private static boolean quitWithUsage() {
 	printUsage();
 	
-	System.exit(-1);
+	return false;
     }
 }

@@ -140,14 +140,14 @@ public class VacuumWorldCleaningAgent extends AbstractAgent implements VacuumWor
 
     private Set<Analyzable> collectPerceptions() throws ClassNotFoundException, IOException {
 	Set<Analyzable> perceptions = new HashSet<>();
-	Perception candidate = null;
+	Perception candidate;
 
 	do {
 	    LogUtils.log(getID() + ": waiting for perception.");
 	    candidate = (Perception) this.input.readObject();
 	    checkStop(candidate);
 	    LogUtils.log(getID() + ": got perception: " + candidate.getClass().getSimpleName() + ".");
-	    perceptions.add((candidate));
+	    perceptions.add(candidate);
 	}
 	while(!(candidate instanceof VacuumWorldPerception));
 	    

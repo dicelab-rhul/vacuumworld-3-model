@@ -28,6 +28,18 @@ public abstract class VacuumWorldAbstractMind extends AbstractAgentMind {
 	this.lastCyclePerceptions = new ArrayList<>();
 	this.lastCycleReceivedMessages = new ArrayList<>();
     }
+    
+    public List<VacuumWorldPerception> getLastCyclePerceptions() {
+	return this.lastCyclePerceptions;
+    }
+    
+    public VacuumWorldPerception getFirstLastCyclePerception() {
+	return this.lastCyclePerceptions.isEmpty() ? null : this.lastCyclePerceptions.get(0);
+    }
+    
+    public List<VacuumWorldSpeechPerception> getLastCycleReceivedMessages() {
+	return this.lastCycleReceivedMessages;
+    }
 
     @Override
     public void perceive(Set<Analyzable> perceptions) {

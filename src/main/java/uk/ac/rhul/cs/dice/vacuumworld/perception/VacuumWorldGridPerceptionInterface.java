@@ -7,9 +7,11 @@ import uk.ac.rhul.cs.dice.agent.interfaces.ActiveBody;
 import uk.ac.rhul.cs.dice.agentcommon.interfaces.Actor;
 import uk.ac.rhul.cs.dice.agentcontainers.enums.Orientation;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.AgentColor;
+import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldActor;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldAvatar;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldCleaningAgent;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldUserAgent;
+import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldEnvironmentAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldLocationAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.dirt.VacuumWorldDirt;
@@ -634,4 +636,17 @@ public interface VacuumWorldGridPerceptionInterface {
      * 
      */
     public abstract boolean isThereCompatibleDirtOnForwardRight(String id);
+    
+    /**
+     * 
+     * Returns the {@link VacuumWorldActorAppearance} of the {@link VacuumWorldActor} whose ID matches <code>id</code>.
+     * 
+     * @param id a {@link String} ID.
+     * 
+     * @return the {@link VacuumWorldActorAppearance} of the {@link VacuumWorldActor} whose ID matches <code>id</code>.
+     * 
+     */
+    public default VacuumWorldActorAppearance getActorAppearance(String id) {
+	return getLocationFromActiveBodyId(id).getActiveBodyAppearanceIfAny();
+    }
 }

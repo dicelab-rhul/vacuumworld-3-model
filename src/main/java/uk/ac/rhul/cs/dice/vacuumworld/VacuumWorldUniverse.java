@@ -57,6 +57,7 @@ public class VacuumWorldUniverse extends AbstractUniverse {
     }
 
     private void connectComponents(String hostname, int port) {
+	getMainAmbient().setNumberOfExpectedActors(getAllActors().size());
 	getAllActors().forEach(a -> connectToEnvironment(a, hostname, port));
 	getMainAmbient().finishInitialization();
     }

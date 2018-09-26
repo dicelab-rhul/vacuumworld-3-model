@@ -57,6 +57,7 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
     private volatile boolean stopFlag;
     private volatile boolean initializationComplete;
     private volatile boolean goodToGo;
+    private int numberOfActors;
     
     public VacuumWorldEnvironment(int dimension, boolean stopFlag, String hostname, int port) {
 	int upperSize = dimension > MAXIMUM_SIZE ? MAXIMUM_SIZE : dimension;
@@ -74,6 +75,10 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 
 	initCommon(stopFlag, hostname, port);
 	setAppearance(new VacuumWorldEnvironmentAppearance(this.grid));
+    }
+    
+    public void setNumberOfExpectedActors(int numberOfActors) {
+	this.numberOfActors = numberOfActors;
     }
     
     @Override
@@ -111,16 +116,25 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
     private void initSocketUnsafe() throws IOException, InterruptedException {
 	this.server = new ServerSocket(this.port);
 	
+	int counter = 0;
+	LogUtils.log("Waiting for the actor(s) to connect to the environment...");
+	
 	while(!this.initializationComplete) {
-	    LogUtils.log("Waiting for actors to connect to the environment...");
 	    Socket socket = this.server.accept();
-	    Thread.sleep(1000);
+	    counter++;
 	    
 	    ObjectOutputStream o = new ObjectOutputStream(socket.getOutputStream());
 	    ObjectInputStream i = new ObjectInputStream(socket.getInputStream());
 	    String recipientId = i.readUTF();
 	    this.input.put(recipientId, i);
 	    this.output.put(recipientId, o);
+	    
+	    if(counter >= this.numberOfActors) {
+		break;
+	    }
+	    else {
+		LogUtils.log("Waiting for " + (this.numberOfActors - counter) + " more actor(s) to connect to the environment...");
+	    }
 	}
 	
 	LogUtils.log("All the actors have successfully established a connection with the environment.");

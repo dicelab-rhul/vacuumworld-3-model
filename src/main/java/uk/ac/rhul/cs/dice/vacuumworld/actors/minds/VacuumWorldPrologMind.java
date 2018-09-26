@@ -43,4 +43,10 @@ public class VacuumWorldPrologMind extends VacuumWorldAbstractMind implements Pr
 	public Theory getFirstTheory() {		
 		return this.theories != null ? PrologMind.super.getFirstTheory() : null;
 	}
+
+	@Override
+	public Object decide() {
+	    // TODO Auto-generated method stub
+	    return null;
+	}
 }

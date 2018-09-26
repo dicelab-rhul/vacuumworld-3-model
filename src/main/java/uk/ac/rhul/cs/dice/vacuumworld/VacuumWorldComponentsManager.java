@@ -11,6 +11,7 @@ import org.cloudstrife9999.logutilities.LogUtils;
 
 import com.google.gson.JsonObject;
 
+import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldActor;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldEnvironment;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.StopPerception;
 
@@ -21,7 +22,7 @@ public class VacuumWorldComponentsManager {
     private ObjectOutputStream output;
     private ExecutorService executor;
     private VacuumWorldUniverse universe;
-    private static final String DEBUG_CONFIGURATION = "two_agents.json";
+    private static final String DEBUG_CONFIGURATION = "with_user.json";
     
     
     public VacuumWorldComponentsManager(boolean fromFile, boolean simulatedRun, String hostname, int port) throws IOException {
@@ -83,6 +84,7 @@ public class VacuumWorldComponentsManager {
 	
 	LogUtils.log(this.getClass().getSimpleName() + ": starting actors...");
 	this.universe.getAllActors().forEach(actor -> actor.setStopFlag(this.universe.getEnvironment().getStopFlag()));
+	//this.universe.getAllActors().forEach(a -> LogUtils.log(a.getID()));
 	this.universe.getAllActors().forEach(this.executor::submit);
     }
 

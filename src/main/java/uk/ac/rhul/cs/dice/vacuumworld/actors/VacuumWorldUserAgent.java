@@ -1,18 +1,29 @@
 package uk.ac.rhul.cs.dice.vacuumworld.actors;
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import org.cloudstrife9999.logutilities.LogUtils;
 
 import uk.ac.rhul.cs.dice.agent.abstractimpl.AbstractAgent;
 import uk.ac.rhul.cs.dice.agent.interfaces.Actuator;
 import uk.ac.rhul.cs.dice.agent.interfaces.AgentMind;
 import uk.ac.rhul.cs.dice.agent.interfaces.Analyzable;
+import uk.ac.rhul.cs.dice.agent.interfaces.Perception;
 import uk.ac.rhul.cs.dice.agent.interfaces.Sensor;
+import uk.ac.rhul.cs.dice.agentcommon.interfaces.Action;
+import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldEvent;
+import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractAction;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
+import uk.ac.rhul.cs.dice.vacuumworld.exceptions.VacuumWorldRuntimeException;
+import uk.ac.rhul.cs.dice.vacuumworld.perception.StopPerception;
+import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldPerception;
 
 public class VacuumWorldUserAgent extends AbstractAgent implements VacuumWorldActor {
     private static final long serialVersionUID = -2882228263580151389L;
@@ -79,6 +90,13 @@ public class VacuumWorldUserAgent extends AbstractAgent implements VacuumWorldAc
 	    setForMind(sendToEnvironment());
 	    sendToMind();
 	}*/
+	while(!this.stop) {
+	    LogUtils.log(getID() + " is being executed.");
+	    VacuumWorldAbstractAction action = (VacuumWorldAbstractAction) getMind().decide();
+	    getMind().execute((Action<?>) action);
+	    setForMind(sendToEnvironment(action));
+	    sendToMind();
+	}
     }
 
     private void testRun() {
@@ -96,17 +114,70 @@ public class VacuumWorldUserAgent extends AbstractAgent implements VacuumWorldAc
 	System.out.println("User " + getID() + ": stop!");
     }
 
-    private Set<Analyzable> sendToEnvironment() {
+    /*private Set<Analyzable> sendToEnvironment() {
 	/* TODO
 	 * create an event
 	 * send it to the output channel
 	 * wait for all the perceptions
 	 * collect the perceptions into a set
 	 * return the set.
-	 */
+	 
 	
 	//TODO change this
 	return Collections.emptySet();
+    }*/
+    
+    private Set<Analyzable> sendToEnvironment(VacuumWorldAbstractAction action) {
+	try {
+	    VacuumWorldEvent event = new VacuumWorldEvent(action);
+	    this.output.writeObject(event);
+	    this.output.flush();
+	    
+	    return collectEnviromentFeedback();
+	}
+	catch(Exception e) {
+	    LogUtils.log(e);
+	    
+	    return Collections.emptySet();
+	}
+    }
+    
+    private Set<Analyzable> collectEnviromentFeedback() {
+	try {
+	    return collectPerceptions();
+	}
+	catch(IOException e) {
+	    LogUtils.log(getID() + ": stop.");
+	    LogUtils.fakeLog(e);
+	    this.stop = true;
+	    
+	    return Collections.emptySet();
+	}
+	catch(Exception e) {
+	    throw new VacuumWorldRuntimeException(e);
+	}
+    }
+
+    private Set<Analyzable> collectPerceptions() throws ClassNotFoundException, IOException {
+	Set<Analyzable> perceptions = new HashSet<>();
+	Perception candidate;
+
+	do {
+	    LogUtils.log(getID() + ": waiting for perception.");
+	    candidate = (Perception) this.input.readObject();
+	    checkStop(candidate);
+	    LogUtils.log(getID() + ": got perception: " + candidate.getClass().getSimpleName() + ".");
+	    perceptions.add(candidate);
+	}
+	while(!(candidate instanceof VacuumWorldPerception));
+	    
+	return perceptions;
+    }
+
+    private void checkStop(Perception candidate) throws IOException {
+	if(candidate instanceof StopPerception) {
+	    throw new IOException();
+	}
     }
     
     @Override

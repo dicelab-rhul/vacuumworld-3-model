@@ -62,11 +62,6 @@ public abstract class VacuumWorldAbstractMind extends AbstractAgentMind {
 	    getDefaultLastReceivedPerceptions().add(a);
 	}
     }
-
-    @Override
-    public VacuumWorldAbstractAction decide() {
-	return new VacuumWorldSensingAction();
-    }
     
     public VacuumWorldAbstractAction decideRandomly() {
 	switch(getRng().nextInt(3)) {
@@ -77,7 +72,7 @@ public abstract class VacuumWorldAbstractMind extends AbstractAgentMind {
 	case 2:
 	    return new VacuumWorldTurnRightAction();
 	default:
-	    return this.decide();
+	    return new VacuumWorldSensingAction();
 	}
     }
 

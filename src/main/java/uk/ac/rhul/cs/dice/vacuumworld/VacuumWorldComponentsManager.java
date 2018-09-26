@@ -11,10 +11,12 @@ import org.cloudstrife9999.logutilities.LogUtils;
 
 import com.google.gson.JsonObject;
 
+import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldActor;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldEnvironment;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.StopPerception;
 
 public class VacuumWorldComponentsManager {
+
 	private String hostname;
 	private int port;
 	private ObjectInputStream input;
@@ -34,14 +36,14 @@ public class VacuumWorldComponentsManager {
 	}
 
 	public void stopUniverse() {
-//		try {
-//			Thread.sleep(10);
-//		} catch (InterruptedException e) {
-//			LogUtils.log(this.getClass().getSimpleName() + ": main thread interrupted: stopping everything!");
-//
-//			shutdown();
-//			Thread.currentThread().interrupt();
-//		}
+		// try {
+		// Thread.sleep(10);
+		// } catch (InterruptedException e) {
+		// LogUtils.log(this.getClass().getSimpleName() + ": main thread interrupted: stopping everything!");
+		//
+		// shutdown();
+		// Thread.currentThread().interrupt();
+		// }
 
 		LogUtils.log(this.getClass().getSimpleName() + ": time up! Stopping everything!");
 		shutdown();
@@ -56,7 +58,7 @@ public class VacuumWorldComponentsManager {
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
 		} finally {
-			//System.exit(0); // just in case.
+			// System.exit(0); // just in case.
 		}
 	}
 

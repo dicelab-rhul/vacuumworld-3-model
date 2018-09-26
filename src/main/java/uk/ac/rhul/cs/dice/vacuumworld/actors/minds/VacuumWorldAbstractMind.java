@@ -9,6 +9,7 @@ import org.cloudstrife9999.logutilities.LogUtils;
 import uk.ac.rhul.cs.dice.agent.abstractimpl.AbstractAgentMind;
 import uk.ac.rhul.cs.dice.agent.interfaces.Analyzable;
 import uk.ac.rhul.cs.dice.agentcommon.interfaces.Action;
+import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorld;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldMoveAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldSensingAction;
@@ -79,7 +80,8 @@ public abstract class VacuumWorldAbstractMind extends AbstractAgentMind {
 	@Override
 	public <T extends Action<?>> void execute(T action) {
 		((VacuumWorldAbstractAction) action).setActor(getBodyId());
-		LogUtils.log(action.getActorID() + " is executing " + action.getClass().getSimpleName());
+		if (VacuumWorld.DEBUGINFO)
+			LogUtils.log(action.getActorID() + " is executing " + action.getClass().getSimpleName());
 
 		return;
 	}

@@ -127,7 +127,11 @@ public class VacuumWorldEnvironmentAppearance implements EnvironmentAppearance, 
     
     @Override
     public VacuumWorldLocationAppearance getLocationFromActiveBodyId(String id) {
-	return this.grid.values().stream().filter(location -> location.containsSuchActiveBody(id)).findFirst().orElse(null);
+    	 this.grid.values().stream().forEach(l -> System.out.println(id + " is here? " + l.containsSuchCleaningAgent(id)));
+    	 this.grid.values().stream().filter(VacuumWorldLocationAppearance::isACleaningAgentThere).forEach(l -> System.out.println("Found " + l.getAgentAppearanceIfAny().getId()));
+    	 this.grid.values().stream().filter(VacuumWorldLocationAppearance::isAUserThere).forEach(l -> System.out.println("Found " + l.getUserAppearanceIfAny().getId()));
+    	 this.grid.values().stream().filter(VacuumWorldLocationAppearance::isAnAvatarThere).forEach(l -> System.out.println("Found " + l.getAvatarAppearanceIfAny().getId()));
+    	 return this.grid.values().stream().filter(location -> location.containsSuchActiveBody(id)).findFirst().orElse(null);
     }
     
     @Override

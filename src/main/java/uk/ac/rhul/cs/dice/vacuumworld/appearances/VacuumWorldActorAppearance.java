@@ -42,7 +42,7 @@ public interface VacuumWorldActorAppearance extends ActorAppearance, AvatarAppea
 	return ActorType.AVATAR.equals(getType());
     }
     
-    public default void turnLeft() {
+	public default void turnLeft() {
 	setOrientation(getOrientation().getLeft());
     }
     

@@ -18,6 +18,7 @@ import uk.ac.rhul.cs.dice.agent.interfaces.Analyzable;
 import uk.ac.rhul.cs.dice.agent.interfaces.Perception;
 import uk.ac.rhul.cs.dice.agent.interfaces.Sensor;
 import uk.ac.rhul.cs.dice.agentcommon.interfaces.Action;
+import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorld;
 import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldEvent;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractAction;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
@@ -82,13 +83,14 @@ public class VacuumWorldCleaningAgent extends AbstractAgent implements VacuumWor
 			}
 		} catch (Exception e) {
 			e.printStackTrace(System.out);
-			
+
 		}
 	}
 
 	private void realRun() {
 		while (!this.stop) {
-			LogUtils.log(getID() + " is being executed.");
+			if (VacuumWorld.DEBUGINFO)
+				LogUtils.log(getID() + " is being executed.");
 			VacuumWorldAbstractAction action = (VacuumWorldAbstractAction) getMind().decide();
 			getMind().execute((Action<?>) action);
 			setForMind(sendToEnvironment(action));
@@ -98,7 +100,8 @@ public class VacuumWorldCleaningAgent extends AbstractAgent implements VacuumWor
 
 	private void testRun() {
 		while (!this.stop) {
-			LogUtils.log(getID() + " is being executed.");
+			if (VacuumWorld.DEBUGINFO)
+				LogUtils.log(getID() + " is being executed.");
 
 			try {
 				Thread.sleep(2000);
@@ -143,10 +146,12 @@ public class VacuumWorldCleaningAgent extends AbstractAgent implements VacuumWor
 		Perception candidate;
 
 		do {
-			LogUtils.log(getID() + ": waiting for perception.");
+			if (VacuumWorld.DEBUGINFO)
+				LogUtils.log(getID() + ": waiting for perception.");
 			candidate = (Perception) this.input.readObject();
 			checkStop(candidate);
-			LogUtils.log(getID() + ": got perception: " + candidate.getClass().getSimpleName() + ".");
+			if (VacuumWorld.DEBUGINFO)
+				LogUtils.log(getID() + ": got perception: " + candidate.getClass().getSimpleName() + ".");
 			perceptions.add(candidate);
 		} while (!(candidate instanceof VacuumWorldPerception));
 

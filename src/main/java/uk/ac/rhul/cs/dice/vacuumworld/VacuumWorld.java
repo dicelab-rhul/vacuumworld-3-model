@@ -7,6 +7,7 @@ import org.cloudstrife9999.logutilities.LogUtils;
 
 public class VacuumWorld {
 
+	public static final boolean DEBUGINFO = false; //info log flag
 	public static final boolean DEBUG = true;
 	public static final String DEBUG_CONFIGURATION = "two_agents.json";
 

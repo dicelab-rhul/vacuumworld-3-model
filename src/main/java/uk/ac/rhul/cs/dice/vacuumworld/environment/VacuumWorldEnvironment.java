@@ -24,6 +24,7 @@ import uk.ac.rhul.cs.dice.agentactions.enums.ActionResult;
 import uk.ac.rhul.cs.dice.agentactions.interfaces.Result;
 import uk.ac.rhul.cs.dice.agentcontainers.abstractimpl.AbstractEnvironment;
 import uk.ac.rhul.cs.dice.agentcontainers.enums.Orientation;
+import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorld;
 import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldEvent;
 import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldPrinter;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractActionInterface;
@@ -225,10 +226,12 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 	private void listenForActorAndExecute(Entry<String, ObjectInputStream> input) {
 		try {
 			ObjectInputStream is = input.getValue();
-			LogUtils.log(this.getClass().getSimpleName() + ": waiting for action from " + input.getKey() + "...");
+			if (VacuumWorld.DEBUGINFO)
+				LogUtils.log(this.getClass().getSimpleName() + ": waiting for action from " + input.getKey() + "...");
 			VacuumWorldEvent event = (VacuumWorldEvent) is.readObject();
-			LogUtils.log(this.getClass().getSimpleName() + ": got " + event.getAction().getClass().getSimpleName() + " from " + input.getKey()
-					+ "...");
+			if (VacuumWorld.DEBUGINFO)
+				LogUtils.log(this.getClass().getSimpleName() + ": got " + event.getAction().getClass().getSimpleName() + " from " + input.getKey()
+						+ "...");
 			VacuumWorldAbstractActionInterface action = event.getAction();
 			printActorDetailsBefore(action);
 			Result result = attemptExecution(action);
@@ -250,7 +253,6 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 	private void printActorDetails(VacuumWorldAbstractActionInterface action, String moment) {
 		VacuumWorldActor actor = getActorFromId(action.getActorID());
 		Orientation orientation = getActorOrientation(actor);
-
 		LogUtils.log(actor.getID()
 				+ ": position "
 				+ moment
@@ -316,7 +318,7 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 		VacuumWorldLocation forwardLeft = this.grid.get(location.getCoordinates().getForwardLeftCoordinates(orientation));
 		VacuumWorldLocation forwardRight = this.grid.get(location.getCoordinates().getForwardRightCoordinates(orientation));
 
-		return buildEnvironmentAppearance(forward, left, right, forwardLeft, forwardRight);
+		return buildEnvironmentAppearance(location, forward, left, right, forwardLeft, forwardRight);
 	}
 
 	private VacuumWorldEnvironmentAppearance buildEnvironmentAppearance(VacuumWorldLocation... locations) {
@@ -337,10 +339,12 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 
 	private void sendGenericPerception(Perception perception, String recipientId) {
 		try {
-			LogUtils.log(this.getClass().getSimpleName() + ": sending perception to " + recipientId + ".");
+			if (VacuumWorld.DEBUGINFO)
+				LogUtils.log(this.getClass().getSimpleName() + ": sending perception to " + recipientId + ".");
 			this.output.get(recipientId).writeObject(perception);
 			this.output.get(recipientId).flush();
-			LogUtils.log(this.getClass().getSimpleName() + ": sent perception to " + recipientId + ".");
+			if (VacuumWorld.DEBUGINFO)
+				LogUtils.log(this.getClass().getSimpleName() + ": sent perception to " + recipientId + ".");
 		} catch (IOException e) {
 			throw new VacuumWorldRuntimeException(e);
 		}
@@ -413,10 +417,12 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 
 	@Override
 	public void run() {
+
 		LogUtils.log(this.getClass().getSimpleName() + " is being executed.");
 		LogUtils.log(this.getClass().getSimpleName() + ": printing initial configuration...");
 
 		VacuumWorldPrinter.dumpModelFromLocations(this.grid);
+
 		LogUtils.log(this.getClass().getSimpleName() + ": printed initial configuration\n\n--------------------\n");
 		LogUtils.log(this.getClass().getSimpleName() + ": start of the cycle.\n");
 

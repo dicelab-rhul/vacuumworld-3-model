@@ -7,6 +7,9 @@ import org.cloudstrife9999.logutilities.LogUtils;
 
 public class VacuumWorld {
 
+	public static final boolean DEBUG = true;
+	public static final String DEBUG_CONFIGURATION = "two_agents.json";
+
 	private VacuumWorld() {
 	}
 
@@ -33,11 +36,12 @@ public class VacuumWorld {
 
 	private static void startSystem(String[] hostDetails) throws IOException {
 		// TODO these flags should become parameters.
-		boolean fromFile = true;
 		boolean simulatedRun = false;
-
-		new VacuumWorldComponentsManager(fromFile, simulatedRun, hostDetails[0], Integer.valueOf(hostDetails[1])).startUniverse();
-		
+		if (!DEBUG) {
+			new VacuumWorldComponentsManager(simulatedRun, hostDetails[0], Integer.valueOf(hostDetails[1])).startUniverse();
+		} else {
+			new VacuumWorldComponentsManager(DEBUG_CONFIGURATION, 65000).startUniverse();
+		}
 	}
 
 	private static boolean checkHostDetails(String ip, String port) {

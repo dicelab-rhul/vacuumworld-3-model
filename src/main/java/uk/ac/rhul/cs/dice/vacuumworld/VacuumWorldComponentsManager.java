@@ -3,17 +3,17 @@ package uk.ac.rhul.cs.dice.vacuumworld;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import org.cloudstrife9999.logutilities.LogUtils;
 
-import com.google.gson.JsonObject;
-
-import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldActor;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldEnvironment;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.StopPerception;
+
+import com.google.gson.JsonObject;
 
 public class VacuumWorldComponentsManager {
 
@@ -23,14 +23,42 @@ public class VacuumWorldComponentsManager {
 	private ObjectOutputStream output;
 	private ExecutorService executor;
 	private VacuumWorldUniverse universe;
-	public static final String DEBUG_CONFIGURATION = "two_agents.json";
 
-	public VacuumWorldComponentsManager(boolean fromFile, boolean simulatedRun, String hostname, int port) throws IOException {
+
+	/**
+	 * ONLINE
+	 * 
+	 * @param simulatedRun
+	 * @param hostname
+	 * @param port
+	 * @throws IOException
+	 */
+	public VacuumWorldComponentsManager(boolean simulatedRun, String hostname, int port) throws IOException {
 		this.hostname = hostname;
 		this.port = port;
 
-		setupServer(fromFile);
-		createUniverse(fromFile, simulatedRun);
+		setupServer(false);
+		LogUtils.log(this.getClass().getSimpleName() + ": starting universe...");
+		JsonObject initialConfiguration = waitForConnection();
+		createUniverse(initialConfiguration);
+
+		// startUniverse();
+		// stopUniverse();
+	}
+
+	/**
+	 * FROM FILE (DEBUG)
+	 * 
+	 * @param file
+	 * @param port
+	 * @throws IOException
+	 */
+	public VacuumWorldComponentsManager(String file, int port) throws IOException {
+		this.hostname = InetAddress.getLocalHost().getHostAddress();
+		this.port = port;
+		setupServer(true);
+		LogUtils.log(this.getClass().getSimpleName() + ": starting universe...");
+		createUniverseForDebug(file, false);
 		// startUniverse();
 		// stopUniverse();
 	}
@@ -82,15 +110,8 @@ public class VacuumWorldComponentsManager {
 		this.universe.getAllActors().forEach(this.executor::submit);
 	}
 
-	private void createUniverse(boolean fromFile, boolean simulatedRun) {
-		LogUtils.log(this.getClass().getSimpleName() + ": starting universe...");
+	private void createUniverse(String file, boolean simulatedRun) {
 
-		if (fromFile) {
-			createUniverseForDebug(DEBUG_CONFIGURATION, simulatedRun);
-		} else {
-			JsonObject initialConfiguration = waitForConnection();
-			createUniverse(initialConfiguration);
-		}
 	}
 
 	private JsonObject waitForConnection() {

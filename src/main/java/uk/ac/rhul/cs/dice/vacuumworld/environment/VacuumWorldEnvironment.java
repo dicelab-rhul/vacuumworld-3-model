@@ -22,6 +22,7 @@ import com.google.common.collect.ImmutableMap;
 import uk.ac.rhul.cs.dice.agent.interfaces.Perception;
 import uk.ac.rhul.cs.dice.agentactions.enums.ActionResult;
 import uk.ac.rhul.cs.dice.agentactions.interfaces.Result;
+import uk.ac.rhul.cs.dice.agentcommon.enums.ContentType;
 import uk.ac.rhul.cs.dice.agentcontainers.abstractimpl.AbstractEnvironment;
 import uk.ac.rhul.cs.dice.agentcontainers.enums.Orientation;
 import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldEvent;
@@ -102,22 +103,27 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 	try {
 	    initSocketUnsafe();
 	}
-	catch(IOException e) {
+	catch(Exception e) {
 	    throw new VacuumWorldRuntimeException(e);
 	}
     }
 
-    private void initSocketUnsafe() throws IOException {
+    private void initSocketUnsafe() throws IOException, InterruptedException {
 	this.server = new ServerSocket(this.port);
 	
 	while(!this.initializationComplete) {
+	    LogUtils.log("Waiting for actors to connect to the environment...");
 	    Socket socket = this.server.accept();
+	    Thread.sleep(1000);
+	    
 	    ObjectOutputStream o = new ObjectOutputStream(socket.getOutputStream());
 	    ObjectInputStream i = new ObjectInputStream(socket.getInputStream());
 	    String recipientId = i.readUTF();
 	    this.input.put(recipientId, i);
 	    this.output.put(recipientId, o);
 	}
+	
+	LogUtils.log("All the actors have successfully established a connection with the environment.");
 	
 	this.goodToGo = true;
     }
@@ -413,5 +419,11 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 	
 	stopServer();
 	LogUtils.log(this.getClass().getSimpleName() + ": stop.");
+    }
+
+    @Override
+    public <T> void sendData(ContentType contentType, byte[] content, Collection<T> recipientsIds) {
+	// TODO Auto-generated method stub
+	
     }
 }

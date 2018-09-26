@@ -40,6 +40,7 @@ public class VacuumWorld {
 		if (!DEBUG) {
 			new VacuumWorldComponentsManager(simulatedRun, hostDetails[0], Integer.valueOf(hostDetails[1])).startUniverse();
 		} else {
+			LogUtils.log("STARTING IN DEFAULT DEBUG MODE");
 			new VacuumWorldComponentsManager(DEBUG_CONFIGURATION, 65000).startUniverse();
 		}
 	}

@@ -21,12 +21,12 @@ public class VacuumWorldPrinter {
 	}
 
 	public static void dumpModelFromLocations(Map<VacuumWorldCoordinates, VacuumWorldLocation> model) {
-		System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+		// System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 		Map<VacuumWorldCoordinates, VacuumWorldLocationAppearance> newModel = new HashMap<>();
 		model.entrySet().forEach(e -> newModel.put(e.getKey(), e.getValue().getAppearance()));
 
 		dumpModelFromLocationAppearances(ImmutableMap.copyOf(newModel));
-		
+
 	}
 
 	public static void dumpModelFromLocationAppearances(Map<VacuumWorldCoordinates, VacuumWorldLocationAppearance> model) {

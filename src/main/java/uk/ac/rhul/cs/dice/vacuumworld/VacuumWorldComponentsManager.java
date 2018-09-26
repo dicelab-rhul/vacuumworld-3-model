@@ -38,7 +38,7 @@ public class VacuumWorldComponentsManager {
 		this.port = port;
 
 		setupServer(false);
-		LogUtils.log(this.getClass().getSimpleName() + ": starting universe...");
+		LogUtils.log(this.getClass().getSimpleName() + ": starting universe...?");
 		JsonObject initialConfiguration = waitForConnection();
 		createUniverse(initialConfiguration);
 
@@ -57,7 +57,7 @@ public class VacuumWorldComponentsManager {
 		this.hostname = InetAddress.getLocalHost().getHostAddress();
 		this.port = port;
 		setupServer(true);
-		LogUtils.log(this.getClass().getSimpleName() + ": starting universe...");
+		LogUtils.log(this.getClass().getSimpleName() + ": starting universe in debug mode...");
 		createUniverseForDebug(file, false);
 		// startUniverse();
 		// stopUniverse();
@@ -108,10 +108,6 @@ public class VacuumWorldComponentsManager {
 		LogUtils.log(this.getClass().getSimpleName() + ": starting actors...");
 		this.universe.getAllActors().forEach(actor -> actor.setStopFlag(this.universe.getEnvironment().getStopFlag()));
 		this.universe.getAllActors().forEach(this.executor::submit);
-	}
-
-	private void createUniverse(String file, boolean simulatedRun) {
-
 	}
 
 	private JsonObject waitForConnection() {

@@ -128,6 +128,7 @@ public class VacuumWorldUserAgent extends AbstractAgent implements VacuumWorldAc
 	private Set<Analyzable> sendToEnvironment(VacuumWorldAbstractAction action) {
 		try {
 			VacuumWorldEvent event = new VacuumWorldEvent(action);
+			this.output.reset();
 			this.output.writeObject(event);
 			this.output.flush();
 

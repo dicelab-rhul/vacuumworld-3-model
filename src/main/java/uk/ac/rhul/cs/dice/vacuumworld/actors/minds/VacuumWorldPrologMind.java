@@ -6,6 +6,7 @@ import java.util.List;
 import alice.tuprolog.Prolog;
 import alice.tuprolog.Theory;
 import uk.ac.rhul.cs.dice.agent.interfaces.PrologMind;
+import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractAction;
 
 public class VacuumWorldPrologMind extends VacuumWorldAbstractMind implements PrologMind {
 	private static final long serialVersionUID = -6107803494980916586L;
@@ -45,7 +46,7 @@ public class VacuumWorldPrologMind extends VacuumWorldAbstractMind implements Pr
 	}
 
 	@Override
-	public Object decide() {
+	public VacuumWorldAbstractAction decide() {
 	    // TODO Auto-generated method stub
 	    return null;
 	}

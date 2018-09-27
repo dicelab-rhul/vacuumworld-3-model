@@ -116,6 +116,7 @@ public class VacuumWorldCleaningAgent extends AbstractAgent implements VacuumWor
 	private Set<Analyzable> sendToEnvironment(VacuumWorldAbstractAction action) {
 		try {
 			VacuumWorldEvent event = new VacuumWorldEvent(action);
+			this.output.reset();
 			this.output.writeObject(event);
 			this.output.flush();
 
@@ -152,7 +153,8 @@ public class VacuumWorldCleaningAgent extends AbstractAgent implements VacuumWor
 			checkStop(candidate);
 			if (VacuumWorld.DEBUGINFO)
 				LogUtils.log(getID() + ": got perception: " + candidate.getClass().getSimpleName() + ".");
-			perceptions.add(candidate);
+			perceptions.add(candidate);			
+			
 		} while (!(candidate instanceof VacuumWorldPerception));
 
 		return perceptions;

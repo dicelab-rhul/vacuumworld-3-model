@@ -18,97 +18,117 @@ import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldLocation;
 import uk.ac.rhul.cs.dice.vacuumworld.exceptions.VacuumWorldRuntimeException;
 
 public class VacuumWorldUniverse extends AbstractUniverse {
-	private volatile boolean stop;
+    private volatile boolean stop;
 
-	public VacuumWorldUniverse(String hostname, int port) {
-		super(null);
+    /**
+     * 
+     * FROM FILE.
+     * 
+     * @param hostname
+     * @param port
+     * 
+     */
+    public VacuumWorldUniverse(String hostname, int port) {
+	super(null);
 
-		createEnvironment(hostname, port);
-		getAppearance().update(getEnvironment());
+	createEnvironment(hostname, port);
+	getAppearance().update(getEnvironment());
 
-		bootUniverse(hostname, port);
+	bootUniverse(hostname, port);
+    }
+
+    /**
+     * 
+     * ONLINE.
+     * 
+     * @param environment
+     * @param hostname
+     * @param port
+     * 
+     */
+    public VacuumWorldUniverse(VacuumWorldEnvironment environment, String hostname, int port) {
+	super(new VacuumWorldUniverseAppearance(environment), environment);
+
+	bootUniverse(hostname, port);
+    }
+
+    @Override
+    public VacuumWorldUniverseAppearance getAppearance() {
+	return (VacuumWorldUniverseAppearance) super.getAppearance();
+    }
+
+    @Override
+    public VacuumWorldEnvironment getMainAmbient() {
+	return (VacuumWorldEnvironment) super.getMainAmbient();
+    }
+
+    public VacuumWorldEnvironment getEnvironment() {
+	return getMainAmbient();
+    }
+
+    private void bootUniverse(String hostname, int port) {
+	connectEnvironment();
+	connectComponents(hostname, port);
+
+	this.stop = getEnvironment().getStopFlag();
+    }
+
+    private void connectComponents(String hostname, int port) {
+	getMainAmbient().setNumberOfExpectedActors(getAllActors().size());
+	getAllActors().forEach(a -> connectToEnvironment(a, hostname, port));
+	getMainAmbient().finishInitialization();
+    }
+
+    private void connectToEnvironment(VacuumWorldActor actor, String hostname, int port) {
+	try {
+	    actor.openSocket(hostname, port);
 	}
-
-	public VacuumWorldUniverse(VacuumWorldEnvironment environment, String hostname, int port) {
-		super(new VacuumWorldUniverseAppearance(environment), environment);
-
-		bootUniverse(hostname, port);
+	catch (IOException e) {
+	    throw new VacuumWorldRuntimeException(e);
 	}
+    }
 
-	@Override
-	public VacuumWorldUniverseAppearance getAppearance() {
-		return (VacuumWorldUniverseAppearance) super.getAppearance();
+    //for debug
+    private void createEnvironment(String hostname, int port) {
+	addAmbient(new VacuumWorldEnvironment(VacuumWorldParser.parseConfiguration("easy.json"), this.stop, hostname, port, null, null));
+    }
+
+    private void connectEnvironment() {
+	try {
+	    LogUtils.log(this.getClass().getSimpleName() + ": creating environment...");
+
+	    Thread t = new Thread(new VacuumWorldEnvironmentBuilderTask(getEnvironment()));
+	    t.start();
+
+	    LogUtils.log(this.getClass().getSimpleName() + ": environment socket OK.");
 	}
-
-	@Override
-	public VacuumWorldEnvironment getMainAmbient() {
-		return (VacuumWorldEnvironment) super.getMainAmbient();
+	catch (Exception e) {
+	    LogUtils.log(e);
+	    Thread.currentThread().interrupt();
 	}
+    }
 
-	public VacuumWorldEnvironment getEnvironment() {
-		return getMainAmbient();
-	}
+    public Set<VacuumWorldCleaningAgent> getAllCleaningAgents() {
+	return getMainAmbient().getGrid().values().stream().filter(VacuumWorldLocation::containsACleaningAgent)
+		.map(VacuumWorldLocation::getAgentIfAny).collect(Collectors.toSet());
+    }
 
-	private void bootUniverse(String hostname, int port) {
-		connectEnvironment();
-		connectComponents(hostname, port);
+    public Set<VacuumWorldUserAgent> getAllUsers() {
+	return getMainAmbient().getGrid().values().stream().filter(VacuumWorldLocation::containsAUser)
+		.map(VacuumWorldLocation::getUserIfAny).collect(Collectors.toSet());
+    }
 
-		this.stop = getEnvironment().getStopFlag();
-	}
+    public Set<VacuumWorldAvatar> getAllAvatars() {
+	return getMainAmbient().getGrid().values().stream().filter(VacuumWorldLocation::containsAnAvatar)
+		.map(VacuumWorldLocation::getAvatarIfAny).collect(Collectors.toSet());
+    }
 
-	private void connectComponents(String hostname, int port) {
-		getMainAmbient().setNumberOfExpectedActors(getAllActors().size());
-		getAllActors().forEach(a -> connectToEnvironment(a, hostname, port));
-		getMainAmbient().finishInitialization();
-	}
+    public Set<VacuumWorldActor> getAllActors() {
+	return getMainAmbient().getGrid().values().stream().filter(VacuumWorldLocation::containsAnActor)
+		.map(VacuumWorldLocation::getActorIfAny).collect(Collectors.toSet());
+    }
 
-	private void connectToEnvironment(VacuumWorldActor actor, String hostname, int port) {
-		try {
-			actor.openSocket(hostname, port);
-		} catch (IOException e) {
-			throw new VacuumWorldRuntimeException(e);
-		}
-	}
-
-	private void createEnvironment(String hostname, int port) {
-		addAmbient(new VacuumWorldEnvironment(VacuumWorldParser.parseConfiguration("easy.json"), this.stop, hostname, port));
-	}
-
-	private void connectEnvironment() {
-		try {
-			LogUtils.log(this.getClass().getSimpleName() + ": creating environment...");
-
-			Thread t = new Thread(new VacuumWorldEnvironmentBuilderTask(getEnvironment()));
-			t.start();
-
-			LogUtils.log(this.getClass().getSimpleName() + ": environment socket OK.");
-		} catch (Exception e) {
-			LogUtils.log(e);
-			Thread.currentThread().interrupt();
-		}
-	}
-
-	public Set<VacuumWorldCleaningAgent> getAllCleaningAgents() {
-		return getMainAmbient().getGrid().values().stream().filter(VacuumWorldLocation::containsACleaningAgent)
-				.map(VacuumWorldLocation::getAgentIfAny).collect(Collectors.toSet());
-	}
-
-	public Set<VacuumWorldUserAgent> getAllUsers() {
-		return getMainAmbient().getGrid().values().stream().filter(VacuumWorldLocation::containsAUser).map(VacuumWorldLocation::getUserIfAny)
-				.collect(Collectors.toSet());
-	}
-
-	public Set<VacuumWorldAvatar> getAllAvatars() {
-		return getMainAmbient().getGrid().values().stream().filter(VacuumWorldLocation::containsAnAvatar).map(VacuumWorldLocation::getAvatarIfAny)
-				.collect(Collectors.toSet());
-	}
-
-	public Set<VacuumWorldActor> getAllActors() {
-		return getMainAmbient().getGrid().values().stream().filter(VacuumWorldLocation::containsAnActor).map(VacuumWorldLocation::getActorIfAny)
-				.collect(Collectors.toSet());
-	}
-
-	public int countActiveBodies() {
-		return getMainAmbient().getAppearance().getAllLocationsWithActiveBodies().size();
-	}
+    public int countActiveBodies() {
+	return getMainAmbient().getAppearance().getAllLocationsWithActiveBodies().size();
+    }
 }

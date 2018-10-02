@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.cloudstrife9999.logutilities.LogUtils;
+import org.json.JSONObject;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -28,6 +29,7 @@ import uk.ac.rhul.cs.dice.agentcontainers.enums.Orientation;
 import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorld;
 import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldEvent;
 import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldPrinter;
+import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldSerializer;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractActionInterface;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractCommunicativeAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractPhysicalAction;
@@ -42,6 +44,8 @@ import uk.ac.rhul.cs.dice.vacuumworld.environment.physics.VacuumWorldPhysics;
 import uk.ac.rhul.cs.dice.vacuumworld.exceptions.VacuumWorldRuntimeException;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldPerception;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldSpeechPerception;
+import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VWMessage;
+import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VWMessageCodes;
 
 public class VacuumWorldEnvironment extends AbstractEnvironment implements Runnable {
     public static final int MINIMUM_SIZE = 3;
@@ -59,21 +63,26 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
     private volatile boolean initializationComplete;
     private volatile boolean goodToGo;
     private int numberOfActors;
+    private ObjectInputStream fromView; //actually controller
+    private ObjectOutputStream toView; //actually controller
 
-    public VacuumWorldEnvironment(int dimension, boolean stopFlag, String hostname, int port) {
+    public VacuumWorldEnvironment(int dimension, boolean stopFlag, String hostname, int port, ObjectOutputStream toView, ObjectInputStream fromView) {
 	int upperSize = dimension > MAXIMUM_SIZE ? MAXIMUM_SIZE : dimension;
 	this.size = dimension < MINIMUM_SIZE ? MINIMUM_SIZE : upperSize;
 	this.grid = new ConcurrentHashMap<>(1 + (int) (this.size * this.size / LOADING_FACTOR));
-
+	this.toView = toView;
+	this.fromView = fromView;
+	
 	initCommon(stopFlag, hostname, port);
 	initGrid();
 	setAppearance(new VacuumWorldEnvironmentAppearance(this.grid));
     }
 
-    public VacuumWorldEnvironment(Map<VacuumWorldCoordinates, VacuumWorldLocation> grid, boolean stopFlag,
-	    String hostname, int port) {
+    public VacuumWorldEnvironment(Map<VacuumWorldCoordinates, VacuumWorldLocation> grid, boolean stopFlag, String hostname, int port, ObjectOutputStream toView, ObjectInputStream fromView) {
 	this.size = (int) Math.sqrt(grid.size());
 	this.grid = new ConcurrentHashMap<>(grid);
+	this.toView = toView;
+	this.fromView = fromView;
 
 	initCommon(stopFlag, hostname, port);
 	setAppearance(new VacuumWorldEnvironmentAppearance(this.grid));
@@ -206,6 +215,7 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 
 	LogUtils.log(this.getClass().getSimpleName() + ": printing current configuration...");
 	VacuumWorldPrinter.dumpModelFromLocations(this.grid);
+	informView();
 	LogUtils.log(this.getClass().getSimpleName() + ": end of the cycle.\n\n--------------------\n");
 	LogUtils.log(this.getClass().getSimpleName() + ": start of the cycle.\n");
 
@@ -215,6 +225,40 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 	    if (System.nanoTime() - timestamp > (long) 750000000) {
 		break;
 	    }
+	}
+	
+	if(this.fromView != null) {
+	    checkForStop();
+	}
+    }
+
+    private void checkForStop() {
+	try {
+	    uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VacuumWorldMessage message = (uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VacuumWorldMessage) this.fromView.readObject();
+	    
+	    if(VWMessageCodes.QUIT_FROM_VIEW.equals(message.getCode())) {
+		this.stopFlag = true;
+	    }
+	}
+	catch(Exception e) {
+	    LogUtils.log(e);
+	}
+    }
+
+    private void informView() {
+	try {
+	    if(this.toView != null) {
+		JSONObject state = new JSONObject(VacuumWorldSerializer.serialize(this).toString());
+		
+		VWMessage message = new uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VacuumWorldMessage(VWMessageCodes.UPDATE_FROM_MODEL, state);
+		
+		this.toView.reset();
+		this.toView.writeObject(message);
+		this.toView.flush();
+	    }
+	}
+	catch(Exception e) {
+	    LogUtils.log(e);
 	}
     }
 

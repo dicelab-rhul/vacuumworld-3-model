@@ -44,7 +44,6 @@ import uk.ac.rhul.cs.dice.vacuumworld.environment.physics.VacuumWorldPhysics;
 import uk.ac.rhul.cs.dice.vacuumworld.exceptions.VacuumWorldRuntimeException;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldPerception;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldSpeechPerception;
-import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VWMessage;
 import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VWMessageCodes;
 
 public class VacuumWorldEnvironment extends AbstractEnvironment implements Runnable {
@@ -250,7 +249,10 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 	    if(this.toView != null) {
 		JSONObject state = new JSONObject(VacuumWorldSerializer.serialize(this).toString());
 		
-		VWMessage message = new uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VacuumWorldMessage(VWMessageCodes.UPDATE_FROM_MODEL, state);
+		LogUtils.log("Sending state to view...");
+		LogUtils.log(state.toString());
+		
+		uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VacuumWorldMessage message = new uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VacuumWorldMessage(VWMessageCodes.UPDATE_FROM_MODEL, state);
 		
 		this.toView.reset();
 		this.toView.writeObject(message);

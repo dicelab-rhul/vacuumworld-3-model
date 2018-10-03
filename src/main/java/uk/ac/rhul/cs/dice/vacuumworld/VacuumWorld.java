@@ -7,7 +7,7 @@ import org.cloudstrife9999.logutilities.LogUtils;
 
 public class VacuumWorld {
     public static final String MODEL_PORT = "10890";
-    public static final boolean DEBUGINFO = false; // info log flag
+    public static final boolean DEBUGINFO = true; // info log flag
     public static final boolean DEBUG = false;
     public static final String DEBUG_CONFIGURATION = "easy.json";
 

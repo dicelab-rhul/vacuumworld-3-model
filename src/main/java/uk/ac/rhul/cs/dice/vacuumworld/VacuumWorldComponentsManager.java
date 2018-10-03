@@ -71,8 +71,8 @@ public class VacuumWorldComponentsManager {
 	
 	createUniverse(initial);
 
-	// startUniverse();
-	// stopUniverse();
+	//startUniverse();
+	//stopUniverse();
     }
 
     /**
@@ -94,15 +94,9 @@ public class VacuumWorldComponentsManager {
     }
 
     public void stopUniverse() {
-	// try {
-	// Thread.sleep(10);
-	// } catch (InterruptedException e) {
-	// LogUtils.log(this.getClass().getSimpleName() + ": main thread interrupted:
-	// stopping everything!");
-	//
-	// shutdown();
-	// Thread.currentThread().interrupt();
-	// }
+	while(!this.universe.getMainAmbient().getStopFlag()) {
+	    continue;
+	}
 
 	LogUtils.log(this.getClass().getSimpleName() + ": time up! Stopping everything!");
 	shutdown();
@@ -142,6 +136,8 @@ public class VacuumWorldComponentsManager {
 	LogUtils.log(this.getClass().getSimpleName() + ": starting actors...");
 	this.universe.getAllActors().forEach(actor -> actor.setStopFlag(this.universe.getEnvironment().getStopFlag()));
 	this.universe.getAllActors().forEach(this.executor::submit);
+	
+	stopUniverse();
     }
 
     private JSONObject waitForConnection() throws IOException {

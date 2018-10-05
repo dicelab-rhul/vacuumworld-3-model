@@ -115,9 +115,11 @@ public class VacuumWorldAvatar extends AbstractAvatar implements VacuumWorldActo
 	System.out.println("Avatar " + getID() + ": stop!");
     }
 
+    /*
     private void sendToEnvironment() {
 	//TODO
     }
+    */
 
     @Override
     public VacuumWorldActorAppearance getAppearance() {

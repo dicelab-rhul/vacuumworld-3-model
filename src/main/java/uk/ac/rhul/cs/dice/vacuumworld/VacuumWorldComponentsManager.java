@@ -24,7 +24,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 public class VacuumWorldComponentsManager {
-    private static final int PORT_FOR_CONTROLLER = 17777;
+    private int controllerPort;
     private ServerSocket forController;
     private Socket socketWithController;
     private String hostname;
@@ -45,9 +45,10 @@ public class VacuumWorldComponentsManager {
      * @param port
      * @throws IOException
      */
-    public VacuumWorldComponentsManager(boolean simulatedRun, String hostname, int port) throws IOException {
+    public VacuumWorldComponentsManager(boolean simulatedRun, String hostname, int controllerPort, int environmentPort) throws IOException {
 	this.hostname = hostname;
-	this.port = port;
+	this.port = environmentPort;
+	this.controllerPort = controllerPort;
 
 	setupServer(false);
 	
@@ -79,12 +80,13 @@ public class VacuumWorldComponentsManager {
      * FROM FILE (DEBUG)
      * 
      * @param file
-     * @param port
+     * @param environmentPort
      * @throws IOException
      */
-    public VacuumWorldComponentsManager(String file, int port) throws IOException {
+    public VacuumWorldComponentsManager(String file, int controllerPort, int environmentPort) throws IOException {
 	this.hostname = InetAddress.getLocalHost().getHostAddress();
-	this.port = port;
+	this.port = environmentPort;
+	this.controllerPort = controllerPort;
 	
 	setupServer(true);
 	LogUtils.log(this.getClass().getSimpleName() + ": starting universe in debug mode...");
@@ -163,7 +165,7 @@ public class VacuumWorldComponentsManager {
     
     public void initConnection() {
 	try {
-	    this.forController = new ServerSocket(VacuumWorldComponentsManager.PORT_FOR_CONTROLLER);
+	    this.forController = new ServerSocket(this.controllerPort);
 	    
 	    LogUtils.log("Model here: waiting for connections...");
 	    

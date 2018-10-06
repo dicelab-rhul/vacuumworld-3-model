@@ -68,9 +68,18 @@ public class VacuumWorldUniverse extends AbstractUniverse {
 
     private void bootUniverse(String hostname, int port) {
 	connectEnvironment();
+	waitForEnvironment();
 	connectComponents(hostname, port);
 
 	this.stop = getEnvironment().getStopFlag();
+    }
+
+    private void waitForEnvironment() {
+	boolean ready = false;
+	
+	while(!ready) {
+	    ready = getEnvironment().canAcceptConnections();
+	}
     }
 
     private void connectComponents(String hostname, int port) {

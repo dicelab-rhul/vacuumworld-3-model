@@ -90,6 +90,10 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
     public void setNumberOfExpectedActors(int numberOfActors) {
 	this.numberOfActors = numberOfActors;
     }
+    
+    public boolean canAcceptConnections() {
+	return this.server != null && this.server.isBound();
+    }
 
     @Override
     public VacuumWorldEnvironmentAppearance getAppearance() {
@@ -129,6 +133,8 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 
 	while (!this.initializationComplete) {
 	    Socket socket = this.server.accept();
+	    
+	    LogUtils.log("An actor has announced its presence to the environment!");
 	    counter++;
 
 	    ObjectOutputStream o = new ObjectOutputStream(socket.getOutputStream());

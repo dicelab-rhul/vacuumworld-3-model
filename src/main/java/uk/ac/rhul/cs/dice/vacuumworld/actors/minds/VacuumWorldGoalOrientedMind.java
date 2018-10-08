@@ -23,8 +23,8 @@ public class VacuumWorldGoalOrientedMind extends VacuumWorldAbstractMind {
     public void perceive(Set<Analyzable> perceptions) {
         super.perceive(perceptions);
         
-        this.self = getFirstLastCyclePerception().getAppearance().getActorAppearance(getBodyId());
-        this.currentCoordinates = getFirstLastCyclePerception().getAppearance().getLocationFromActiveBodyId(getBodyId()).getCoordinates();
+        this.self = getPerception().getAppearance().getActorAppearance(getBodyId());
+        this.currentCoordinates = getPerception().getAppearance().getLocationFromActiveBodyId(getBodyId()).getCoordinates();
     }
     
     @Override

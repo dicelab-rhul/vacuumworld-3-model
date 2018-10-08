@@ -350,6 +350,17 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
     
     /**
      * 
+     * Checks whether an instance of an {@link ActiveBody} ({@link VacuumWorldCleaningAgent}, {@link VacuumWorldUserAgent}, or {@link VacuumWorldAvatar}) or an instance of a {@link VacuumWorldDirt} are present on this {@link VacuumWorldLocation}.
+     * 
+     * @return  whether or not an instance of an {@link ActiveBody} ({@link VacuumWorldCleaningAgent}, {@link VacuumWorldUserAgent}, or {@link VacuumWorldAvatar}) or an instance of a {@link VacuumWorldDirt} are present on this {@link VacuumWorldLocation}.
+     * 
+     */
+    public default boolean isNotEmpty() {
+	return isAnActiveBodyThere() || isDirtThere();
+    }
+    
+    /**
+     * 
      * Checks whether an {@link ActiveBody} ({@link VacuumWorldCleaningAgent}, {@link VacuumWorldUserAgent}, or {@link VacuumWorldAvatar}) whose ID matches <code>id</code> is present on this {@link VacuumWorldLocation}.
      * 
      * @param id the <code>ID</code> of the {@link ActiveBody} this method is looking for on this {@link VacuumWorldLocation}.

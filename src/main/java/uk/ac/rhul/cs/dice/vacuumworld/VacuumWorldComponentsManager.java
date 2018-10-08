@@ -8,6 +8,8 @@ import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -36,6 +38,7 @@ public class VacuumWorldComponentsManager {
     private VacuumWorldMessage latestFromController;
     private ExecutorService executor;
     private VacuumWorldUniverse universe;
+    private static List<String> ids = new ArrayList<>();
 
     /**
      * ONLINE
@@ -95,6 +98,14 @@ public class VacuumWorldComponentsManager {
 	// stopUniverse();
     }
 
+    public static List<String> getIds() {
+	return VacuumWorldComponentsManager.ids;
+    }
+    
+    public static void addId(String id) {
+	VacuumWorldComponentsManager.ids.add(id);
+    }
+    
     public void stopUniverse() {
 	while(!this.universe.getMainAmbient().getStopFlag()) {
 	    continue;

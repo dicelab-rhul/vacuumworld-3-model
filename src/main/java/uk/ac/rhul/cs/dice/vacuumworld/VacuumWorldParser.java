@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.cloudstrife9999.logutilities.LogUtils;
@@ -170,8 +171,9 @@ public class VacuumWorldParser {
 	}
     }
 
-    private static VacuumWorldActor buildAvatar(JsonObject actorRepresentation, String id, Orientation orientation, List<Sensor> sensors, List<Actuator> actuators) {
+    private static VacuumWorldActor buildAvatar(JsonObject actorRepresentation, String candidateId, Orientation orientation, List<Sensor> sensors, List<Actuator> actuators) {
 	try {
+	    String id = sanitize(candidateId);
 	    int port = actorRepresentation.get("port").getAsInt();
 	    VacuumWorldPrincipalListener listener = new VacuumWorldPrincipalListener(new ServerSocket(port));
 	    VacuumWorldPrincipalListenerAppearance mindAppearance = new VacuumWorldPrincipalListenerAppearance(listener.getName(), port);
@@ -184,7 +186,9 @@ public class VacuumWorldParser {
 	}
     }
 
-    private static VacuumWorldActor buildAutonomousActor(String id, VacuumWorldAutonomousActorAppearance appearance, List<Sensor> sensors, List<Actuator> actuators, AbstractAgentMind mind) {
+    private static VacuumWorldActor buildAutonomousActor(String candidateId, VacuumWorldAutonomousActorAppearance appearance, List<Sensor> sensors, List<Actuator> actuators, AbstractAgentMind mind) {
+	String id = sanitize(candidateId);
+	
 	switch(appearance.getType()) {
 	case CLEANING_AGENT:
 	    return new VacuumWorldCleaningAgent(id, appearance, sensors, actuators, mind);
@@ -192,6 +196,23 @@ public class VacuumWorldParser {
 	    return new VacuumWorldUserAgent(id, appearance, sensors, actuators, mind);
 	default:
 	    throw new IllegalArgumentException();
+	}
+    }
+
+    private static String sanitize(String candidateId) {
+	if(!VacuumWorldComponentsManager.getIds().contains(candidateId)) {
+	    VacuumWorldComponentsManager.addId(candidateId);
+	    
+	    return candidateId;
+	}
+	else {
+	    String newId = "Actor-" + UUID.randomUUID().toString();
+	    
+	    LogUtils.log("Overriding the ID " + candidateId + " with " + newId + " to avoid conflicts");
+	    
+	    VacuumWorldComponentsManager.addId(candidateId);
+	    
+	    return candidateId;
 	}
     }
 

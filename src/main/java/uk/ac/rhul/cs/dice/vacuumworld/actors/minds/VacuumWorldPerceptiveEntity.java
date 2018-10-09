@@ -39,6 +39,17 @@ public interface VacuumWorldPerceptiveEntity {
     public abstract String getBodyId();
 
     /**
+     * 
+     * Returns whether there is an available {@link VacuumWorldPerception}, or not.
+     * 
+     * @return whether or not there is an available {@link VacuumWorldPerception}.
+     * 
+     */
+    public default boolean hasPerception() {
+	return getPerception() != null;
+    }
+    
+    /**
      * Checks if this agent is able to clean the given dirt. An example use:
      * canClean(getDirt()) checks if the agent is able to clean the dirt that it is
      * currently on top of. Recall that,

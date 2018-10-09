@@ -11,6 +11,7 @@ import uk.ac.rhul.cs.dice.agent.interfaces.Analyzable;
 import uk.ac.rhul.cs.dice.agentcommon.interfaces.Action;
 import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorld;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractAction;
+import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldCleanAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldMoveAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldSensingAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldTurnLeftAction;
@@ -30,16 +31,12 @@ public abstract class VacuumWorldAbstractMind extends AbstractAgentMind implemen
 	this.lastCycleReceivedMessages = new ArrayList<>();
     }
 
-    public List<VacuumWorldPerception> getLastCyclePerceptions() {
-	return this.lastCyclePerceptions;
-    }
-
     @Override
     public VacuumWorldPerception getPerception() {
 	return this.lastCyclePerceptions.isEmpty() ? null : this.lastCyclePerceptions.get(0);
     }
 
-    public List<VacuumWorldSpeechPerception> getLastCycleReceivedMessages() {
+    public List<VacuumWorldSpeechPerception> getMessages() {
 	return this.lastCycleReceivedMessages;
     }
 
@@ -66,20 +63,22 @@ public abstract class VacuumWorldAbstractMind extends AbstractAgentMind implemen
     }
 
     public VacuumWorldAbstractAction decideRandomly() {
-	switch (getRng().nextInt(3)) {
+	switch (getRng().nextInt(4)) {
 	case 0:
 	    return new VacuumWorldMoveAction();
 	case 1:
 	    return new VacuumWorldTurnLeftAction();
 	case 2:
 	    return new VacuumWorldTurnRightAction();
+	case 3:
+	    return new VacuumWorldCleanAction();
 	default:
 	    return new VacuumWorldSensingAction();
 	}
     }
 
     @Override
-    public <T extends Action<?>> void execute(T action) {
+    public final <T extends Action<?>> void execute(T action) {
 	((VacuumWorldAbstractAction) action).setActor(getBodyId());
 	if (VacuumWorld.DEBUGINFO)
 	    LogUtils.log(action.getActorID() + " is executing " + action.getClass().getSimpleName());

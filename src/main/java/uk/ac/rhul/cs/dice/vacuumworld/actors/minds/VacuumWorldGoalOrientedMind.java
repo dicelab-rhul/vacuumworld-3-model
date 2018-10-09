@@ -56,6 +56,6 @@ public class VacuumWorldGoalOrientedMind extends VacuumWorldAbstractMind {
     }
 
     private boolean areInformationAvailable() {
-	return getLastCyclePerceptions().isEmpty() || this.self == null || this.currentCoordinates == null;
+	return hasPerception() || this.self == null || this.currentCoordinates == null;
     }
 }

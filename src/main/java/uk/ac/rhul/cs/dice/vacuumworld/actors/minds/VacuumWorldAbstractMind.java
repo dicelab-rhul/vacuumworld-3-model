@@ -18,9 +18,6 @@ import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldTurnRightAction;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldPerception;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldSpeechPerception;
 
-/*
- * 
- */
 public abstract class VacuumWorldAbstractMind extends AbstractAgentMind implements VacuumWorldPerceptiveEntity {
     private static final long serialVersionUID = 5415182091402486290L;
     private List<VacuumWorldPerception> lastCyclePerceptions;

@@ -18,6 +18,8 @@ public class VacuumWorld {
     private VacuumWorld() {}
 
     public static void main(String[] args) throws IOException {
+	LogUtils.enableVerbose();
+	
 	String[] hostDetails = getHostDetails();
 	
 	if (!checkHostDetails(hostDetails[0], hostDetails[1])) {

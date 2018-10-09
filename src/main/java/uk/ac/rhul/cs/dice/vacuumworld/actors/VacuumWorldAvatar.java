@@ -5,6 +5,8 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.List;
 
+import org.cloudstrife9999.logutilities.LogUtils;
+
 import uk.ac.rhul.cs.dice.agent.abstractimpl.AbstractAvatar;
 import uk.ac.rhul.cs.dice.agent.interfaces.Actuator;
 import uk.ac.rhul.cs.dice.agent.interfaces.Analyzable;
@@ -60,7 +62,7 @@ public class VacuumWorldAvatar extends AbstractAvatar implements VacuumWorldActo
     
     @Override
     public void sendFeedbackToPrincipal(Analyzable... feedback) {
-	throw new UnsupportedOperationException(); //TODO maybe change this
+	throw new UnsupportedOperationException();
     }
 
     @Override
@@ -94,15 +96,12 @@ public class VacuumWorldAvatar extends AbstractAvatar implements VacuumWorldActo
     }
     
     private void realRun() {
-	/*VacuumWorldAbstractAction action = (VacuumWorldAbstractAction) getPrincipalListener().decide();
-	getPrincipalListener().execute((Action<?>) action);
-	sendToActuator((Action<?>) action);
-	sendToEnvironment();*/
+	//useless for now.
     }
 
     private void testRun() {
 	while(!this.stop) {
-	    System.out.println("Avatar " + getID() + " is being executed.");
+	    LogUtils.log("Avatar " + getID() + " is being executed.");
 	    
 	    try {
 		Thread.sleep(2000);
@@ -112,14 +111,8 @@ public class VacuumWorldAvatar extends AbstractAvatar implements VacuumWorldActo
 	    }
 	}
 	
-	System.out.println("Avatar " + getID() + ": stop!");
+	LogUtils.log("Avatar " + getID() + ": stop!");
     }
-
-    /*
-    private void sendToEnvironment() {
-	//TODO
-    }
-    */
 
     @Override
     public VacuumWorldActorAppearance getAppearance() {

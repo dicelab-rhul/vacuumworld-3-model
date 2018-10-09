@@ -43,7 +43,7 @@ import uk.ac.rhul.cs.dice.vacuumworld.dirt.VacuumWorldDirt;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldCoordinates;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldEnvironment;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldLocation;
-import uk.ac.rhul.cs.dice.vacuumworld.exceptions.VacuumWorldRuntimeException;
+import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VacuumWorldRuntimeException;
 
 public class VacuumWorldParser {
 
@@ -105,11 +105,10 @@ public class VacuumWorldParser {
     }
     
     private static VacuumWorldLocation parseLocation(VacuumWorldCoordinates coordinates, JsonObject locationRepresentation, int size) {
-	VacuumWorldLocation location = new VacuumWorldLocation(coordinates, VacuumWorldEnvironment.getWallInfo(coordinates, size));
-	location = addActorIfPresent(location, locationRepresentation);
-	location = addDirtIfPresent(location, locationRepresentation);
+	VacuumWorldLocation tmp = new VacuumWorldLocation(coordinates, VacuumWorldEnvironment.getWallInfo(coordinates, size));
+	VacuumWorldLocation temp = addActorIfPresent(tmp, locationRepresentation);
 	
-	return location;
+	return addDirtIfPresent(temp, locationRepresentation);
     }
 
     private static VacuumWorldLocation addActorIfPresent(VacuumWorldLocation location, JsonObject locationRepresentation) {
@@ -210,9 +209,9 @@ public class VacuumWorldParser {
 	    
 	    LogUtils.log("Overriding the ID " + candidateId + " with " + newId + " to avoid conflicts");
 	    
-	    VacuumWorldComponentsManager.addId(candidateId);
+	    VacuumWorldComponentsManager.addId(newId);
 	    
-	    return candidateId;
+	    return newId;
 	}
     }
 

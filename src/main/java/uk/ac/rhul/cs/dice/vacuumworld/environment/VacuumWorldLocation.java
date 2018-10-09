@@ -261,7 +261,7 @@ public class VacuumWorldLocation implements VacuumWorldLocationInterface, Compar
 
     @Override
     public boolean equals(Object obj) {
-	return obj != null && obj instanceof VacuumWorldLocation && this.appearance.equals(((VacuumWorldLocation) obj).getAppearance());
+	return obj instanceof VacuumWorldLocation && this.appearance.equals(((VacuumWorldLocation) obj).getAppearance());
     }
 
     @Override

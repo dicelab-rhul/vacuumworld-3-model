@@ -9,45 +9,44 @@ import uk.ac.rhul.cs.dice.agent.interfaces.PrologMind;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractAction;
 
 public class VacuumWorldPrologMind extends VacuumWorldAbstractMind implements PrologMind {
-	private static final long serialVersionUID = -6107803494980916586L;
-	private Prolog interpreter;
-	private List<Theory> theories;
-	
-	public VacuumWorldPrologMind(String bodyId, Prolog interpreter) {
-		super(bodyId);
-		
-		this.theories = new ArrayList<>();
-		setInterpreter(interpreter);
-	}
+    private static final long serialVersionUID = -6107803494980916586L;
+    private Prolog interpreter;
+    private List<Theory> theories;
 
-	@Override
-	public Prolog getInterpreter() {
-		return this.interpreter;
-	}
+    public VacuumWorldPrologMind(String bodyId, Prolog interpreter) {
+	super(bodyId);
 
-	@Override
-	public void setInterpreter(Prolog interpreter) {
-		this.interpreter = interpreter;
-	}
+	this.theories = new ArrayList<>();
+	setInterpreter(interpreter);
+    }
 
-	@Override
-	public List<Theory> getTheories() {
-		return this.theories;
-	}
+    @Override
+    public Prolog getInterpreter() {
+	return this.interpreter;
+    }
 
-	@Override
-	public void setTheories(List<Theory> theories) {
-		this.theories = theories;
-	}
-	
-	@Override
-	public Theory getFirstTheory() {		
-		return this.theories != null ? PrologMind.super.getFirstTheory() : null;
-	}
+    @Override
+    public void setInterpreter(Prolog interpreter) {
+	this.interpreter = interpreter;
+    }
 
-	@Override
-	public VacuumWorldAbstractAction decide() {
-	    // TODO Auto-generated method stub
-	    return null;
-	}
+    @Override
+    public List<Theory> getTheories() {
+	return this.theories;
+    }
+
+    @Override
+    public void setTheories(List<Theory> theories) {
+	this.theories = theories;
+    }
+
+    @Override
+    public Theory getFirstTheory() {
+	return this.theories != null ? PrologMind.super.getFirstTheory() : null;
+    }
+
+    @Override
+    public VacuumWorldAbstractAction decide() {
+	return super.decideRandomly();
+    }
 }

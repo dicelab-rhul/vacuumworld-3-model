@@ -21,17 +21,16 @@ public class GoToPositionGoal implements VacuumWorldSimplePhysicalGoal<PhysicalA
 	int horizontalDifference = this.target.getHorizontalDifference(current);
 	int verticalDifference = this.target.getVerticalDifference(current);
 	
-	if(this.target.equals(current)) {
-	    return;
-	}
-	else if(horizontalDifference == 0) {
-	    buildVerticalMovementPlan(orientation, verticalDifference);
-	}
-	else if(verticalDifference == 0) {
-	    buildHorizontalMovementPlan(orientation, horizontalDifference);
-	}
-	else {
-	    buildGenericPlan(orientation, horizontalDifference, verticalDifference);
+	if(!this.target.equals(current)) {
+	    if(horizontalDifference == 0) {
+		buildVerticalMovementPlan(orientation, verticalDifference);
+	    }
+	    else if(verticalDifference == 0) {
+		buildHorizontalMovementPlan(orientation, horizontalDifference);
+	    }
+	    else {
+		buildGenericPlan(orientation, horizontalDifference, verticalDifference);
+	    } 
 	}
     }
     

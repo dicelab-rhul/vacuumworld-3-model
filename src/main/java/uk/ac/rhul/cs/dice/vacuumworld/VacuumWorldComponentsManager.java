@@ -31,8 +31,6 @@ public class VacuumWorldComponentsManager {
     private Socket socketWithController;
     private String hostname;
     private int port;
-    private OutputStream out;
-    private InputStream in;
     private ObjectInputStream fromController;
     private ObjectOutputStream toController;
     private VacuumWorldMessage latestFromController;
@@ -48,7 +46,7 @@ public class VacuumWorldComponentsManager {
      * @param port
      * @throws IOException
      */
-    public VacuumWorldComponentsManager(boolean simulatedRun, String hostname, int controllerPort, int environmentPort) throws IOException {
+    public VacuumWorldComponentsManager(String hostname, int controllerPort, int environmentPort) throws IOException {
 	this.hostname = hostname;
 	this.port = environmentPort;
 	this.controllerPort = controllerPort;
@@ -59,24 +57,14 @@ public class VacuumWorldComponentsManager {
 	JSONObject initialConfiguration = waitForConnection();
 	
 	LogUtils.log("Model here: the raw initial state has been received!");
-	
-	if(initialConfiguration == null) {
-	    System.out.println("null");
-	}
-	
-	System.out.println(initialConfiguration.toString(4));
+	LogUtils.log(initialConfiguration.toString(4));
 	
 	JsonParser parser = new JsonParser();
 	JsonObject initial = parser.parse(initialConfiguration.toString()).getAsJsonObject();
 	
-	System.out.println(initial.toString());
-	
 	LogUtils.log("Model here: the initial state has been parsed!");
 	
 	createUniverse(initial);
-
-	//startUniverse();
-	//stopUniverse();
     }
 
     /**
@@ -86,16 +74,19 @@ public class VacuumWorldComponentsManager {
      * @param environmentPort
      * @throws IOException
      */
-    public VacuumWorldComponentsManager(String file, int controllerPort, int environmentPort) throws IOException {
-	this.hostname = InetAddress.getLocalHost().getHostAddress();
-	this.port = environmentPort;
-	this.controllerPort = controllerPort;
-	
-	setupServer(true);
-	LogUtils.log(this.getClass().getSimpleName() + ": starting universe in debug mode...");
-	createUniverseForDebug(file, false);
-	// startUniverse();
-	// stopUniverse();
+    public VacuumWorldComponentsManager(String file, int controllerPort, int environmentPort, boolean debug) throws IOException {
+	if(debug) {
+	    this.hostname = InetAddress.getLocalHost().getHostAddress();
+	    this.port = environmentPort;
+	    this.controllerPort = controllerPort;
+
+	    setupServer(true);
+	    LogUtils.log(this.getClass().getSimpleName() + ": starting universe in debug mode...");
+	    createUniverseForDebug(file, false);
+	}
+	else {
+	    throw new IllegalArgumentException();
+	}
     }
 
     public static List<String> getIds() {
@@ -108,7 +99,9 @@ public class VacuumWorldComponentsManager {
     
     public void stopUniverse() {
 	while(!this.universe.getMainAmbient().getStopFlag()) {
-	    continue;
+	    if(System.currentTimeMillis() % 100000000 == 0) {
+		LogUtils.log("Final Fantasy VII is the best!");
+	    }
 	}
 
 	LogUtils.log(this.getClass().getSimpleName() + ": time up! Stopping everything!");
@@ -166,7 +159,7 @@ public class VacuumWorldComponentsManager {
 	}
     }
 
-    private void setupServer(boolean fromFile) throws IOException {
+    private void setupServer(boolean fromFile) {
 	LogUtils.log(this.getClass().getSimpleName() + ": starting listener for Controller...");
 
 	if (!fromFile) {
@@ -184,10 +177,10 @@ public class VacuumWorldComponentsManager {
 	    
 	    LogUtils.log("Model here: a controller attempted a connection: " + this.socketWithController.getRemoteSocketAddress() + ".");
 	    
-	    this.out = this.socketWithController.getOutputStream();
-	    this.in = this.socketWithController.getInputStream();
-	    this.toController = new ObjectOutputStream(this.out);
-	    this.fromController = new ObjectInputStream(this.in);
+	    OutputStream out = this.socketWithController.getOutputStream();
+	    InputStream in = this.socketWithController.getInputStream();
+	    this.toController = new ObjectOutputStream(out);
+	    this.fromController = new ObjectInputStream(in);
 	    
 	    doHandshake();
 	}
@@ -280,5 +273,13 @@ public class VacuumWorldComponentsManager {
     private void setStopFlag(boolean flag) {
 	this.universe.getEnvironment().setStopFlag(flag);
 	this.universe.getAllActors().forEach(actor -> actor.setStopFlag(this.universe.getEnvironment().getStopFlag()));
+    }
+    
+    public Socket getSocketWithController() {
+	return this.socketWithController;
+    }
+    
+    public ServerSocket getServerSocketForController() {
+	return this.forController;
     }
 }

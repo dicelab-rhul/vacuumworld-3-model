@@ -133,10 +133,9 @@ public class VacuumWorldSerializer {
 	actorObject.addProperty("orientation", actor.getOrientation().toString().toLowerCase());
 	actorObject.addProperty("mind", actor.getMindAppearance().getMindName());
 	
-	actorObject = addActorSensorsIfAny(actorObject, actor);
-	actorObject = addActorActuatorsIfAny(actorObject, actor);
+	JsonObject tempObject = addActorSensorsIfAny(actorObject, actor);
 	
-	return actorObject;
+	return addActorActuatorsIfAny(tempObject, actor);
     }
     
     private static JsonObject addActorSensorsIfAny(JsonObject actorObject, VacuumWorldAutonomousActorAppearance actor) {
@@ -169,10 +168,9 @@ public class VacuumWorldSerializer {
 	avatarObject.addProperty("port", avatar.getListeningPort());
 	avatarObject.addProperty("mind", avatar.getMindAppearance().getName());
 	
-	avatarObject = addSensorsIfAny(avatarObject, avatar);
-	avatarObject = addActuatorsIfAny(avatarObject, avatar);
+	JsonObject tempObject = addSensorsIfAny(avatarObject, avatar);
 	
-	return avatarObject;
+	return addActuatorsIfAny(tempObject, avatar);
     }
 
     private static JsonObject addSensorsIfAny(JsonObject avatarObject, VacuumWorldAvatarAppearance avatar) {

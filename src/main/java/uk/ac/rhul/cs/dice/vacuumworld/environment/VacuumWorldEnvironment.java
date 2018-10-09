@@ -26,7 +26,6 @@ import uk.ac.rhul.cs.dice.agentactions.interfaces.Result;
 import uk.ac.rhul.cs.dice.agentcommon.enums.ContentType;
 import uk.ac.rhul.cs.dice.agentcontainers.abstractimpl.AbstractEnvironment;
 import uk.ac.rhul.cs.dice.agentcontainers.enums.Orientation;
-import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorld;
 import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldEvent;
 import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldPrinter;
 import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldSerializer;
@@ -41,10 +40,10 @@ import uk.ac.rhul.cs.dice.vacuumworld.actions.results.VacuumWorldSensingActionRe
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldActor;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldEnvironmentAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.physics.VacuumWorldPhysics;
-import uk.ac.rhul.cs.dice.vacuumworld.exceptions.VacuumWorldRuntimeException;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldPerception;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldSpeechPerception;
 import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VWMessageCodes;
+import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VacuumWorldRuntimeException;
 
 public class VacuumWorldEnvironment extends AbstractEnvironment implements Runnable {
     public static final int MINIMUM_SIZE = 3;
@@ -103,7 +102,8 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
     private void stopServer() {
 	try {
 	    this.server.close();
-	} catch (IOException e) {
+	}
+	catch (IOException e) {
 	    LogUtils.log(e);
 	}
     }
@@ -120,12 +120,13 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
     public void initSocket() {
 	try {
 	    initSocketUnsafe();
-	} catch (Exception e) {
+	}
+	catch (Exception e) {
 	    throw new VacuumWorldRuntimeException(e);
 	}
     }
 
-    private void initSocketUnsafe() throws IOException, InterruptedException {
+    private void initSocketUnsafe() throws IOException {
 	this.server = new ServerSocket(this.port);
 
 	int counter = 0;
@@ -145,9 +146,9 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 
 	    if (counter >= this.numberOfActors) {
 		break;
-	    } else {
-		LogUtils.log("Waiting for " + (this.numberOfActors - counter)
-			+ " more actor(s) to connect to the environment...");
+	    }
+	    else {
+		LogUtils.log("Waiting for " + (this.numberOfActors - counter) + " more actor(s) to connect to the environment...");
 	    }
 	}
 
@@ -281,18 +282,18 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
     private void listenForActorAndExecute(Entry<String, ObjectInputStream> input) {
 	try {
 	    ObjectInputStream is = input.getValue();
-	    if (VacuumWorld.DEBUGINFO)
-		LogUtils.log(this.getClass().getSimpleName() + ": waiting for action from " + input.getKey() + "...");
+	    LogUtils.log(this.getClass().getSimpleName() + ": waiting for action from " + input.getKey() + "...");
+		
 	    VacuumWorldEvent event = (VacuumWorldEvent) is.readObject();
-	    if (VacuumWorld.DEBUGINFO)
-		LogUtils.log(this.getClass().getSimpleName() + ": got " + event.getAction().getClass().getSimpleName()
-			+ " from " + input.getKey() + "...");
+	    LogUtils.log(this.getClass().getSimpleName() + ": got " + event.getAction().getClass().getSimpleName() + " from " + input.getKey() + "...");
+		
 	    VacuumWorldAbstractActionInterface action = event.getAction();
 	    printActorDetailsBefore(action);
 	    Result result = attemptExecution(action);
 	    printActorDetailsAfter(action);
 	    provideFeedback(result, getActorFromId(action.getActorID()));
-	} catch (ClassNotFoundException | IOException e) {
+	}
+	catch (ClassNotFoundException | IOException e) {
 	    throw new VacuumWorldRuntimeException(e);
 	}
     }
@@ -308,9 +309,7 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
     private void printActorDetails(VacuumWorldAbstractActionInterface action, String moment) {
 	VacuumWorldActor actor = getActorFromId(action.getActorID());
 	Orientation orientation = getActorOrientation(actor);
-	LogUtils.log(actor.getID() + ": position " + moment + " attempt: " + this.grid.entrySet().stream()
-		.filter(e -> e.getValue().containsSuchActor(actor.getID())).findFirst().map(Entry::getKey).orElse(null)
-		+ ".");
+	LogUtils.log(actor.getID() + ": position " + moment + " attempt: " + this.grid.entrySet().stream().filter(e -> e.getValue().containsSuchActor(actor.getID())).findFirst().map(Entry::getKey).orElse(null) + ".");
 	LogUtils.log(actor.getID() + ": orientation " + moment + " attempt: " + orientation + ".");
     }
 
@@ -321,11 +320,14 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
     private void provideFeedback(Result result, VacuumWorldActor actor) {
 	if (result instanceof VacuumWorldPhysicalActionResult) {
 	    provideFeedback((VacuumWorldPhysicalActionResult) result, actor);
-	} else if (result instanceof VacuumWorldCommunicativeActionResult) {
+	}
+	else if (result instanceof VacuumWorldCommunicativeActionResult) {
 	    provideFeedback((VacuumWorldCommunicativeActionResult) result, actor);
-	} else if (result instanceof VacuumWorldSensingActionResult) {
+	}
+	else if (result instanceof VacuumWorldSensingActionResult) {
 	    provideFeedback((VacuumWorldSensingActionResult) result, actor);
-	} else {
+	}
+	else {
 	    throw new IllegalArgumentException();
 	}
     }
@@ -367,17 +369,14 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 	VacuumWorldLocation forward = this.grid.get(location.getCoordinates().getForwardCoordinates(orientation));
 	VacuumWorldLocation left = this.grid.get(location.getCoordinates().getLeftCoordinates(orientation));
 	VacuumWorldLocation right = this.grid.get(location.getCoordinates().getRightCoordinates(orientation));
-	VacuumWorldLocation forwardLeft = this.grid
-		.get(location.getCoordinates().getForwardLeftCoordinates(orientation));
-	VacuumWorldLocation forwardRight = this.grid
-		.get(location.getCoordinates().getForwardRightCoordinates(orientation));
+	VacuumWorldLocation forwardLeft = this.grid.get(location.getCoordinates().getForwardLeftCoordinates(orientation));
+	VacuumWorldLocation forwardRight = this.grid.get(location.getCoordinates().getForwardRightCoordinates(orientation));
 
 	return buildEnvironmentAppearance(location, forward, left, right, forwardLeft, forwardRight);
     }
 
     private VacuumWorldEnvironmentAppearance buildEnvironmentAppearance(VacuumWorldLocation... locations) {
-	Set<VacuumWorldLocation> nonNullLocations = Stream.of(locations).filter(Objects::nonNull)
-		.collect(Collectors.toSet());
+	Set<VacuumWorldLocation> nonNullLocations = Stream.of(locations).filter(Objects::nonNull).collect(Collectors.toSet());
 	Map<VacuumWorldCoordinates, VacuumWorldLocation> locationsMap = new HashMap<>();
 	nonNullLocations.forEach(location -> locationsMap.put(location.getCoordinates(), location));
 
@@ -394,15 +393,16 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 
     private void sendGenericPerception(Perception perception, String recipientId) {
 	try {
-	    if (VacuumWorld.DEBUGINFO)
-		LogUtils.log(this.getClass().getSimpleName() + ": sending perception to " + recipientId + ".");
+	    LogUtils.log(this.getClass().getSimpleName() + ": sending perception to " + recipientId + ".");
 	    
 	    this.output.get(recipientId).reset();
 	    this.output.get(recipientId).writeObject(perception);
 	    this.output.get(recipientId).flush();
-	    if (VacuumWorld.DEBUGINFO)
-		LogUtils.log(this.getClass().getSimpleName() + ": sent perception to " + recipientId + ".");
-	} catch (IOException e) {
+	    
+	    LogUtils.log(this.getClass().getSimpleName() + ": sent perception to " + recipientId + ".");
+		
+	}
+	catch (IOException e) {
 	    throw new VacuumWorldRuntimeException(e);
 	}
     }
@@ -410,11 +410,14 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
     private Result attemptExecution(VacuumWorldAbstractActionInterface action) {
 	if (action instanceof VacuumWorldAbstractPhysicalAction) {
 	    return ((VacuumWorldAbstractPhysicalAction) action).attempt(this, this.physics);
-	} else if (action instanceof VacuumWorldAbstractCommunicativeAction) {
+	}
+	else if (action instanceof VacuumWorldAbstractCommunicativeAction) {
 	    return ((VacuumWorldAbstractCommunicativeAction) action).attempt(this, this.physics);
-	} else if (action instanceof VacuumWorldAbstractSensingAction) {
+	}
+	else if (action instanceof VacuumWorldAbstractSensingAction) {
 	    return ((VacuumWorldAbstractSensingAction) action).attempt(this, this.physics);
-	} else {
+	}
+	else {
 	    throw new UnsupportedOperationException();
 	}
     }
@@ -432,8 +435,7 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 	    throw new IllegalArgumentException();
 	}
 
-	return this.grid.values().stream().map(VacuumWorldLocation::getActorIfAny).filter(Objects::nonNull)
-		.filter(actor -> id.equals(actor.getID())).findFirst().orElse(null);
+	return this.grid.values().stream().map(VacuumWorldLocation::getActorIfAny).filter(Objects::nonNull).filter(actor -> id.equals(actor.getID())).findFirst().orElse(null);
     }
 
     public void moveActor(String actorId) {
@@ -445,7 +447,8 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 	if (!checkTargetLocation(original, orientation)) {
 	    location.addActor(actor);
 	    throw new UnsupportedOperationException("The target location already has an actor.");
-	} else {
+	}
+	else {
 	    this.grid.get(original.getNeighborCoordinates(orientation)).addActor(actor);
 	}
     }
@@ -467,7 +470,8 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
     public Orientation getOrientation(VacuumWorldActor actor) {
 	if (actor == null) {
 	    throw new IllegalArgumentException();
-	} else {
+	}
+	else {
 	    return getActorOrientation(actor);
 	}
     }
@@ -493,8 +497,6 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 
     @Override
     public <T> void sendData(ContentType contentType, byte[] content, Collection<T> recipientsIds) {
-	// TODO Auto-generated method stub
-
+	//useless
     }
-
 }

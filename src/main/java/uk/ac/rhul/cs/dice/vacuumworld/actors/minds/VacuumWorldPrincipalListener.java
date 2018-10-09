@@ -17,13 +17,11 @@ public class VacuumWorldPrincipalListener extends AbstractPrincipalListener {
 
     @Override
     public void perceive(Set<Analyzable> perceptions) {
-	// TODO Auto-generated method stub
-
+	//useless for now.
     }
 
     @Override
     public <T extends Action<?>> void execute(T action) {
-	// TODO Auto-generated method stub
-
+	//useless for now.
     }
 }

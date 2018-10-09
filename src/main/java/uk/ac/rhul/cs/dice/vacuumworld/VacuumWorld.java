@@ -11,9 +11,8 @@ import org.json.JSONTokener;
 public class VacuumWorld {
     private static final String HOST = "127.0.0.1";
     private static final String CONFIG_FILE_PATH = "config.json";
-    public static final boolean DEBUGINFO = true; // info log flag
-    public static final boolean DEBUG = false;
-    public static final String DEBUG_CONFIGURATION = "easy.json";
+    private static final boolean DEBUG = false;
+    private static final String DEBUG_CONFIGURATION = "easy.json";
 
     private VacuumWorld() {}
 
@@ -24,8 +23,6 @@ public class VacuumWorld {
 	
 	if (!checkHostDetails(hostDetails[0], hostDetails[1])) {
 	    LogUtils.log("Malformed or illegal details have been provided. Please edit " + CONFIG_FILE_PATH + " and retry.");
-	    
-	    return;
 	}
 	else {
 	    startSystem(hostDetails[0], hostDetails[1]);
@@ -52,12 +49,9 @@ public class VacuumWorld {
 	}
     }
 
-    private static void startSystem(String modelPort, String environmentPort) throws IOException {
-	// TODO these flags should become parameters.
-	boolean simulatedRun = false;
-	
+    private static void startSystem(String modelPort, String environmentPort) throws IOException {	
 	if (!DEBUG) {
-	    new VacuumWorldComponentsManager(simulatedRun, HOST, Integer.valueOf(modelPort), Integer.valueOf(environmentPort)).startUniverse();
+	    new VacuumWorldComponentsManager(HOST, Integer.valueOf(modelPort), Integer.valueOf(environmentPort)).startUniverse();
 	}
 	else {
 	    LogUtils.log("STARTING IN DEFAULT DEBUG MODE");
@@ -74,11 +68,7 @@ public class VacuumWorld {
 	    return false;
 	}
 
-	if (!testPort(environmentPort)) {
-	    return false;
-	}
-
-	return true;
+	return testPort(environmentPort);
     }
 
     private static boolean testPort(String portRepresentation) {

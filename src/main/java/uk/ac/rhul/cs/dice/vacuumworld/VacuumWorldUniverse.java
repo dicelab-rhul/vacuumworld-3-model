@@ -15,7 +15,7 @@ import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldUniverseAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.buildtasks.VacuumWorldEnvironmentBuilderTask;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldEnvironment;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldLocation;
-import uk.ac.rhul.cs.dice.vacuumworld.exceptions.VacuumWorldRuntimeException;
+import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VacuumWorldRuntimeException;
 
 public class VacuumWorldUniverse extends AbstractUniverse {
     private volatile boolean stop;

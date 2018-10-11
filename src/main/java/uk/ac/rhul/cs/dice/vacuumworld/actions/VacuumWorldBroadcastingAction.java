@@ -17,7 +17,7 @@ public class VacuumWorldBroadcastingAction extends VacuumWorldSpeakAction {
     private static final long serialVersionUID = 7205890569373167178L;
 
     public VacuumWorldBroadcastingAction(VacuumWorldMessage message) {
-	super(VacuumWorldCommunicativeActionsEnum.BROADCAST, message, new HashSet<>());
+	super(message);
     }
 
     @Override

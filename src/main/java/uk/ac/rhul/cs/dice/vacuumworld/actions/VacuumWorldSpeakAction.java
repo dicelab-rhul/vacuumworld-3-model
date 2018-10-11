@@ -20,8 +20,15 @@ public class VacuumWorldSpeakAction extends VacuumWorldAbstractCommunicativeActi
 	super(VacuumWorldCommunicativeActionsEnum.SPEAK, message, recipients);
     }
     
-    public VacuumWorldSpeakAction(VacuumWorldCommunicativeActionsEnum type, VacuumWorldMessage message, Set<String> recipients) {
-	super(type, message, recipients);
+    /**
+     * 
+     * Do NOT call this constructor directly. Construct a {@link VacuumWorldBroadcastingAction} instead.
+     * 
+     * @param message a {@link VacuumWorldMessage}.
+     * 
+     */
+    public VacuumWorldSpeakAction(VacuumWorldMessage message) {
+	super(VacuumWorldCommunicativeActionsEnum.BROADCAST, message, new HashSet<>());
     }
 
     @Override

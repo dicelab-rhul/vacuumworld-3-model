@@ -35,7 +35,7 @@ public class VacuumWorldPrinter {
     }
 
     private static String getSingleLocationRepresentation(Map<VacuumWorldCoordinates, VacuumWorldLocationAppearance> model) {
-	return model.get(new VacuumWorldCoordinates(0, 0)).toString();
+	return model.get(new VacuumWorldCoordinates(0, 0)).toString().replace(VacuumWorldLocationAppearance.TEXTUAL_BORDER, VacuumWorldLocationAppearance.SHARP_TEXTUAL_BORDER);
     }
 
     private static String buildRows(Map<VacuumWorldCoordinates, VacuumWorldLocationAppearance> model, int size) {

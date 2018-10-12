@@ -25,7 +25,6 @@ import com.google.gson.JsonObject;
 public class VacuumWorldLocationAppearance implements Appearance, VacuumWorldLocationPerceptionInterface, Comparable<VacuumWorldLocationAppearance> {
     private static final long serialVersionUID = -2552147509566518640L;
     private static final int MAX_WALLS = 4;
-    private static final String TEXTUAL_BORDER = "X\n";
     private VacuumWorldActorAppearance activeBodyAppearance;
     private VacuumWorldDirtAppearance dirtAppearance;
     private VacuumWorldCoordinates coordinates;
@@ -33,6 +32,8 @@ public class VacuumWorldLocationAppearance implements Appearance, VacuumWorldLoc
     private boolean wallOnSouth;
     private boolean wallOnWest;
     private boolean wallOnEast;
+    public static final String TEXTUAL_BORDER = "X\n";
+    public static final String SHARP_TEXTUAL_BORDER = "#\n";
 
     /**
      * 

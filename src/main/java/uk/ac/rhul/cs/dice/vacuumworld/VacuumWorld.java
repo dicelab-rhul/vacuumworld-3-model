@@ -8,10 +8,11 @@ import org.cloudstrife9999.logutilities.LogUtils;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VWJSON;
+
 public class VacuumWorld {
-    private static final String HOST = "127.0.0.1";
     private static final String CONFIG_FILE_PATH = "config.json";
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = false; //remove this in future releases.
     private static final String DEBUG_CONFIGURATION = "easy.json";
 
     private VacuumWorld() {}
@@ -19,13 +20,13 @@ public class VacuumWorld {
     public static void main(String[] args) throws IOException {
 	LogUtils.enableVerbose();
 	
-	String[] hostDetails = getHostDetails();
+	String[] hostDetails = getHostDetails(); //hostname, model port, environment port.
 	
-	if (!checkHostDetails(hostDetails[0], hostDetails[1])) {
+	if (!checkHostDetails(hostDetails[1], hostDetails[2])) {
 	    LogUtils.log("Malformed or illegal details have been provided. Please edit " + CONFIG_FILE_PATH + " and retry.");
 	}
 	else {
-	    startSystem(hostDetails[0], hostDetails[1]);
+	    startSystem(hostDetails[0], hostDetails[1], hostDetails[2]);
 	}
     }
 
@@ -34,7 +35,7 @@ public class VacuumWorld {
 	    JSONTokener tokener = new JSONTokener(new FileInputStream(CONFIG_FILE_PATH));
 	    JSONObject root = new JSONObject(tokener);
 	    
-	    return new String[] {root.getString("model_port"), root.getString("environment_port")};
+	    return new String[] {root.getString(VWJSON.MODEL_HOSTNAME), root.getString(VWJSON.MODEL_PORT), root.getString(VWJSON.ENVIRONMENT_PORT)};
 	}
 	catch(FileNotFoundException e) {
 	    LogUtils.fakeLog(e);
@@ -49,13 +50,13 @@ public class VacuumWorld {
 	}
     }
 
-    private static void startSystem(String modelPort, String environmentPort) throws IOException {	
-	if (!DEBUG) {
-	    new VacuumWorldComponentsManager(HOST, Integer.valueOf(modelPort), Integer.valueOf(environmentPort)).startUniverse();
+    private static void startSystem(String hostname, String modelPort, String environmentPort) throws IOException {	
+	if (!DEBUG) { //make this branch the only one in future releases.
+	    new VacuumWorldComponentsManager(hostname, Integer.valueOf(modelPort), Integer.valueOf(environmentPort)).startUniverse();
 	}
-	else {
+	else { //remove this in future releases.
 	    LogUtils.log("STARTING IN DEFAULT DEBUG MODE");
-	    new VacuumWorldComponentsManager(DEBUG_CONFIGURATION, Integer.valueOf(modelPort), Integer.valueOf(environmentPort)).startUniverse();
+	    new VacuumWorldComponentsManager(DEBUG_CONFIGURATION, Integer.valueOf(modelPort), Integer.valueOf(environmentPort), true).startUniverse();
 	}
     }
 

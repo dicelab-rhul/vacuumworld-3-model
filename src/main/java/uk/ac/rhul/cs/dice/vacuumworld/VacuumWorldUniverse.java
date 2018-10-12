@@ -20,13 +20,8 @@ import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VacuumWorldRuntimeException;
 public class VacuumWorldUniverse extends AbstractUniverse {
     private volatile boolean stop;
 
-    /**
-     * 
+    /* 
      * FROM FILE.
-     * 
-     * @param hostname
-     * @param port
-     * 
      */
     public VacuumWorldUniverse(String hostname, int port) {
 	super(null);
@@ -37,14 +32,8 @@ public class VacuumWorldUniverse extends AbstractUniverse {
 	bootUniverse(hostname, port);
     }
 
-    /**
-     * 
+    /*
      * ONLINE.
-     * 
-     * @param environment
-     * @param hostname
-     * @param port
-     * 
      */
     public VacuumWorldUniverse(VacuumWorldEnvironment environment, String hostname, int port) {
 	super(new VacuumWorldUniverseAppearance(environment), environment);

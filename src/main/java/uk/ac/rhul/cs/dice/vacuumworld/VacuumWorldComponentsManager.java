@@ -27,8 +27,6 @@ import com.google.gson.JsonParser;
 
 public class VacuumWorldComponentsManager {
     private int controllerPort;
-    private ServerSocket forController;
-    private Socket socketWithController;
     private String hostname;
     private int port;
     private ObjectInputStream fromController;
@@ -38,13 +36,8 @@ public class VacuumWorldComponentsManager {
     private VacuumWorldUniverse universe;
     private static List<String> ids = new ArrayList<>();
 
-    /**
-     * ONLINE
-     * 
-     * @param simulatedRun
-     * @param hostname
-     * @param port
-     * @throws IOException
+    /*
+     * ONLINE.
      */
     public VacuumWorldComponentsManager(String hostname, int controllerPort, int environmentPort) throws IOException {
 	this.hostname = hostname;
@@ -53,7 +46,7 @@ public class VacuumWorldComponentsManager {
 
 	setupServer(false);
 	
-	LogUtils.log(this.getClass().getSimpleName() + ": starting universe...?");
+	LogUtils.log(this.getClass().getSimpleName() + ": starting universe...");
 	JSONObject initialConfiguration = waitForConnection();
 	
 	LogUtils.log("Model here: the raw initial state has been received!");
@@ -67,12 +60,11 @@ public class VacuumWorldComponentsManager {
 	createUniverse(initial);
     }
 
-    /**
-     * FROM FILE (DEBUG)
+    /*
+     * FROM FILE (DEBUG).
      * 
-     * @param file
-     * @param environmentPort
-     * @throws IOException
+     * Remove this in future releases.
+     * 
      */
     public VacuumWorldComponentsManager(String file, int controllerPort, int environmentPort, boolean debug) throws IOException {
 	if(debug) {
@@ -168,17 +160,15 @@ public class VacuumWorldComponentsManager {
     }
     
     public void initConnection() {
-	try {
-	    this.forController = new ServerSocket(this.controllerPort);
-	    
+	try (ServerSocket modelServerSocket = new ServerSocket(this.controllerPort);) {
 	    LogUtils.log("Model here: waiting for connections...");
 	    
-	    this.socketWithController = this.forController.accept();
+	    Socket controllerSocket = modelServerSocket.accept();
 	    
-	    LogUtils.log("Model here: a controller attempted a connection: " + this.socketWithController.getRemoteSocketAddress() + ".");
+	    LogUtils.log("Model here: a controller attempted a connection: " + controllerSocket.getRemoteSocketAddress() + ".");
 	    
-	    OutputStream out = this.socketWithController.getOutputStream();
-	    InputStream in = this.socketWithController.getInputStream();
+	    OutputStream out = controllerSocket.getOutputStream();
+	    InputStream in = controllerSocket.getInputStream();
 	    this.toController = new ObjectOutputStream(out);
 	    this.fromController = new ObjectInputStream(in);
 	    
@@ -263,6 +253,7 @@ public class VacuumWorldComponentsManager {
 	this.universe = new VacuumWorldUniverse(env, this.hostname, this.port);
     }
 
+    //remove this in future releases.
     private void createUniverseForDebug(String path, boolean simulatedRun) {
 	VacuumWorldEnvironment env = new VacuumWorldEnvironment(VacuumWorldParser.parseConfiguration(path), false, this.hostname, this.port, this.toController, this.fromController);
 	
@@ -273,13 +264,5 @@ public class VacuumWorldComponentsManager {
     private void setStopFlag(boolean flag) {
 	this.universe.getEnvironment().setStopFlag(flag);
 	this.universe.getAllActors().forEach(actor -> actor.setStopFlag(this.universe.getEnvironment().getStopFlag()));
-    }
-    
-    public Socket getSocketWithController() {
-	return this.socketWithController;
-    }
-    
-    public ServerSocket getServerSocketForController() {
-	return this.forController;
     }
 }

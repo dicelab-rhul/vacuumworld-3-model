@@ -43,6 +43,7 @@ import uk.ac.rhul.cs.dice.vacuumworld.dirt.VacuumWorldDirt;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldCoordinates;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldEnvironment;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldLocation;
+import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VWJSON;
 import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VacuumWorldRuntimeException;
 
 public class VacuumWorldParser {
@@ -68,14 +69,14 @@ public class VacuumWorldParser {
     }
 
     private static Map<VacuumWorldCoordinates, VacuumWorldLocation> buildMap(JsonObject tree) {
-	JsonElement sizeElement = tree.get("size");
+	JsonElement sizeElement = tree.get(VWJSON.SIZE);
 	int size = sizeElement.getAsInt();
 	
 	if(size < VacuumWorldEnvironment.MINIMUM_SIZE || size > VacuumWorldEnvironment.MAXIMUM_SIZE) {
 	    throw new VacuumWorldRuntimeException("Size out of bounds: accepted [" + VacuumWorldEnvironment.MINIMUM_SIZE + ", " + VacuumWorldEnvironment.MAXIMUM_SIZE + "], got " + size + ".");
 	}
 	
-	return buildLocations(size, tree.get("notable_locations"));
+	return buildLocations(size, tree.get(VWJSON.NOTABLE_LOCATIONS));
     }
 
     private static Map<VacuumWorldCoordinates, VacuumWorldLocation> buildLocations(int size, JsonElement notableLocations) {
@@ -96,7 +97,7 @@ public class VacuumWorldParser {
 	for(JsonElement location : locations) {
 	    JsonObject locationRepresentation = location.getAsJsonObject();
 	    
-	    if(locationRepresentation.get("x").getAsInt() == coordinates.getX() && locationRepresentation.get("y").getAsInt() == coordinates.getY()) {
+	    if(locationRepresentation.get(VWJSON.X).getAsInt() == coordinates.getX() && locationRepresentation.get(VWJSON.Y).getAsInt() == coordinates.getY()) {
 		return parseLocation(coordinates, locationRepresentation, size);
 	    }
 	}
@@ -113,7 +114,7 @@ public class VacuumWorldParser {
 
     private static VacuumWorldLocation addActorIfPresent(VacuumWorldLocation location, JsonObject locationRepresentation) {
 	VacuumWorldLocation toReturn = location;
-	JsonElement actorRepresentation = locationRepresentation.get("actor");
+	JsonElement actorRepresentation = locationRepresentation.get(VWJSON.ACTOR);
 	
 	if(actorRepresentation != null && !actorRepresentation.isJsonNull()) {
 	    toReturn.addActor(buildActor(actorRepresentation.getAsJsonObject()));
@@ -124,7 +125,7 @@ public class VacuumWorldParser {
 
     private static VacuumWorldLocation addDirtIfPresent(VacuumWorldLocation location, JsonObject locationRepresentation) {
 	VacuumWorldLocation toReturn = location;
-	JsonElement dirtRepresentation = locationRepresentation.get("dirt");
+	JsonElement dirtRepresentation = locationRepresentation.get(VWJSON.DIRT);
 	
 	if(dirtRepresentation != null && !dirtRepresentation.isJsonNull()) {
 	    toReturn.addDirt(buildDirt(dirtRepresentation.getAsJsonObject()));
@@ -134,13 +135,13 @@ public class VacuumWorldParser {
     }
     
     private static VacuumWorldActor buildActor(JsonObject actorRepresentation) {
-	String id = actorRepresentation.get("id").getAsString();
-	JsonElement colorRepresentation = actorRepresentation.get("color");
+	String id = actorRepresentation.get(VWJSON.ACTOR_ID).getAsString();
+	JsonElement colorRepresentation = actorRepresentation.get(VWJSON.ACTOR_COLOR);
 	AgentColor color = colorRepresentation.isJsonNull() ? null : AgentColor.valueOf(colorRepresentation.getAsString().toUpperCase());
-	Orientation orientation = Orientation.valueOf(actorRepresentation.get("orientation").getAsString().toUpperCase());
-	List<Sensor> sensors = buildSensors(actorRepresentation.get("sensors").getAsJsonArray());
-	List<Actuator> actuators = buildActuators(actorRepresentation.get("actuators").getAsJsonArray());
-	ActorType actorType = ActorType.valueOf(actorRepresentation.get("type").getAsString().toUpperCase());
+	Orientation orientation = Orientation.valueOf(actorRepresentation.get(VWJSON.ORIENTATION).getAsString().toUpperCase());
+	List<Sensor> sensors = buildSensors(actorRepresentation.get(VWJSON.SENSORS).getAsJsonArray());
+	List<Actuator> actuators = buildActuators(actorRepresentation.get(VWJSON.ACTUATORS).getAsJsonArray());
+	ActorType actorType = ActorType.valueOf(actorRepresentation.get(VWJSON.TYPE).getAsString().toUpperCase());
 	
 	return buildActorSwitcher(actorRepresentation, id, color, orientation, sensors, actuators, actorType);
     }
@@ -159,8 +160,8 @@ public class VacuumWorldParser {
 
     private static VacuumWorldActor buildAutonomousActor(JsonObject actorRepresentation, String id, AgentColor color, Orientation orientation, List<Sensor> sensors, List<Actuator> actuators, ActorType actorType) {
 	try {
-	    AbstractAgentMind mind = (AbstractAgentMind) Class.forName(actorRepresentation.get("mind").getAsString()).getConstructor(String.class).newInstance(id);
-	    VacuumWorldMindAppearance mindAppearance = new VacuumWorldMindAppearance(actorRepresentation.get("mind").getAsString());
+	    AbstractAgentMind mind = (AbstractAgentMind) Class.forName(actorRepresentation.get(VWJSON.MIND).getAsString()).getConstructor(String.class).newInstance(id);
+	    VacuumWorldMindAppearance mindAppearance = new VacuumWorldMindAppearance(actorRepresentation.get(VWJSON.MIND).getAsString());
 	    VacuumWorldAutonomousActorAppearance appearance = new VacuumWorldAutonomousActorAppearance(id, color, actorType, orientation, mindAppearance, sensors, actuators);
 	    
 	    return buildAutonomousActor(id, appearance, sensors, actuators, mind);
@@ -173,7 +174,7 @@ public class VacuumWorldParser {
     private static VacuumWorldActor buildAvatar(JsonObject actorRepresentation, String candidateId, Orientation orientation, List<Sensor> sensors, List<Actuator> actuators) {
 	try {
 	    String id = sanitize(candidateId);
-	    int port = actorRepresentation.get("port").getAsInt();
+	    int port = actorRepresentation.get(VWJSON.AVATAR_PORT).getAsInt();
 	    VacuumWorldPrincipalListener listener = new VacuumWorldPrincipalListener(new ServerSocket(port));
 	    VacuumWorldPrincipalListenerAppearance mindAppearance = new VacuumWorldPrincipalListenerAppearance(listener.getName(), port);
 	    AvatarAppearance avatarAppearance = new VacuumWorldAvatarAppearance(id, orientation, port, mindAppearance, sensors, actuators);
@@ -223,7 +224,7 @@ public class VacuumWorldParser {
     }
 
     private static Actuator parseActuator(JsonObject actuatorRepresentation) {
-	ActuatorPurposeEnum purpose = ActuatorPurposeEnum.valueOf(actuatorRepresentation.get("purpose").getAsString().toUpperCase());
+	ActuatorPurposeEnum purpose = ActuatorPurposeEnum.valueOf(actuatorRepresentation.get(VWJSON.SENSOR_ACTUATOR_PURPOSE).getAsString().toUpperCase());
 	
 	return new VacuumWorldActuator(purpose);
     }
@@ -236,13 +237,13 @@ public class VacuumWorldParser {
     }
 
     private static Sensor parseSensor(JsonObject sensorRepresentation) {
-	SensorPurposeEnum purpose = SensorPurposeEnum.valueOf(sensorRepresentation.get("purpose").getAsString().toUpperCase());
+	SensorPurposeEnum purpose = SensorPurposeEnum.valueOf(sensorRepresentation.get(VWJSON.SENSOR_ACTUATOR_PURPOSE).getAsString().toUpperCase());
 	
 	return new VacuumWorldSensor(purpose);
     }
 
     private static VacuumWorldDirt buildDirt(JsonObject dirtRepresentation) {
-	String color = dirtRepresentation.get("color").getAsString();
+	String color = dirtRepresentation.get(VWJSON.DIRT_COLOR).getAsString();
 	
 	return new VacuumWorldDirt(VacuumWorldDirtColor.valueOf(color.toUpperCase()));
     }

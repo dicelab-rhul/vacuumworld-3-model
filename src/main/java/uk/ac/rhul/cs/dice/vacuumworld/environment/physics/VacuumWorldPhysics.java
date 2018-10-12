@@ -1,5 +1,8 @@
 package uk.ac.rhul.cs.dice.vacuumworld.environment.physics;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import uk.ac.rhul.cs.dice.agentactions.enums.ActionResult;
 import uk.ac.rhul.cs.dice.agentcontainers.enums.Orientation;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldBroadcastingAction;
@@ -140,6 +143,9 @@ public class VacuumWorldPhysics implements VacuumWorldPhysicsInterface {
 
     @Override
     public synchronized VacuumWorldCommunicativeActionResult perform(VacuumWorldBroadcastingAction action, VacuumWorldEnvironment context) {
+	Set<String> recipients = context.getGrid().entrySet().stream().filter(e -> e.getValue().containsAnActor()).map(e -> e.getValue().getActorIfAny()).map(VacuumWorldActor::getID).collect(Collectors.toSet());
+	action.addRecipients(recipients);
+	
 	return new VacuumWorldCommunicativeActionResult(ActionResult.SUCCESS, action.getMessage(), action.getRecipientsIds());
     }
 

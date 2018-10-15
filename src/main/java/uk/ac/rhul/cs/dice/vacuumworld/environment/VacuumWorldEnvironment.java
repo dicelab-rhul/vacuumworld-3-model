@@ -381,6 +381,13 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
     }
 
     private void sendGenericPerception(Perception perception, String recipientId) {
+	if(perception == null) {
+	    LogUtils.log("NUUUUUUUUUUUUUUUUUUUUUUUUUUUULLLLLLLLLLLLLLLLLLLL!!!");
+	}
+	else {
+	    LogUtils.log(perception.getClass().getName());
+	}
+	
 	try {
 	    LogUtils.log(this.getClass().getSimpleName() + ": sending perception to " + recipientId + ".");
 	    

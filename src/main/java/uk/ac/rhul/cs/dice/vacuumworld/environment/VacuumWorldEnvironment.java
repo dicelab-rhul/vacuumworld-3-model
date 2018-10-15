@@ -165,14 +165,18 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
     }
 
     private void sendFirstPerception() {
+	while(!this.goodToGo) {
+	    if(System.currentTimeMillis() % 1000000 == 0) {
+		LogUtils.log("Final Fantasy VII is the best Final Fantasy!!!");
+	    }
+	}
+	
 	this.grid.entrySet().stream().filter(e -> e.getValue().containsAnActor()).map(e -> e.getValue().getActorIfAny()).forEach(this::sendFirstPerceptionToActor);
     }
     
     private void sendFirstPerceptionToActor(VacuumWorldActor actor) {
-	LogUtils.log(getClass().getSimpleName() + ": sending the initial perception to " + actor.getID() + " ...");
 	VacuumWorldSensingActionResult result = new VacuumWorldSensingActionResult(ActionResult.SUCCESS);
 	provideFeedback(result, actor);
-	LogUtils.log(getClass().getSimpleName() + ": sent the initial perception to " + actor.getID() + ".");
     }
 
     public void setInputStreams(Map<String, ObjectInputStream> input) {
@@ -381,13 +385,6 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
     }
 
     private void sendGenericPerception(Perception perception, String recipientId) {
-	if(perception == null) {
-	    LogUtils.log("NUUUUUUUUUUUUUUUUUUUUUUUUUUUULLLLLLLLLLLLLLLLLLLL!!!");
-	}
-	else {
-	    LogUtils.log(perception.getClass().getName());
-	}
-	
 	try {
 	    LogUtils.log(this.getClass().getSimpleName() + ": sending perception to " + recipientId + ".");
 	    

@@ -40,40 +40,33 @@ public class Tutorial1AgentMind extends VacuumWorldAbstractMind {
      */
     @Override
     public VacuumWorldAbstractAction decide() {
-	// the first step should always be to check if the agent has a perception, unless you do not plan to use it.
-	if (hasPerception()) {
-	    // ***** ***** ***** ***** ***** EDIT HERE ***** ***** ***** ***** *****//
+	// ***** ***** ***** ***** ***** EDIT HERE ***** ***** ***** ***** *****//
 
-	    // think about how to find the edge of the grid in an optimal way (i.e) with the
-	    // least number of actions.
-	    // hint 1: what orientation should the agent have before moving?
-	    // hint 2: you can get the current coordinates of the agent by using the method
-	    // - getCoordinates()
+	// think about how to find the edge of the grid in an optimal way (i.e) with the
+	// least number of actions.
+	// hint 1: what orientation should the agent have before moving?
+	// hint 2: you can get the current coordinates of the agent by using the method
+	// - getCoordinates()
 
-	    // FOR STUDENTS: YOUR TASK IS TO CHANGE THIS DEFAULT BEHAVIOR!
-	    if (isOrientationEast() || isOrientationSouth()) {
-		return new VacuumWorldMoveAction();
-	    }
-	    else if (isOrientationNorth()) {
-		return new VacuumWorldTurnRightAction();
-	    }
-	    else if (isOrientationWest()) {
-		return new VacuumWorldTurnLeftAction();
-	    }
-	    else {
-		throw new IllegalStateException("WE ARE NOT FACING ANYWHERE!?!?");
-	    }
-	    // ***** ***** ***** ***** ***** **** **** ***** ***** ***** ***** *****//
+	// FOR STUDENTS: YOUR TASK IS TO CHANGE THIS DEFAULT BEHAVIOR!
+
+	// ***** ***** ***** ***** ***** **** **** ***** ***** ***** ***** *****//
+	if (isOrientationEast() || isOrientationSouth()) {
+	    return new VacuumWorldMoveAction();
+	}
+	else if (isOrientationNorth()) {
+	    return new VacuumWorldTurnRightAction();
+	}
+	else if (isOrientationWest()) {
+	    return new VacuumWorldTurnLeftAction();
 	}
 	else {
-	    // when the agent has not perceived, do a sense action (this should only happen
-	    // on the first cycle step)
-	    return new VacuumWorldIdleAction();
+	    throw new IllegalStateException("WE ARE NOT FACING ANYWHERE!?!?");
 	}
     }
-    
+
     @Override
     public void revise() {
-	//Edit here.
+	// Edit here.
     }
 }

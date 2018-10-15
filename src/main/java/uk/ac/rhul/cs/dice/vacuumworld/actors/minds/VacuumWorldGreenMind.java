@@ -22,9 +22,6 @@ public class VacuumWorldGreenMind extends VacuumWorldColoredMind {
     public VacuumWorldAbstractAction decide() {
 	//Edit here.
 	
-	//HINT: always call hasPerception() in order to check whether the perception exists.
-	//HINT #2: call getPerception() in order to get the perception.
-	
 	//Change this with the desired behavior. Remember: NEVER return null!
 	return super.decideRandomly();
     }

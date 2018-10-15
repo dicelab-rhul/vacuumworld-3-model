@@ -8,7 +8,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.cloudstrife9999.logutilities.LogUtils;
 
@@ -105,8 +104,7 @@ public class VacuumWorldCleaningAgent extends AbstractAgent implements VacuumWor
     private void getFirstPerception() {
 	try {
 	    LogUtils.log(getID() + ": waiting for the initial perception from the VacuumWorldEnvironment...");
-	    Set<?> tmp = (Set<?>) this.input.readObject();
-	    Set<Analyzable> firstCyclePerception = tmp.stream().filter(elm -> Analyzable.class.isAssignableFrom(elm.getClass())).map(elm -> (Analyzable) elm).collect(Collectors.toSet());
+	    Analyzable firstCyclePerception = (Analyzable) this.input.readObject();
 	    getMind().receiveFirstPerception(firstCyclePerception);
 	    LogUtils.log(getID() + ": successfully received the initial perception from the VacuumWorldEnvironment...");
 	}

@@ -1,6 +1,8 @@
 package uk.ac.rhul.cs.dice.vacuumworld.actors.minds;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -53,8 +55,8 @@ public abstract class VacuumWorldAbstractMind extends AbstractAgentMind implemen
     }
     
     @Override
-    public void receiveFirstPerception(Set<Analyzable> perceptions) {
-        perceive(perceptions);
+    public void receiveFirstPerception(Analyzable perception) {
+        perceive(new HashSet<>(Arrays.asList(perception)));
     }
 
     private void dealWithPercept(Analyzable a) {

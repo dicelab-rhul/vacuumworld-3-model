@@ -2,6 +2,8 @@ package uk.ac.rhul.cs.dice.vacuumworld.actors.minds;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 import uk.ac.rhul.cs.dice.agent.abstractimpl.AbstractPrincipalListener;
@@ -31,7 +33,7 @@ public class VacuumWorldPrincipalListener extends AbstractPrincipalListener {
     }
 
     @Override
-    public void receiveFirstPerception(Set<Analyzable> perceptions) {
-	perceive(perceptions);
+    public void receiveFirstPerception(Analyzable perception) {
+	perceive(new HashSet<>(Arrays.asList(perception)));
     }
 }

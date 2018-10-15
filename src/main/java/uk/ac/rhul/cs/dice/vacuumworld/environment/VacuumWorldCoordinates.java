@@ -99,4 +99,8 @@ public class VacuumWorldCoordinates extends AbstractCoordinates {
     public VacuumWorldCoordinates getWesternCoordinates() {
         return (VacuumWorldCoordinates) super.getWesternCoordinates();
     }
+    
+    public static VacuumWorldCoordinates randomCoordinates(Integer maxX, Integer maxY) {
+	return (VacuumWorldCoordinates) AbstractCoordinates.randomCoordinates(maxX, maxY);
+    }
 }

@@ -3,7 +3,7 @@ package uk.ac.rhul.cs.dice.vacuumworld.actors.minds;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldDropDirtAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldMoveAction;
-import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldSensingAction;
+import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldIdleAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldTurnLeftAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldTurnRightAction;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldDirtColor;
@@ -29,7 +29,12 @@ public class VacuumWorldUserMind extends VacuumWorldAbstractMind {
 	case 4:
 	    return new VacuumWorldDropDirtAction(VacuumWorldDirtColor.GREEN);
 	default:
-	    return new VacuumWorldSensingAction();
+	    return new VacuumWorldIdleAction();
 	}
+    }
+    
+    @Override
+    public void revise() {
+	//The user does not need to revise anything.
     }
 }

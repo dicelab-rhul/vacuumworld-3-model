@@ -24,4 +24,14 @@ public class VacuumWorldPrincipalListener extends AbstractPrincipalListener {
     public <T extends Action<?>> void execute(T action) {
 	//useless for now.
     }
+    
+    @Override
+    public void revise() {
+	//Edit here.
+    }
+
+    @Override
+    public void receiveFirstPerception(Set<Analyzable> perceptions) {
+	perceive(perceptions);
+    }
 }

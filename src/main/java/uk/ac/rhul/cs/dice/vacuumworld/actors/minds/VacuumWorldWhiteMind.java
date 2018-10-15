@@ -25,6 +25,11 @@ public class VacuumWorldWhiteMind extends VacuumWorldAbstractMind {
 	//Change this with the desired behavior. Remember: NEVER return null!
 	return super.decideRandomly();
     }
+
+    @Override
+    public void revise() {
+	//Edit here.
+    }
     
     //Add any method you need.
 }

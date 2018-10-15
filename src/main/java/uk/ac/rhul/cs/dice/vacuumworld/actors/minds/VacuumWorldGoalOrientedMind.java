@@ -4,7 +4,7 @@ import java.util.Set;
 
 import uk.ac.rhul.cs.dice.agent.interfaces.Analyzable;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractAction;
-import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldSensingAction;
+import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldIdleAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.advanced.GoToPositionGoal;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldCoordinates;
@@ -30,7 +30,7 @@ public class VacuumWorldGoalOrientedMind extends VacuumWorldAbstractMind {
     @Override
     public VacuumWorldAbstractAction decide() {
 	if(!areInformationAvailable()) {
-	    return new VacuumWorldSensingAction();
+	    return new VacuumWorldIdleAction();
 	}
 	else if(this.goal == null) {
             this.goal = new GoToPositionGoal(new VacuumWorldCoordinates(7, 6));
@@ -57,5 +57,10 @@ public class VacuumWorldGoalOrientedMind extends VacuumWorldAbstractMind {
 
     private boolean areInformationAvailable() {
 	return hasPerception() || this.self == null || this.currentCoordinates == null;
+    }
+    
+    @Override
+    public void revise() {
+	//Edit here.
     }
 }

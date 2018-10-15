@@ -12,7 +12,7 @@ import uk.ac.rhul.cs.dice.agentcommon.interfaces.Action;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldCleanAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldMoveAction;
-import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldSensingAction;
+import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldIdleAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldTurnLeftAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldTurnRightAction;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldPerception;
@@ -39,6 +39,7 @@ public abstract class VacuumWorldAbstractMind extends AbstractAgentMind implemen
 	return this.lastCycleReceivedMessages;
     }
 
+    @Override
     public abstract VacuumWorldAbstractAction decide();
 
     @Override
@@ -50,13 +51,20 @@ public abstract class VacuumWorldAbstractMind extends AbstractAgentMind implemen
 
 	perceptions.forEach(this::dealWithPercept);
     }
+    
+    @Override
+    public void receiveFirstPerception(Set<Analyzable> perceptions) {
+        perceive(perceptions);
+    }
 
     private void dealWithPercept(Analyzable a) {
 	if (VacuumWorldPerception.class.isAssignableFrom(a.getClass())) {
 	    this.lastCyclePerceptions.add((VacuumWorldPerception) a);
-	} else if (VacuumWorldSpeechPerception.class.isAssignableFrom(a.getClass())) {
+	}
+	else if (VacuumWorldSpeechPerception.class.isAssignableFrom(a.getClass())) {
 	    this.lastCycleReceivedMessages.add((VacuumWorldSpeechPerception) a);
-	} else {
+	}
+	else {
 	    getDefaultLastReceivedPerceptions().add(a);
 	}
     }
@@ -72,7 +80,7 @@ public abstract class VacuumWorldAbstractMind extends AbstractAgentMind implemen
 	case 3:
 	    return new VacuumWorldCleanAction();
 	default:
-	    return new VacuumWorldSensingAction();
+	    return new VacuumWorldIdleAction();
 	}
     }
 

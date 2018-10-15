@@ -159,7 +159,18 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
     }
 
     public void finishInitialization() {
+	sendFirstPerception();
+	
 	this.initializationComplete = true;
+    }
+
+    private void sendFirstPerception() {
+	this.grid.entrySet().stream().filter(e -> e.getValue().containsAnActor()).map(e -> e.getValue().getActorIfAny()).forEach(this::sendFirstPerceptionToActor);
+    }
+    
+    private void sendFirstPerceptionToActor(VacuumWorldActor actor) {
+	VacuumWorldSensingActionResult result = new VacuumWorldSensingActionResult(ActionResult.SUCCESS);
+	provideFeedback(result, actor);
     }
 
     public void setInputStreams(Map<String, ObjectInputStream> input) {

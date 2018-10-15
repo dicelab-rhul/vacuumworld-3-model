@@ -55,7 +55,7 @@ public class VacuumWorldActionFactory {
     private static VacuumWorldAbstractAction generateSensing(VacuumWorldSensingActionsEnum code) {
 	switch(code) {
 	case SENSE:
-	    return new VacuumWorldSensingAction();
+	    return new VacuumWorldIdleAction();
 	case STAY_IDLE:
 	    throw new UnsupportedOperationException("Not yet implemeted.");
 	default:

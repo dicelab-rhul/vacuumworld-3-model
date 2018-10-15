@@ -29,5 +29,10 @@ public class VacuumWorldGreenMind extends VacuumWorldColoredMind {
 	return super.decideRandomly();
     }
     
+    @Override
+    public void revise() {
+	//Edit here.
+    }
+    
     //Add any method you need.
 }

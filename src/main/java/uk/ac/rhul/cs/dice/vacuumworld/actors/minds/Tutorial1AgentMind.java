@@ -3,7 +3,7 @@ package uk.ac.rhul.cs.dice.vacuumworld.actors.minds;
 import uk.ac.rhul.cs.dice.agentcontainers.enums.Orientation;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldMoveAction;
-import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldSensingAction;
+import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldIdleAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldTurnLeftAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldTurnRightAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.minds.VacuumWorldAbstractMind;
@@ -31,7 +31,7 @@ public class Tutorial1AgentMind extends VacuumWorldAbstractMind {
      * @return the next action that this agent should attempt. Choose from:
      *         <p>
      *         <ul>
-     *         <li>{@link VacuumWorldSensingAction},
+     *         <li>{@link VacuumWorldIdleAction},
      *         <li>{@link VacuumWorldTurnLeftAction},
      *         <li>{@link VacuumWorldTurnRightAction},
      *         <li>{@link VacuumWorldMoveAction},
@@ -68,7 +68,12 @@ public class Tutorial1AgentMind extends VacuumWorldAbstractMind {
 	else {
 	    // when the agent has not perceived, do a sense action (this should only happen
 	    // on the first cycle step)
-	    return new VacuumWorldSensingAction();
+	    return new VacuumWorldIdleAction();
 	}
+    }
+    
+    @Override
+    public void revise() {
+	//Edit here.
     }
 }

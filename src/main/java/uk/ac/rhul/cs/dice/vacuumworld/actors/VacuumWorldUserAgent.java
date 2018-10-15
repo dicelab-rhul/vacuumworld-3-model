@@ -91,6 +91,7 @@ public class VacuumWorldUserAgent extends AbstractAgent implements VacuumWorldAc
 	while (!this.stop) {
 	    LogUtils.log(getID() + " is being executed.");
 
+	    getMind().revise();
 	    VacuumWorldAbstractAction action = (VacuumWorldAbstractAction) getMind().decide();
 	    getMind().execute((Action<?>) action);
 	    setForMind(sendToEnvironment(action));

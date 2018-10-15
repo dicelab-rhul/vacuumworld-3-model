@@ -9,16 +9,16 @@ import uk.ac.rhul.cs.dice.vacuumworld.actions.results.VacuumWorldSensingActionRe
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldEnvironment;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.physics.VacuumWorldPhysicsInterface;
 
-public class VacuumWorldSensingAction extends VacuumWorldAbstractSensingAction {
+public class VacuumWorldIdleAction extends VacuumWorldAbstractSensingAction {
     private static final long serialVersionUID = -8335780880947142634L;
 
-    public VacuumWorldSensingAction() {
-	super(VacuumWorldSensingActionsEnum.SENSE);
+    public VacuumWorldIdleAction() {
+	super(VacuumWorldSensingActionsEnum.STAY_IDLE);
     }
 
     @Override
     public boolean isTypeConsistent() {
-	return VacuumWorldSensingActionsEnum.SENSE.equals(getType());
+	return VacuumWorldSensingActionsEnum.STAY_IDLE.equals(getType());
     }
 
     @Override

@@ -9,7 +9,7 @@ import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldBroadcastingAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldCleanAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldDropDirtAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldMoveAction;
-import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldSensingAction;
+import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldIdleAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldSpeakAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldTurnAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldTurnLeftAction;
@@ -65,7 +65,7 @@ public class VacuumWorldPhysics implements VacuumWorldPhysicsInterface {
     }
 
     @Override
-    public synchronized boolean isPossible(VacuumWorldSensingAction action, VacuumWorldEnvironment context) {
+    public synchronized boolean isPossible(VacuumWorldIdleAction action, VacuumWorldEnvironment context) {
 	return true;
     }
 
@@ -150,7 +150,7 @@ public class VacuumWorldPhysics implements VacuumWorldPhysicsInterface {
     }
 
     @Override
-    public synchronized VacuumWorldSensingActionResult perform(VacuumWorldSensingAction action, VacuumWorldEnvironment context) {
+    public synchronized VacuumWorldSensingActionResult perform(VacuumWorldIdleAction action, VacuumWorldEnvironment context) {
 	return new VacuumWorldSensingActionResult(ActionResult.SUCCESS);
     }
 
@@ -228,7 +228,7 @@ public class VacuumWorldPhysics implements VacuumWorldPhysicsInterface {
     }
 
     @Override
-    public boolean succeeded(VacuumWorldSensingAction action, VacuumWorldEnvironment context) {
+    public boolean succeeded(VacuumWorldIdleAction action, VacuumWorldEnvironment context) {
 	return true;
     }
 

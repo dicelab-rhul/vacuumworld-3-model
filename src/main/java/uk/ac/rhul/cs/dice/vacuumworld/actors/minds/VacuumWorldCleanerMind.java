@@ -25,5 +25,10 @@ public class VacuumWorldCleanerMind extends VacuumWorldAbstractMind {
 	return super.decideRandomly();
     }
     
+    @Override
+    public void revise() {
+	//Edit here.
+    }
+    
     //Add any method you need.
 }

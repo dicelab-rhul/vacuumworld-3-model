@@ -41,6 +41,7 @@ public class Tutorial1AgentMind extends VacuumWorldAbstractMind {
      * <li>1. Turn to face {@link Orientation#East East} or {@link Orientation#South
      * South}
      * <li>2. Move forward
+     * <li>3. Stop at a wall
      * </ul>
      * <p>
      * 
@@ -73,7 +74,9 @@ public class Tutorial1AgentMind extends VacuumWorldAbstractMind {
 	// update might overwrite what you have done!)
 
 	// FOR STUDENTS: YOUR TASK IS TO CHANGE THIS DEFAULT BEHAVIOUR!
-
+    if(isWallForward()) {
+        return new VacuumWorldIdleAction();
+    }
 	if (isOrientationEast() || isOrientationSouth()) {
 	    return new VacuumWorldMoveAction();
 	}
@@ -97,10 +100,6 @@ public class Tutorial1AgentMind extends VacuumWorldAbstractMind {
      */
     @Override
     public void revise() {
-	this.position = getCoordinates();
-    }
-    
-    public Coordinates getPositionCoordinates() {
-        return this.position;
+         this.position = getCoordinates();
     }
 }

@@ -74,21 +74,22 @@ public class Tutorial1AgentMind extends VacuumWorldAbstractMind {
 	// update might overwrite what you have done!)
 
 	// FOR STUDENTS: YOUR TASK IS TO CHANGE THIS DEFAULT BEHAVIOUR!
-    if(isWallForward()) {
-        return new VacuumWorldIdleAction();
-    }
+	if (isWallForward()) {
+	    return new VacuumWorldIdleAction();
+	}
+	
 	if (isOrientationEast() || isOrientationSouth()) {
 	    return new VacuumWorldMoveAction();
 	}
-	
+
 	if (isOrientationNorth()) {
 	    return new VacuumWorldTurnRightAction();
 	}
-	
+
 	if (isOrientationWest()) {
 	    return new VacuumWorldTurnLeftAction();
 	}
-	
+
 	return new VacuumWorldIdleAction(); // the default action (which will never happen).
 	// ***** ***** ***** ***** ***** **** **** ***** ***** ***** ***** *****//
     }
@@ -100,6 +101,10 @@ public class Tutorial1AgentMind extends VacuumWorldAbstractMind {
      */
     @Override
     public void revise() {
-         this.position = getCoordinates();
+	this.position = getCoordinates();
+    }
+
+    public Coordinates getPositionCoordinates() {
+	return this.position;
     }
 }

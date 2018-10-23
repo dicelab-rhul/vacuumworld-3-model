@@ -20,18 +20,18 @@ public class VacuumWorldShoutingMind extends VacuumWorldAbstractMind {
     @Override
     public void revise() {
 	this.cycle++;
+	LogUtils.log(getBodyId() + ": cycle " + this.cycle + ". Received these:");
+	getMessages().forEach(this::printMessageDetails);
     }
 
     @Override
     public VacuumWorldAbstractAction decide() {
-	getMessages().forEach(this::printMessageDetails);
-	
 	VacuumWorldMessage message = new VacuumWorldMessage("Hello everyone! I am " + getBodyId() + ". I am sending this on cycle " + this.cycle + ", and you should receive this on cycle " + (this.cycle + 1) + ".");
 	
 	return new VacuumWorldBroadcastingAction(message);
     }
     
     private void printMessageDetails(VacuumWorldSpeechPerception received) {
-	LogUtils.log(getBodyId() + ": cycle " + this.cycle + ". Received this:\n  " + received.getMessage().getText());
+	LogUtils.log("  " + received.getMessage().getText());
     }
 }

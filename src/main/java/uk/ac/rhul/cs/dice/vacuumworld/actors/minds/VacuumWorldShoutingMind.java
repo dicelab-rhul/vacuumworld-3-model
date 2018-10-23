@@ -19,8 +19,15 @@ public class VacuumWorldShoutingMind extends VacuumWorldAbstractMind {
     @Override
     public void revise() {
 	this.cycle++;
-	StringBuilder builder = new StringBuilder(getBodyId() + ": cycle " + this.cycle + ". Received these:");
-	getMessages().forEach(m -> builder.append("\n  " + m.getMessage().getText()));
+	StringBuilder builder = new StringBuilder(getBodyId() + ": cycle " + this.cycle  + ". ");
+	
+	if(hasNewMessages()) {
+	    builder.append("Received these:");
+	    getMessages().forEach(m -> builder.append("\n  " + m.getMessage().getText()));
+	}
+	else {
+	    builder.append("\n  No new messages available.");
+	}
 	
 	LogUtils.log(builder.toString());
     }

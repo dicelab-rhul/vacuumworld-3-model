@@ -68,6 +68,18 @@ public class VacuumWorldLocation implements VacuumWorldLocationInterface, Compar
 	return this.agent != null || this.user != null || this.avatar != null;
     }
     
+    public boolean containsAnActorDifferentFrom(String id) {
+	if(this.agent != null && this.agent.getID().equals(id)) {
+	    return true;
+	}
+	else if(this.user != null && this.user.getID().equals(id)) {
+	    return true;
+	}
+	else {
+	    return this.avatar != null && this.avatar.getID().equals(id);
+	}
+    }
+
     @Override
     public boolean containsACleaningAgent() {
 	return this.agent != null;

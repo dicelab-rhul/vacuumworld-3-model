@@ -21,8 +21,9 @@ import uk.ac.rhul.cs.dice.agentcommon.interfaces.Action;
 import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldEvent;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractAction;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
+import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldEnvironment;
+import uk.ac.rhul.cs.dice.vacuumworld.perception.NothingMoreIncomingPerception;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.StopPerception;
-import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldPerception;
 import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VacuumWorldRuntimeException;
 
 public class VacuumWorldCleaningAgent extends AbstractAgent implements VacuumWorldActor {
@@ -92,12 +93,24 @@ public class VacuumWorldCleaningAgent extends AbstractAgent implements VacuumWor
 	
 	while (!this.stop) {
 	    LogUtils.log(getID() + " is being executed.");
+	    VacuumWorldEnvironment.addTicket(getID());
 	    
 	    getMind().revise();
 	    VacuumWorldAbstractAction action = (VacuumWorldAbstractAction) getMind().decide();
 	    getMind().execute((Action<?>) action);
 	    setForMind(sendToEnvironment(action));
 	    sendToMind();
+	    
+	    VacuumWorldEnvironment.removeTicket(getID());
+	    waitForOthers();
+	}
+    }
+
+    private void waitForOthers() {
+	while(!VacuumWorldEnvironment.cycleOver()) {
+	    if(System.currentTimeMillis() % 1000000 == 0) {
+		LogUtils.log("Final Fantasy VII is the best Final Fantasy!!!");
+	    }
 	}
     }
 
@@ -174,7 +187,7 @@ public class VacuumWorldCleaningAgent extends AbstractAgent implements VacuumWor
 		
 	    perceptions.add(candidate);
 
-	} while (!(candidate instanceof VacuumWorldPerception));
+	} while (!(candidate instanceof NothingMoreIncomingPerception));
 
 	return perceptions;
     }

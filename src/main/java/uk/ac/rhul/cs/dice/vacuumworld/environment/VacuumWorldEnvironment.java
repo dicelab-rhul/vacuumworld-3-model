@@ -5,8 +5,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
@@ -40,6 +42,7 @@ import uk.ac.rhul.cs.dice.vacuumworld.actions.results.VacuumWorldSensingActionRe
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldActor;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldEnvironmentAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.physics.VacuumWorldPhysics;
+import uk.ac.rhul.cs.dice.vacuumworld.perception.NothingMoreIncomingPerception;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldPerception;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldSpeechPerception;
 import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VWMessageCodes;
@@ -61,6 +64,7 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
     private int numberOfActors;
     private ObjectInputStream fromController;
     private ObjectOutputStream toController;
+    private static volatile List<String> tickets = new ArrayList<>();
 
     public VacuumWorldEnvironment(Map<VacuumWorldCoordinates, VacuumWorldLocation> grid, boolean stopFlag, String hostname, int port, ObjectOutputStream toController, ObjectInputStream fromController) {
 	this.grid = new ConcurrentHashMap<>(grid);
@@ -71,6 +75,18 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 	setAppearance(new VacuumWorldEnvironmentAppearance(this.grid));
     }
 
+    public static void addTicket(String id) {
+	VacuumWorldEnvironment.tickets.add(id);
+    }
+    
+    public static void removeTicket(String id) {
+	VacuumWorldEnvironment.tickets.remove(id);
+    }
+    
+    public static boolean cycleOver() {
+	return VacuumWorldEnvironment.tickets.isEmpty();
+    }
+    
     public void setNumberOfExpectedActors(int numberOfActors) {
 	this.numberOfActors = numberOfActors;
     }
@@ -211,6 +227,7 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
     public void listenAndExecute() {
 	waitForInitialization();
 	this.input.entrySet().forEach(this::listenForActorAndExecute);
+	this.output.entrySet().forEach(this::sendLastPerception);
 
 	LogUtils.log(this.getClass().getSimpleName() + ": printing current configuration...");
 	VacuumWorldPrinter.dumpModelFromLocations(this.grid);
@@ -228,6 +245,18 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 	
 	if(this.fromController != null) {
 	    checkForStop();
+	}
+    }
+    
+    private void sendLastPerception(Entry<String, ObjectOutputStream> output) {
+	try {
+	    ObjectOutputStream os = output.getValue();
+	    os.reset();
+	    os.writeObject(new NothingMoreIncomingPerception());
+	    os.flush();
+	}
+	catch(IOException e) {
+	    throw new VacuumWorldRuntimeException(e);
 	}
     }
 
@@ -386,13 +415,13 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 
     private void sendGenericPerception(Perception perception, String recipientId) {
 	try {
-	    LogUtils.log(this.getClass().getSimpleName() + ": sending perception to " + recipientId + ".");
+	    LogUtils.log(this.getClass().getSimpleName() + ": sending " + perception.getClass().getSimpleName() + " to " + recipientId + ".");
 	    
 	    this.output.get(recipientId).reset();
 	    this.output.get(recipientId).writeObject(perception);
 	    this.output.get(recipientId).flush();
 	    
-	    LogUtils.log(this.getClass().getSimpleName() + ": sent perception to " + recipientId + ".");
+	    LogUtils.log(this.getClass().getSimpleName() + ": sent " + perception.getClass().getSimpleName() + " to " + recipientId + ".");
 		
 	}
 	catch (IOException e) {

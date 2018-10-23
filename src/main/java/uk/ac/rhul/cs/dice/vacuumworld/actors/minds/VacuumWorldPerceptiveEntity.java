@@ -1,5 +1,6 @@
 package uk.ac.rhul.cs.dice.vacuumworld.actors.minds;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -12,6 +13,7 @@ import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldLocationAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldCoordinates;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldEnvironment;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldPerception;
+import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldSpeechPerception;
 
 public interface VacuumWorldPerceptiveEntity {
 
@@ -29,6 +31,24 @@ public interface VacuumWorldPerceptiveEntity {
      */
     public abstract VacuumWorldPerception getPerception();
 
+    /**
+     * 
+     * Returns whether new messages are available (i.e., whether at least an actor sent a message to this actor during last cycle).
+     * 
+     * @return whether or not new messages are available.
+     * 
+     */
+    public abstract boolean hasNewMessages();
+    
+    /**
+     * 
+     * Returns a (possibly empty) {@link List} of {@link VacuumWorldSpeechPerception} messages sent by other actors to this actor during last cycle.
+     * 
+     * @return a (possibly empty) {@link List} of {@link VacuumWorldSpeechPerception} messages.
+     * 
+     */
+    public abstract List<VacuumWorldSpeechPerception> getMessages();
+    
     /**
      * 
      * Returns the body ID of self.

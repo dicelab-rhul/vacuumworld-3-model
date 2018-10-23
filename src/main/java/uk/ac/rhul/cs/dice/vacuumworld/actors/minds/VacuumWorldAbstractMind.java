@@ -37,6 +37,12 @@ public abstract class VacuumWorldAbstractMind extends AbstractAgentMind implemen
 	return this.lastCyclePerceptions.isEmpty() ? null : this.lastCyclePerceptions.get(0);
     }
 
+    @Override
+    public boolean hasNewMessages() {
+        return !this.lastCycleReceivedMessages.isEmpty();
+    }
+    
+    @Override
     public List<VacuumWorldSpeechPerception> getMessages() {
 	return this.lastCycleReceivedMessages;
     }

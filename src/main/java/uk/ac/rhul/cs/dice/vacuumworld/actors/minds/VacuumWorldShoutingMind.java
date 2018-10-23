@@ -5,7 +5,6 @@ import org.cloudstrife9999.logutilities.LogUtils;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldBroadcastingAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.messages.VacuumWorldMessage;
-import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldSpeechPerception;
 
 public class VacuumWorldShoutingMind extends VacuumWorldAbstractMind {
     private static final long serialVersionUID = 572122589076420561L;
@@ -20,8 +19,10 @@ public class VacuumWorldShoutingMind extends VacuumWorldAbstractMind {
     @Override
     public void revise() {
 	this.cycle++;
-	LogUtils.log(getBodyId() + ": cycle " + this.cycle + ". Received these:");
-	getMessages().forEach(this::printMessageDetails);
+	StringBuilder builder = new StringBuilder(getBodyId() + ": cycle " + this.cycle + ". Received these:");
+	getMessages().forEach(m -> builder.append("\n  " + m.getMessage().getText()));
+	
+	LogUtils.log(builder.toString());
     }
 
     @Override
@@ -29,9 +30,5 @@ public class VacuumWorldShoutingMind extends VacuumWorldAbstractMind {
 	VacuumWorldMessage message = new VacuumWorldMessage("Hello everyone! I am " + getBodyId() + ". I am sending this on cycle " + this.cycle + ", and you should receive this on cycle " + (this.cycle + 1) + ".");
 	
 	return new VacuumWorldBroadcastingAction(message);
-    }
-    
-    private void printMessageDetails(VacuumWorldSpeechPerception received) {
-	LogUtils.log("  " + received.getMessage().getText());
     }
 }

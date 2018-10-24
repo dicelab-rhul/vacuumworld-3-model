@@ -21,6 +21,7 @@ import uk.ac.rhul.cs.dice.agentcommon.interfaces.Action;
 import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldEvent;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractAction;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
+import uk.ac.rhul.cs.dice.vacuumworld.environment.VWTicketEnum;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldEnvironment;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.NothingMoreIncomingPerception;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.StopPerception;
@@ -91,21 +92,33 @@ public class VacuumWorldUserAgent extends AbstractAgent implements VacuumWorldAc
     private void realRun() {
 	while (!this.stop) {
 	    LogUtils.log(getID() + " is being executed.");
-	    VacuumWorldEnvironment.addTicket(getID());
-
-	    getMind().revise();
-	    VacuumWorldAbstractAction action = (VacuumWorldAbstractAction) getMind().decide();
-	    getMind().execute((Action<?>) action);
-	    setForMind(sendToEnvironment(action));
-	    sendToMind();
 	    
-	    VacuumWorldEnvironment.removeTicket(getID());
+	    VacuumWorldEnvironment.addTicket(VWTicketEnum.REVISING);
+	    getMind().revise();
+	    VacuumWorldEnvironment.removeTicket();
+	    waitForOthers();
+	    
+	    VacuumWorldEnvironment.addTicket(VWTicketEnum.DECIDING);
+	    VacuumWorldAbstractAction action = (VacuumWorldAbstractAction) getMind().decide();
+	    VacuumWorldEnvironment.removeTicket();
+	    waitForOthers();
+	    
+	    VacuumWorldEnvironment.addTicket(VWTicketEnum.EXECUTING);
+	    getMind().execute((Action<?>) action);
+	    VacuumWorldEnvironment.removeTicket();
+	    waitForOthers();
+	    
+	    setForMind(sendToEnvironment(action));
+	    
+	    VacuumWorldEnvironment.addTicket(VWTicketEnum.PERCEIVING);
+	    sendToMind();
+	    VacuumWorldEnvironment.removeTicket();
 	    waitForOthers();
 	}
     }
     
     private void waitForOthers() {
-	while(!VacuumWorldEnvironment.cycleOver()) {
+	while(!VacuumWorldEnvironment.checkpointReached()) {
 	    if(System.currentTimeMillis() % 1000000 == 0) {
 		LogUtils.log("Final Fantasy VII is the best Final Fantasy!!!");
 	    }

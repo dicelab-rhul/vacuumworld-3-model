@@ -5,15 +5,15 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -64,7 +64,7 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
     private int numberOfActors;
     private ObjectInputStream fromController;
     private ObjectOutputStream toController;
-    private static volatile List<String> tickets = new ArrayList<>();
+    private static volatile Queue<VWTicket> tickets = new ConcurrentLinkedQueue<>();
 
     public VacuumWorldEnvironment(Map<VacuumWorldCoordinates, VacuumWorldLocation> grid, boolean stopFlag, String hostname, int port, ObjectOutputStream toController, ObjectInputStream fromController) {
 	this.grid = new ConcurrentHashMap<>(grid);
@@ -75,15 +75,15 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 	setAppearance(new VacuumWorldEnvironmentAppearance(this.grid));
     }
 
-    public static void addTicket(String id) {
-	VacuumWorldEnvironment.tickets.add(id);
+    public static void addTicket(VWTicketEnum status) {
+	VacuumWorldEnvironment.tickets.add(new VWTicket(status));
     }
     
-    public static void removeTicket(String id) {
-	VacuumWorldEnvironment.tickets.remove(id);
+    public static void removeTicket() {
+	VacuumWorldEnvironment.tickets.poll();
     }
     
-    public static boolean cycleOver() {
+    public static boolean checkpointReached() {
 	return VacuumWorldEnvironment.tickets.isEmpty();
     }
     

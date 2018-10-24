@@ -226,8 +226,8 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 
     public void listenAndExecute() {
 	waitForInitialization();
-	this.input.entrySet().parallelStream().forEach(this::listenForActorAndExecute);
-	this.output.entrySet().parallelStream().forEach(this::sendLastPerception);
+	this.input.entrySet().forEach(i -> new Thread(new ListenForActorTask(i)).start());
+	this.output.entrySet().forEach(this::sendLastPerception);
 
 	LogUtils.log(this.getClass().getSimpleName() + ": printing current configuration...");
 	VacuumWorldPrinter.dumpModelFromLocations(this.grid);
@@ -301,7 +301,7 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 	}
     }
 
-    private void listenForActorAndExecute(Entry<String, ObjectInputStream> input) {
+    public void listenForActorAndExecute(Entry<String, ObjectInputStream> input) {
 	try {
 	    ObjectInputStream is = input.getValue();
 	    LogUtils.log(this.getClass().getSimpleName() + ": waiting for action from " + input.getKey() + "...");
@@ -520,5 +520,18 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
     @Override
     public <T> void sendData(ContentType contentType, byte[] content, Collection<T> recipientsIds) {
 	//useless
+    }
+    
+    private class ListenForActorTask implements Runnable {
+	private Entry<String, ObjectInputStream> actorInterface;
+	
+	public ListenForActorTask(Entry<String, ObjectInputStream> actorInterface) {
+	    this.actorInterface = actorInterface;
+	}
+	
+	@Override
+	public void run() {
+	    listenForActorAndExecute(this.actorInterface);
+	}
     }
 }

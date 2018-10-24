@@ -91,6 +91,7 @@ public class VacuumWorldCleaningAgent extends AbstractAgent implements VacuumWor
 
     private void realRun() {
 	VacuumWorldEnvironment.addTicket(VWTicketEnum.PERCEIVING);
+	LogUtils.log(getID() + " is perceiving for the first time...");
 	getFirstPerception();
 	VacuumWorldEnvironment.removeTicket();
 	waitForOthers();
@@ -99,21 +100,25 @@ public class VacuumWorldCleaningAgent extends AbstractAgent implements VacuumWor
 	    LogUtils.log(getID() + " is being executed.");
 	    
 	    VacuumWorldEnvironment.addTicket(VWTicketEnum.REVISING);
+	    LogUtils.log(getID() + " is revising...");
 	    getMind().revise();
 	    VacuumWorldEnvironment.removeTicket();
 	    waitForOthers();
 	    
 	    VacuumWorldEnvironment.addTicket(VWTicketEnum.DECIDING);
+	    LogUtils.log(getID() + " is deciding...");
 	    VacuumWorldAbstractAction action = (VacuumWorldAbstractAction) getMind().decide();
 	    VacuumWorldEnvironment.removeTicket();
 	    waitForOthers();
 	    
 	    VacuumWorldEnvironment.addTicket(VWTicketEnum.EXECUTING);
+	    LogUtils.log(getID() + " is executing...");
 	    getMind().execute((Action<?>) action);
 	    VacuumWorldEnvironment.removeTicket();
 	    waitForOthers();
 	    
 	    VacuumWorldEnvironment.addTicket(VWTicketEnum.PERCEIVING);
+	    LogUtils.log(getID() + " is waiting for the environment to report back...");
 	    setForMind(sendToEnvironment(action));
 	    sendToMind();
 	    waitForOthers();
@@ -157,6 +162,7 @@ public class VacuumWorldCleaningAgent extends AbstractAgent implements VacuumWor
 
     private Set<Analyzable> sendToEnvironment(VacuumWorldAbstractAction action) {
 	try {
+	    LogUtils.log(getID() + ": sending event with " + action.getClass().getSimpleName() + " to the environment...");
 	    VacuumWorldEvent event = new VacuumWorldEvent(action);
 	    this.output.reset();
 	    this.output.writeObject(event);

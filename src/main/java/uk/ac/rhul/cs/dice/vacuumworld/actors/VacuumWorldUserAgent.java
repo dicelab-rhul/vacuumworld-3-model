@@ -21,15 +21,12 @@ import uk.ac.rhul.cs.dice.agentcommon.interfaces.Action;
 import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldEvent;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractAction;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
-import uk.ac.rhul.cs.dice.vacuumworld.environment.VWTicketEnum;
-import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldEnvironment;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.NothingMoreIncomingPerception;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.StopPerception;
 import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VacuumWorldRuntimeException;
 
 public class VacuumWorldUserAgent extends AbstractAgent implements VacuumWorldActor {
     private static final long serialVersionUID = -2882228263580151389L;
-    private static final String EE = "{8x Counter + Mime} + Ungarmax, and you'll see...";
     private transient Socket socketWithEnvironment;
     private transient ObjectInputStream input;
     private transient ObjectOutputStream output;
@@ -92,72 +89,18 @@ public class VacuumWorldUserAgent extends AbstractAgent implements VacuumWorldAc
 
     private void realRun() {
 	while (!this.stop) {
-	    LogUtils.log(getID() + " is being executed.");
-	    waitForEnvironmentCheckpoint();
-	    
-	    VacuumWorldEnvironment.addTicket(VWTicketEnum.REVISING);
 	    LogUtils.log(getID() + " is revising...");
 	    getMind().revise();
-	    VacuumWorldEnvironment.removeReviseTicket();
-	    waitForReviseCheckpoint();
-	    
-	    VacuumWorldEnvironment.addTicket(VWTicketEnum.DECIDING);
+
 	    LogUtils.log(getID() + " is deciding...");
 	    VacuumWorldAbstractAction action = (VacuumWorldAbstractAction) getMind().decide();
-	    VacuumWorldEnvironment.removeDecideTicket();
-	    waitForDecideCheckpoint();
 	    
-	    VacuumWorldEnvironment.addTicket(VWTicketEnum.EXECUTING);
 	    LogUtils.log(getID() + " is executing...");
 	    getMind().execute((Action<?>) action);
-	    VacuumWorldEnvironment.removeExecuteTicket();
-	    waitForExecuteCheckpoint();
 	    
-	    VacuumWorldEnvironment.addTicket(VWTicketEnum.PERCEIVING);
 	    LogUtils.log(getID() + " is waiting for the environment to report back...");
 	    setForMind(sendToEnvironment(action));
 	    sendToMind();
-	    waitForPerceiveCheckpoint();
-	}
-    }
-
-    private void waitForEnvironmentCheckpoint() {
-	while(!VacuumWorldEnvironment.isEnvDone()) {
-	    if(System.currentTimeMillis() % 1000000 == 0) {
-		LogUtils.log(VacuumWorldUserAgent.EE);
-	    }
-	}
-    }
-
-    private void waitForExecuteCheckpoint() {
-	while(!VacuumWorldEnvironment.everyoneExecuted()) {
-	    if(System.currentTimeMillis() % 1000000 == 0) {
-		LogUtils.log(VacuumWorldUserAgent.EE);
-	    }
-	}
-    }
-
-    private void waitForDecideCheckpoint() {
-	while(!VacuumWorldEnvironment.everyoneDecided()) {
-	    if(System.currentTimeMillis() % 1000000 == 0) {
-		LogUtils.log(VacuumWorldUserAgent.EE);
-	    }
-	}
-    }
-
-    private void waitForReviseCheckpoint() {
-	while(!VacuumWorldEnvironment.everyoneRevised()) {
-	    if(System.currentTimeMillis() % 1000000 == 0) {
-		LogUtils.log(VacuumWorldUserAgent.EE);
-	    }
-	}
-    }
-
-    private void waitForPerceiveCheckpoint() {
-	while(!VacuumWorldEnvironment.everyonePerceived()) {
-	    if(System.currentTimeMillis() % 1000000 == 0) {
-		LogUtils.log(VacuumWorldUserAgent.EE);
-	    }
 	}
     }
 
@@ -221,8 +164,6 @@ public class VacuumWorldUserAgent extends AbstractAgent implements VacuumWorldAc
 
 	    perceptions.add(candidate);
 	} while (!(candidate instanceof NothingMoreIncomingPerception));
-
-	VacuumWorldEnvironment.removePerceiveTicket();
 	
 	return perceptions;
     }

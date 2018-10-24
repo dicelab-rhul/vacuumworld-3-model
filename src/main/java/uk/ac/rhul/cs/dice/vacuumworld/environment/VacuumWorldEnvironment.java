@@ -10,10 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
-import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -65,11 +63,6 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
     private ObjectInputStream fromController;
     private ObjectOutputStream toController;
     private Map<String, Result> cycleResults;
-    private static volatile Queue<VWTicket> perceiveTickets = new ConcurrentLinkedQueue<>();
-    private static volatile Queue<VWTicket> reviseTickets = new ConcurrentLinkedQueue<>();
-    private static volatile Queue<VWTicket> decideTickets = new ConcurrentLinkedQueue<>();
-    private static volatile Queue<VWTicket> executeTickets = new ConcurrentLinkedQueue<>();
-    private static volatile Queue<VWTicket> environmentTickets = new ConcurrentLinkedQueue<>();
 
     public VacuumWorldEnvironment(Map<VacuumWorldCoordinates, VacuumWorldLocation> grid, boolean stopFlag, String hostname, int port, ObjectOutputStream toController, ObjectInputStream fromController) {
 	this.grid = new ConcurrentHashMap<>(grid);
@@ -79,68 +72,6 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 
 	initCommon(stopFlag, hostname, port);
 	setAppearance(new VacuumWorldEnvironmentAppearance(this.grid));
-    }
-
-    public static void addTicket(VWTicketEnum status) {
-	switch(status) {
-	case PERCEIVING:
-	    VacuumWorldEnvironment.perceiveTickets.add(new VWTicket(status));
-	    break;
-	case REVISING:
-	    VacuumWorldEnvironment.reviseTickets.add(new VWTicket(status));
-	    break;
-	case DECIDING:
-	    VacuumWorldEnvironment.decideTickets.add(new VWTicket(status));
-	    break;
-	case EXECUTING:
-	    VacuumWorldEnvironment.executeTickets.add(new VWTicket(status));
-	    break;
-	case ENV:
-	    VacuumWorldEnvironment.environmentTickets.add(new VWTicket(status));
-	    break;
-	default:
-	    throw new IllegalArgumentException();
-	}
-    }
-    
-    public static void removePerceiveTicket() {
-	VacuumWorldEnvironment.perceiveTickets.poll();
-    }
-    
-    public static void removeReviseTicket() {
-	VacuumWorldEnvironment.reviseTickets.poll();
-    }
-    
-    public static void removeDecideTicket() {
-	VacuumWorldEnvironment.decideTickets.poll();
-    }
-    
-    public static void removeExecuteTicket() {
-	VacuumWorldEnvironment.executeTickets.poll();
-    }
-    
-    public static void removeEnvTicket() {
-	VacuumWorldEnvironment.environmentTickets.poll();
-    }
-    
-    public static boolean everyonePerceived() {
-	return VacuumWorldEnvironment.perceiveTickets.isEmpty();
-    }
-    
-    public static boolean everyoneRevised() {
-	return VacuumWorldEnvironment.reviseTickets.isEmpty();
-    }
-    
-    public static boolean everyoneDecided() {
-	return VacuumWorldEnvironment.decideTickets.isEmpty();
-    }
-    
-    public static boolean everyoneExecuted() {
-	return VacuumWorldEnvironment.executeTickets.isEmpty();
-    }
-    
-    public static boolean isEnvDone() {
-	return VacuumWorldEnvironment.environmentTickets.isEmpty();
     }
     
     public void setNumberOfExpectedActors(int numberOfActors) {
@@ -588,32 +519,4 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
     public <T> void sendData(ContentType contentType, byte[] content, Collection<T> recipientsIds) {
 	//useless
     }
-    
-    /*
-    private class ListenForActorTask implements Runnable {
-	private Entry<String, ObjectInputStream> actorInterface;
-	
-	public ListenForActorTask(Entry<String, ObjectInputStream> actorInterface) {
-	    this.actorInterface = actorInterface;
-	}
-	
-	@Override
-	public void run() {
-	    listenForActorAndExecute(this.actorInterface);
-	}
-    }
-    
-    private class PushActorTask implements Runnable {
-	private Entry<String, ObjectOutputStream> actorInterface;
-	
-	public PushActorTask(Entry<String, ObjectOutputStream> actorInterface) {
-	    this.actorInterface = actorInterface;
-	}
-	
-	@Override
-	public void run() {
-	    sendLastPerception(actorInterface);
-	}
-    }
-    */
 }

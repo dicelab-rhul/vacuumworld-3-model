@@ -27,7 +27,6 @@ import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VacuumWorldRuntimeException;
 
 public class VacuumWorldCleaningAgent extends AbstractAgent implements VacuumWorldActor {
     private static final long serialVersionUID = -7231158706838196637L;
-    //private static final String EE = "Final Fantasy VII is the best Final Fantasy!!!";
     private transient Socket socketWithEnvironment;
     private transient ObjectInputStream input;
     private transient ObjectOutputStream output;
@@ -93,8 +92,6 @@ public class VacuumWorldCleaningAgent extends AbstractAgent implements VacuumWor
 	getFirstPerception();
 	
 	while (!this.stop) {
-	    LogUtils.log(getID() + " is being executed.");
-
 	    LogUtils.log(getID() + " is revising...");
 	    getMind().revise();
 

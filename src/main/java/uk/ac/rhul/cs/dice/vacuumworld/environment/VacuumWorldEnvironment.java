@@ -226,8 +226,8 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 
     public void listenAndExecute() {
 	waitForInitialization();
-	this.input.entrySet().forEach(this::listenForActorAndExecute);
-	this.output.entrySet().forEach(this::sendLastPerception);
+	this.input.entrySet().parallelStream().forEach(this::listenForActorAndExecute);
+	this.output.entrySet().parallelStream().forEach(this::sendLastPerception);
 
 	LogUtils.log(this.getClass().getSimpleName() + ": printing current configuration...");
 	VacuumWorldPrinter.dumpModelFromLocations(this.grid);

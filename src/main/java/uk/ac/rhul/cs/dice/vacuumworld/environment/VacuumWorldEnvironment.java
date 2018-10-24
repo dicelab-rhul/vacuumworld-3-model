@@ -376,6 +376,7 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 	    provideFeedback(result, getActorFromId(action.getActorID()));
 	}
 	catch (ClassNotFoundException | IOException e) {
+	    LogUtils.log(e);
 	    throw new VacuumWorldRuntimeException(e);
 	}
     }

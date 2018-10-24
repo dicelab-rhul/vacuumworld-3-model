@@ -64,7 +64,11 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
     private int numberOfActors;
     private ObjectInputStream fromController;
     private ObjectOutputStream toController;
-    private static volatile Queue<VWTicket> tickets = new ConcurrentLinkedQueue<>();
+    private static volatile Queue<VWTicket> perceiveTickets = new ConcurrentLinkedQueue<>();
+    private static volatile Queue<VWTicket> reviseTickets = new ConcurrentLinkedQueue<>();
+    private static volatile Queue<VWTicket> decideTickets = new ConcurrentLinkedQueue<>();
+    private static volatile Queue<VWTicket> executeTickets = new ConcurrentLinkedQueue<>();
+    private static volatile Queue<VWTicket> environmentTickets = new ConcurrentLinkedQueue<>();
 
     public VacuumWorldEnvironment(Map<VacuumWorldCoordinates, VacuumWorldLocation> grid, boolean stopFlag, String hostname, int port, ObjectOutputStream toController, ObjectInputStream fromController) {
 	this.grid = new ConcurrentHashMap<>(grid);
@@ -76,15 +80,65 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
     }
 
     public static void addTicket(VWTicketEnum status) {
-	VacuumWorldEnvironment.tickets.add(new VWTicket(status));
+	switch(status) {
+	case PERCEIVING:
+	    VacuumWorldEnvironment.perceiveTickets.add(new VWTicket(status));
+	    break;
+	case REVISING:
+	    VacuumWorldEnvironment.reviseTickets.add(new VWTicket(status));
+	    break;
+	case DECIDING:
+	    VacuumWorldEnvironment.decideTickets.add(new VWTicket(status));
+	    break;
+	case EXECUTING:
+	    VacuumWorldEnvironment.executeTickets.add(new VWTicket(status));
+	    break;
+	case ENV:
+	    VacuumWorldEnvironment.environmentTickets.add(new VWTicket(status));
+	    break;
+	default:
+	    throw new IllegalArgumentException();
+	}
     }
     
-    public static void removeTicket() {
-	VacuumWorldEnvironment.tickets.poll();
+    public static void removePerceiveTicket() {
+	VacuumWorldEnvironment.perceiveTickets.poll();
     }
     
-    public static boolean checkpointReached() {
-	return VacuumWorldEnvironment.tickets.isEmpty();
+    public static void removeReviseTicket() {
+	VacuumWorldEnvironment.reviseTickets.poll();
+    }
+    
+    public static void removeDecideTicket() {
+	VacuumWorldEnvironment.decideTickets.poll();
+    }
+    
+    public static void removeExecuteTicket() {
+	VacuumWorldEnvironment.executeTickets.poll();
+    }
+    
+    public static void removeEnvTicket() {
+	VacuumWorldEnvironment.environmentTickets.poll();
+    }
+    
+    public static boolean everyonePerceived() {
+	return VacuumWorldEnvironment.perceiveTickets.isEmpty();
+    }
+    
+    public static boolean everyoneRevised() {
+	return VacuumWorldEnvironment.reviseTickets.isEmpty();
+    }
+    
+    public static boolean everyoneDecided() {
+	return VacuumWorldEnvironment.decideTickets.isEmpty();
+    }
+    
+    public static boolean everyoneExecuted() {
+	return VacuumWorldEnvironment.executeTickets.isEmpty();
+    }
+    
+    public static boolean isEnvDone() {
+	return VacuumWorldEnvironment.environmentTickets.isEmpty();
     }
     
     public void setNumberOfExpectedActors(int numberOfActors) {
@@ -229,6 +283,8 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 	this.input.entrySet().forEach(i -> new Thread(new ListenForActorTask(i)).start());
 	this.output.entrySet().forEach(o -> new Thread(new PushActorTask(o)).start());
 	
+	VacuumWorldEnvironment.addTicket(VWTicketEnum.ENV);
+	
 	informController();
 	LogUtils.log(this.getClass().getSimpleName() + ": end of the cycle.\n\n--------------------\n");
 	
@@ -236,6 +292,8 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 	VacuumWorldPrinter.dumpModelFromLocations(this.grid);
 	
 	LogUtils.log(this.getClass().getSimpleName() + ": start of the cycle.\n");
+	
+	VacuumWorldEnvironment.removeEnvTicket();
 
 	long timestamp = System.nanoTime();
 

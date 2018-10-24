@@ -6,7 +6,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import uk.ac.rhul.cs.dice.agentcontainers.enums.Orientation;
-import uk.ac.rhul.cs.dice.agentcontainers.interfaces.Coordinates;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldDirtAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldLocationAppearance;
@@ -549,7 +548,7 @@ public interface VacuumWorldPerceptiveEntity {
      *                       of an agent (or user)
      * @return the coordinates
      */
-    public default Coordinates getCoordinatesOf(VacuumWorldActorAppearance appearance) {
+    public default VacuumWorldCoordinates getCoordinatesOf(VacuumWorldActorAppearance appearance) {
 	return getPerception().getAppearance().getLocationFromActiveBodyId(appearance.getId()).getCoordinates();
     }
 
@@ -558,7 +557,7 @@ public interface VacuumWorldPerceptiveEntity {
      * 
      * @return the current coordinates of this agent
      */
-    public default Coordinates getCoordinates() {
+    public default VacuumWorldCoordinates getCoordinates() {
 	return getPerception().getAppearance().getLocationFromActiveBodyId(this.getBodyId()).getCoordinates();
     }
 
@@ -567,7 +566,7 @@ public interface VacuumWorldPerceptiveEntity {
      * 
      * @return the current coordinates immediately left of this agent
      */
-    public default Coordinates getCoordinatesLeft() {
+    public default VacuumWorldCoordinates getCoordinatesLeft() {
 	return getCoordinates().getLeftCoordinates(getPerception().getAppearance().getActorAppearance(this.getBodyId()).getOrientation());
     }
 
@@ -576,7 +575,7 @@ public interface VacuumWorldPerceptiveEntity {
      * 
      * @return the current coordinates immediately right of this agent
      */
-    public default Coordinates getCoordinatesRight() {
+    public default VacuumWorldCoordinates getCoordinatesRight() {
 	return getCoordinates().getRightCoordinates(getPerception().getAppearance().getActorAppearance(this.getBodyId()).getOrientation());
     }
 
@@ -585,7 +584,7 @@ public interface VacuumWorldPerceptiveEntity {
      * 
      * @return the current coordinates immediately forward of this agent
      */
-    public default Coordinates getCoordinatesForward() {
+    public default VacuumWorldCoordinates getCoordinatesForward() {
 	return getCoordinates().getForwardCoordinates(getPerception().getAppearance().getActorAppearance(this.getBodyId()).getOrientation());
     }
 
@@ -594,7 +593,7 @@ public interface VacuumWorldPerceptiveEntity {
      * 
      * @return the current coordinates forward left of this agent
      */
-    public default Coordinates getCoordinatesForwardLeft() {
+    public default VacuumWorldCoordinates getCoordinatesForwardLeft() {
 	return getCoordinates().getForwardLeftCoordinates(
 		getPerception().getAppearance().getActorAppearance(this.getBodyId()).getOrientation());
     }
@@ -604,7 +603,7 @@ public interface VacuumWorldPerceptiveEntity {
      * 
      * @return the current coordinates forward right of this agent
      */
-    public default Coordinates getCoordinatesForwardRight() {
+    public default VacuumWorldCoordinates getCoordinatesForwardRight() {
 	return getCoordinates().getForwardRightCoordinates(getPerception().getAppearance().getActorAppearance(this.getBodyId()).getOrientation());
     }
 

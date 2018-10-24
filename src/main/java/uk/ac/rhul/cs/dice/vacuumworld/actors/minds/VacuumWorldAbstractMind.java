@@ -17,6 +17,7 @@ import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldMoveAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldIdleAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldTurnLeftAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldTurnRightAction;
+import uk.ac.rhul.cs.dice.vacuumworld.perception.NothingMoreIncomingPerception;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldPerception;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldSpeechPerception;
 
@@ -72,7 +73,7 @@ public abstract class VacuumWorldAbstractMind extends AbstractAgentMind implemen
 	else if (VacuumWorldSpeechPerception.class.isAssignableFrom(a.getClass())) {
 	    this.lastCycleReceivedMessages.add((VacuumWorldSpeechPerception) a);
 	}
-	else {
+	else if (!NothingMoreIncomingPerception.class.isAssignableFrom(a.getClass())) {
 	    getDefaultLastReceivedPerceptions().add(a);
 	}
     }

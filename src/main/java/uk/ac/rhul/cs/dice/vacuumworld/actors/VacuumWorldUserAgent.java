@@ -108,11 +108,9 @@ public class VacuumWorldUserAgent extends AbstractAgent implements VacuumWorldAc
 	    VacuumWorldEnvironment.removeTicket();
 	    waitForOthers();
 	    
-	    setForMind(sendToEnvironment(action));
-	    
 	    VacuumWorldEnvironment.addTicket(VWTicketEnum.PERCEIVING);
+	    setForMind(sendToEnvironment(action));
 	    sendToMind();
-	    VacuumWorldEnvironment.removeTicket();
 	    waitForOthers();
 	}
     }
@@ -186,6 +184,8 @@ public class VacuumWorldUserAgent extends AbstractAgent implements VacuumWorldAc
 	    perceptions.add(candidate);
 	} while (!(candidate instanceof NothingMoreIncomingPerception));
 
+	VacuumWorldEnvironment.removeTicket();
+	
 	return perceptions;
     }
 

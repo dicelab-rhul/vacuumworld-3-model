@@ -113,11 +113,9 @@ public class VacuumWorldCleaningAgent extends AbstractAgent implements VacuumWor
 	    VacuumWorldEnvironment.removeTicket();
 	    waitForOthers();
 	    
-	    setForMind(sendToEnvironment(action));
-	    
 	    VacuumWorldEnvironment.addTicket(VWTicketEnum.PERCEIVING);
+	    setForMind(sendToEnvironment(action));
 	    sendToMind();
-	    VacuumWorldEnvironment.removeTicket();
 	    waitForOthers();
 	}
     }
@@ -205,6 +203,8 @@ public class VacuumWorldCleaningAgent extends AbstractAgent implements VacuumWor
 
 	} while (!(candidate instanceof NothingMoreIncomingPerception));
 
+	VacuumWorldEnvironment.removeTicket();
+	
 	return perceptions;
     }
 

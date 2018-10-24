@@ -64,6 +64,7 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
     private int numberOfActors;
     private ObjectInputStream fromController;
     private ObjectOutputStream toController;
+    private Map<String, Result> cycleResults;
     private static volatile Queue<VWTicket> perceiveTickets = new ConcurrentLinkedQueue<>();
     private static volatile Queue<VWTicket> reviseTickets = new ConcurrentLinkedQueue<>();
     private static volatile Queue<VWTicket> decideTickets = new ConcurrentLinkedQueue<>();
@@ -74,6 +75,7 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 	this.grid = new ConcurrentHashMap<>(grid);
 	this.toController = toController;
 	this.fromController = fromController;
+	this.cycleResults = new HashMap<>();
 
 	initCommon(stopFlag, hostname, port);
 	setAppearance(new VacuumWorldEnvironmentAppearance(this.grid));
@@ -280,10 +282,8 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 
     public void listenAndExecute() {
 	waitForInitialization();
-	this.input.entrySet().forEach(i -> new Thread(new ListenForActorTask(i)).start());
-	this.output.entrySet().forEach(o -> new Thread(new PushActorTask(o)).start());
-	
-	VacuumWorldEnvironment.addTicket(VWTicketEnum.ENV);
+	this.input.entrySet().forEach(this::listenForActorAndExecute);
+	this.output.entrySet().forEach(this::sendPerceptions);
 	
 	informController();
 	LogUtils.log(this.getClass().getSimpleName() + ": end of the cycle.\n\n--------------------\n");
@@ -293,7 +293,7 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 	
 	LogUtils.log(this.getClass().getSimpleName() + ": start of the cycle.\n");
 	
-	VacuumWorldEnvironment.removeEnvTicket();
+	this.output.entrySet().forEach(this::sendLastPerception);
 
 	long timestamp = System.nanoTime();
 
@@ -306,6 +306,11 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 	if(this.fromController != null) {
 	    checkForStop();
 	}
+    }
+    
+    private void sendPerceptions(Entry<String, ObjectOutputStream> output) {
+	Result result = this.cycleResults.remove(output.getKey());
+	provideFeedback(result, getActorFromId(output.getKey()));
     }
     
     private void sendLastPerception(Entry<String, ObjectOutputStream> output) {
@@ -373,7 +378,8 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 	    printActorDetailsBefore(action);
 	    Result result = attemptExecution(action);
 	    printActorDetailsAfter(action);
-	    provideFeedback(result, getActorFromId(action.getActorID()));
+	    
+	    this.cycleResults.put(action.getActorID(), result);
 	}
 	catch (ClassNotFoundException | IOException e) {
 	    LogUtils.log(e);
@@ -583,6 +589,7 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 	//useless
     }
     
+    /*
     private class ListenForActorTask implements Runnable {
 	private Entry<String, ObjectInputStream> actorInterface;
 	
@@ -608,4 +615,5 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 	    sendLastPerception(actorInterface);
 	}
     }
+    */
 }

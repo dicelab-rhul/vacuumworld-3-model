@@ -21,15 +21,13 @@ import uk.ac.rhul.cs.dice.agentcommon.interfaces.Action;
 import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldEvent;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractAction;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
-import uk.ac.rhul.cs.dice.vacuumworld.environment.VWTicketEnum;
-import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldEnvironment;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.NothingMoreIncomingPerception;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.StopPerception;
 import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VacuumWorldRuntimeException;
 
 public class VacuumWorldCleaningAgent extends AbstractAgent implements VacuumWorldActor {
     private static final long serialVersionUID = -7231158706838196637L;
-    private static final String EE = "Final Fantasy VII is the best Final Fantasy!!!";
+    //private static final String EE = "Final Fantasy VII is the best Final Fantasy!!!";
     private transient Socket socketWithEnvironment;
     private transient ObjectInputStream input;
     private transient ObjectOutputStream output;
@@ -91,79 +89,24 @@ public class VacuumWorldCleaningAgent extends AbstractAgent implements VacuumWor
     }
 
     private void realRun() {
-	VacuumWorldEnvironment.addTicket(VWTicketEnum.PERCEIVING);
 	LogUtils.log(getID() + " is perceiving for the first time...");
 	getFirstPerception();
-	VacuumWorldEnvironment.removePerceiveTicket();
-	waitForPerceiveCheckpoint();
 	
 	while (!this.stop) {
 	    LogUtils.log(getID() + " is being executed.");
-	    waitForEnvironmentCheckpoint();
-	    
-	    VacuumWorldEnvironment.addTicket(VWTicketEnum.REVISING);
+
 	    LogUtils.log(getID() + " is revising...");
 	    getMind().revise();
-	    VacuumWorldEnvironment.removeReviseTicket();
-	    waitForReviseCheckpoint();
-	    
-	    VacuumWorldEnvironment.addTicket(VWTicketEnum.DECIDING);
+
 	    LogUtils.log(getID() + " is deciding...");
 	    VacuumWorldAbstractAction action = (VacuumWorldAbstractAction) getMind().decide();
-	    VacuumWorldEnvironment.removeDecideTicket();
-	    waitForDecideCheckpoint();
 	    
-	    VacuumWorldEnvironment.addTicket(VWTicketEnum.EXECUTING);
 	    LogUtils.log(getID() + " is executing...");
 	    getMind().execute((Action<?>) action);
-	    VacuumWorldEnvironment.removeExecuteTicket();
-	    waitForExecuteCheckpoint();
 	    
-	    VacuumWorldEnvironment.addTicket(VWTicketEnum.PERCEIVING);
 	    LogUtils.log(getID() + " is waiting for the environment to report back...");
 	    setForMind(sendToEnvironment(action));
 	    sendToMind();
-	    waitForPerceiveCheckpoint();
-	}
-    }
-
-    private void waitForEnvironmentCheckpoint() {
-	while(!VacuumWorldEnvironment.isEnvDone()) {
-	    if(System.currentTimeMillis() % 1000000 == 0) {
-		LogUtils.log(VacuumWorldCleaningAgent.EE);
-	    }
-	}
-    }
-
-    private void waitForExecuteCheckpoint() {
-	while(!VacuumWorldEnvironment.everyoneExecuted()) {
-	    if(System.currentTimeMillis() % 1000000 == 0) {
-		LogUtils.log(VacuumWorldCleaningAgent.EE);
-	    }
-	}
-    }
-
-    private void waitForDecideCheckpoint() {
-	while(!VacuumWorldEnvironment.everyoneDecided()) {
-	    if(System.currentTimeMillis() % 1000000 == 0) {
-		LogUtils.log(VacuumWorldCleaningAgent.EE);
-	    }
-	}
-    }
-
-    private void waitForReviseCheckpoint() {
-	while(!VacuumWorldEnvironment.everyoneRevised()) {
-	    if(System.currentTimeMillis() % 1000000 == 0) {
-		LogUtils.log(VacuumWorldCleaningAgent.EE);
-	    }
-	}
-    }
-
-    private void waitForPerceiveCheckpoint() {
-	while(!VacuumWorldEnvironment.everyonePerceived()) {
-	    if(System.currentTimeMillis() % 1000000 == 0) {
-		LogUtils.log(VacuumWorldCleaningAgent.EE);
-	    }
 	}
     }
 
@@ -242,8 +185,6 @@ public class VacuumWorldCleaningAgent extends AbstractAgent implements VacuumWor
 	    perceptions.add(candidate);
 
 	} while (!(candidate instanceof NothingMoreIncomingPerception));
-
-	VacuumWorldEnvironment.removePerceiveTicket();
 	
 	return perceptions;
     }

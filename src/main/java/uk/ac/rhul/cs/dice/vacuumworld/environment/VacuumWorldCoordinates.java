@@ -6,6 +6,7 @@ import uk.ac.rhul.cs.dice.agentcontainers.interfaces.Coordinates;
 
 public class VacuumWorldCoordinates extends AbstractCoordinates {
     private static final long serialVersionUID = 3580947018632549487L;
+    private static final VacuumWorldCoordinates origin = new VacuumWorldCoordinates(0, 0);
 
     public VacuumWorldCoordinates(int x, int y) {
 	super(x, y);
@@ -104,11 +105,44 @@ public class VacuumWorldCoordinates extends AbstractCoordinates {
 	return getX() == x && getY() == y;
     }
     
+    public boolean matchForX(int x) {
+	return match(x, getY());
+    }
+    
+    public boolean matchForX(VacuumWorldCoordinates coordinates) {
+	return matchForX(coordinates.getX());
+    }
+    
+    public boolean matchForY(int y) {
+	return match(getX(), y);
+    }
+    
+    public boolean matchForY(VacuumWorldCoordinates coordinates) {
+	return matchForY(coordinates.getY());
+    }
+    
+    public boolean noMatchForXAndY(VacuumWorldCoordinates coordinates) {
+	return noMatchForXAndY(coordinates.getX(), coordinates.getY());
+    }
+    
+    private boolean noMatchForXAndY(int x, int y) {
+	return x != getX() && y != getY();
+    }
+
+    public boolean onTheMainDiagonal() {
+	return getX() == getY();
+    }
+    
     public static VacuumWorldCoordinates randomCoordinates(Integer maxX, Integer maxY) {
 	return (VacuumWorldCoordinates) AbstractCoordinates.randomCoordinates(maxX, maxY);
     }
     
     public static VacuumWorldCoordinates of(int x, int y) {
-	return new VacuumWorldCoordinates(x, y);
+	if(x == 0 && y == 0) {
+	    return VacuumWorldCoordinates.origin;
+	}
+	else {
+	    return new VacuumWorldCoordinates(x, y);
+	}
     }
 }

@@ -59,4 +59,9 @@ public class VacuumWorldDropDirtAction extends VacuumWorldAbstractPhysicalAction
         
         return false;
     }
+    
+    @Override
+    public String toShortString() {
+        return "D";
+    }
 }

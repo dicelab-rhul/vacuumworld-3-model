@@ -57,4 +57,9 @@ public class VacuumWorldMoveAction extends VacuumWorldAbstractPhysicalAction {
         
         return false;
     }
+    
+    @Override
+    public String toShortString() {
+        return "M";
+    }
 }

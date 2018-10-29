@@ -49,4 +49,6 @@ public abstract class VacuumWorldAbstractAction implements VacuumWorldAbstractAc
     public String toString() {
         return this.getClass().getSimpleName();
     }
+    
+    public abstract String toShortString();
 }

@@ -100,7 +100,15 @@ public class VacuumWorldCoordinates extends AbstractCoordinates {
         return (VacuumWorldCoordinates) super.getWesternCoordinates();
     }
     
+    public boolean match(int x, int y) {
+	return getX() == x && getY() == y;
+    }
+    
     public static VacuumWorldCoordinates randomCoordinates(Integer maxX, Integer maxY) {
 	return (VacuumWorldCoordinates) AbstractCoordinates.randomCoordinates(maxX, maxY);
+    }
+    
+    public static VacuumWorldCoordinates of(int x, int y) {
+	return new VacuumWorldCoordinates(x, y);
     }
 }

@@ -7,6 +7,7 @@ import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldTurnLeftAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldTurnRightAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.enums.VacuumWorldPhysicalActionsEnum;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldCoordinates;
+import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VacuumWorldRuntimeException;
 
 public class GoToPositionGoal implements VacuumWorldSimplePhysicalGoal<PhysicalAction<VacuumWorldPhysicalActionsEnum>> {
     private VacuumWorldCoordinates target;
@@ -18,78 +19,115 @@ public class GoToPositionGoal implements VacuumWorldSimplePhysicalGoal<PhysicalA
     }
 
     public void buildPlan(VacuumWorldCoordinates current, Orientation orientation) {
-	int horizontalDifference = this.target.getHorizontalDifference(current);
-	int verticalDifference = this.target.getVerticalDifference(current);
-	
 	if(!this.target.equals(current)) {
-	    if(horizontalDifference == 0) {
-		buildVerticalMovementPlan(orientation, verticalDifference);
-	    }
-	    else if(verticalDifference == 0) {
-		buildHorizontalMovementPlan(orientation, horizontalDifference);
-	    }
-	    else {
-		buildGenericPlan(orientation, horizontalDifference, verticalDifference);
-	    } 
+	    int hDiff = this.target.getHorizontalDifference(current); // target.x - current.x
+	    int vDiff = this.target.getVerticalDifference(current); // target.y - current.y
+	    
+	    buildPlan(hDiff, vDiff, orientation);
 	}
+    }
+
+    private void buildPlan(int hDiff, int vDiff, Orientation orientation) {
+	if(hDiff == 0) {
+	    turnIfnecessaryAndGoStraight(vDiff, orientation, false); // vertical movement
+	}
+	else if(vDiff == 0) {
+	    turnIfnecessaryAndGoStraight(hDiff, orientation, true); // horizontal movement
+	}
+	else {
+	    buildMixedPlan(hDiff, vDiff, orientation);
+	}
+    }
+
+    private void buildMixedPlan(int hDiff, int vDiff, Orientation orientation) {
+	Orientation referenceHorizontal = getReferenceOrientation(hDiff, true);
+	Orientation referrenceVertical = getReferenceOrientation(vDiff, false);
+	
+	int numberOfTurnLeftIfHorizontalFirst = orientation.getDifferenceIn90DegreesCCWFrom(referenceHorizontal);
+	int numberOfTurnLeftIfVerticalFirst = orientation.getDifferenceIn90DegreesCCWFrom(referrenceVertical);
+	
+	if(Math.abs(numberOfTurnLeftIfHorizontalFirst) < Math.abs(numberOfTurnLeftIfVerticalFirst)) {
+	    horizontallyFirst(hDiff, vDiff, orientation, numberOfTurnLeftIfHorizontalFirst);
+	}
+	else {
+	    verticallyFirst(hDiff, vDiff, orientation, numberOfTurnLeftIfVerticalFirst);
+	}
+    }
+
+    private void verticallyFirst(int hDiff, int vDiff, Orientation orientation, int numberOfTurnLeftIfVerticalFirst) {
+	turnAndGoStraight(vDiff, numberOfTurnLeftIfVerticalFirst);
+	Orientation newOrientation = applyTurns(orientation, numberOfTurnLeftIfVerticalFirst);
+	Orientation reference = getReferenceOrientation(hDiff, true);
+	int numberOfTurnLeft = newOrientation.getDifferenceIn90DegreesCCWFrom(reference);
+	turnAndGoStraight(hDiff, numberOfTurnLeft);
+    }
+
+    private void horizontallyFirst(int hDiff, int vDiff, Orientation orientation, int numberOfTurnLeftIfHorizontalFirst) {
+	turnAndGoStraight(hDiff, numberOfTurnLeftIfHorizontalFirst);
+	Orientation newOrientation = applyTurns(orientation, numberOfTurnLeftIfHorizontalFirst);
+	Orientation reference = getReferenceOrientation(vDiff, false);
+	int numberOfTurnLeft = newOrientation.getDifferenceIn90DegreesCCWFrom(reference);
+	turnAndGoStraight(vDiff, numberOfTurnLeft);
+    }
+
+    private Orientation applyTurns(Orientation orientation, int numberOfTurnLeft) {
+	switch(numberOfTurnLeft) {
+	case -1:
+	    return orientation.getRight();
+	case 2:
+	    return orientation.getOpposite();
+	case 1:
+	    return orientation.getLeft();
+	case 0:
+	    return orientation;
+	default:
+	    throw new VacuumWorldRuntimeException();
+	}
+    }
+
+    private void turnIfnecessaryAndGoStraight(int diff, Orientation orientation, boolean horizontal) {
+	Orientation reference = getReferenceOrientation(diff, horizontal);
+	int numberOfTurnLeft = orientation.getDifferenceIn90DegreesCCWFrom(reference);
+	turnAndGoStraight(diff, numberOfTurnLeft);
+    }
+
+    private Orientation getReferenceOrientation(int diff, boolean horizontal) {
+	if(horizontal && diff > 0) {
+	    return Orientation.EAST;
+	}
+	else if(horizontal && diff < 0) {
+	    return Orientation.WEST;
+	}
+	else if(!horizontal && diff > 0) {
+	    return Orientation.SOUTH;
+	}
+	else {
+	    return Orientation.NORTH;
+	}
+    }
+
+    private void turnAndGoStraight(int diff, int numberOfTurnLeft) {
+	switch(numberOfTurnLeft) {
+	case -1:
+	    this.plan.enqueueAction(new VacuumWorldTurnRightAction());
+	    break;
+	case 2:
+	    this.plan.enqueueAction(new VacuumWorldTurnLeftAction());
+	    //and fall through.
+	case 1:
+	    this.plan.enqueueAction(new VacuumWorldTurnLeftAction());
+	    break;
+	case 0:
+	default:
+	    break;
+	}
+	
+	addMoveActions(Math.abs(diff));
     }
     
-    private void buildVerticalMovementPlan(Orientation orientation, int verticalDifference) {	
-	Orientation o = verticalDifference > 0 ? Orientation.SOUTH : Orientation.NORTH;
-	buildStraightMovement(orientation, o, verticalDifference);
-    }
-
-    private void buildStraightMovement(Orientation orientation, Orientation o, int difference) {
-	int numberOfTurnLeft = orientation.getDifferenceIn90DegreesCCWFrom(o);
-	buildStraightMovement(numberOfTurnLeft, difference);
-    }
-
-    private void buildStraightMovement(int numberOfTurnLeft, int difference) {
-	if(numberOfTurnLeft == -1) {
-	    this.plan.enqueueAction(new VacuumWorldTurnRightAction());
-	}
-	else {
-	    addTurnLeftActions(numberOfTurnLeft);
-	}
-	
-	addMoveActions(difference);
-    }
-
-    private void addMoveActions(int verticalDifference) {
-	for(int i = 0; i < verticalDifference; i++) {
+    private void addMoveActions(int diff) {
+	for(int i = 0; i < diff; i++) {
 	    this.plan.enqueueAction(new VacuumWorldMoveAction());
-	}
-    }
-
-    private void addTurnLeftActions(int numberOfTurnLeft) {
-	for(int i = 0; i < numberOfTurnLeft; i++) {
-	    this.plan.enqueueAction(new VacuumWorldTurnLeftAction());
-	}
-    }
-
-    private void buildHorizontalMovementPlan(Orientation orientation, int horizontalDifference) {
-	Orientation o = horizontalDifference > 0 ? Orientation.EAST : Orientation.WEST;
-	buildStraightMovement(orientation, o, horizontalDifference);
-    }
-
-    private void buildGenericPlan(Orientation orientation, int horizontalDifference, int verticalDifference) {
-	Orientation ho = horizontalDifference > 0 ? Orientation.EAST : Orientation.WEST;
-	int hOffset = orientation.getDifferenceIn90DegreesCCWFrom(ho);
-	
-	Orientation vo = verticalDifference > 0 ? Orientation.SOUTH : Orientation.NORTH;
-	int vOffset = orientation.getDifferenceIn90DegreesCCWFrom(vo);
-	
-	buildGenericPlan(orientation, hOffset, vOffset, horizontalDifference, verticalDifference);
-    }
-
-    private void buildGenericPlan(Orientation orientation, int hOffset, int vOffset, int horizontalDifference, int verticalDifference) {
-	if(Math.abs(hOffset) > Math.abs(vOffset)) {
-	    buildStraightMovement(vOffset, verticalDifference);
-	    buildHorizontalMovementPlan(orientation, horizontalDifference); //I call this because hOffset might have changed
-	}
-	else {
-	    buildStraightMovement(hOffset, horizontalDifference);
-	    buildVerticalMovementPlan(orientation, verticalDifference); //I call this because vOffset might have changed
 	}
     }
 

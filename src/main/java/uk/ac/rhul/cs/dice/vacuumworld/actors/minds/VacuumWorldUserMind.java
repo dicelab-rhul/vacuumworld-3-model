@@ -88,11 +88,13 @@ public class VacuumWorldUserMind extends VacuumWorldAbstractMind implements Vacu
     }
 
     private VacuumWorldAbstractAction decideWithRNG() {
-	switch (getRng().nextInt(3)) {
+	switch (getRng().nextInt(4)) {
 	case 0:
 	case 1:
-	    return resumeBehavior();
 	case 2:
+	case 3:
+	    return resumeBehavior();
+	case 4:
 	    return isDirt() ? resumeBehavior() : new VacuumWorldDropDirtAction(VacuumWorldDirtColor.random());
 	default:
 	    return new VacuumWorldIdleAction();

@@ -144,7 +144,7 @@ public class VacuumWorldComponentsManager {
 	LogUtils.log("Waiting for the initial state...");
 	
 	try {
-	    this.fromController.accept(VacuumWorldMessage.class, VWAbstractMessage.class, VWMessage.class);
+	    this.fromController.accept(VacuumWorldMessage.class, VWAbstractMessage.class, VWMessage.class, VWMessageCodes.class);
 	    VacuumWorldMessage message = (VacuumWorldMessage) this.fromController.readObject();
 	    
 	    return message.getContent();
@@ -193,7 +193,7 @@ public class VacuumWorldComponentsManager {
 
     private void receiveHCM() {
 	try {
-	    this.fromController.accept(VacuumWorldMessage.class, VWAbstractMessage.class, VWMessage.class);
+	    this.fromController.accept(VacuumWorldMessage.class, VWAbstractMessage.class, VWMessage.class, VWMessageCodes.class);
 	    this.latestFromController = (VacuumWorldMessage) this.fromController.readObject();
 	    parseHCM();
 	    sendHMC();
@@ -209,7 +209,7 @@ public class VacuumWorldComponentsManager {
 
     private void receiveHVM() {
 	try {
-	    this.fromController.accept(VacuumWorldMessage.class, VWAbstractMessage.class, VWMessage.class);
+	    this.fromController.accept(VacuumWorldMessage.class, VWAbstractMessage.class, VWMessage.class, VWMessageCodes.class);
 	    this.latestFromController = (VacuumWorldMessage) this.fromController.readObject();
 	    parseHVM();
 	    sendHMV();

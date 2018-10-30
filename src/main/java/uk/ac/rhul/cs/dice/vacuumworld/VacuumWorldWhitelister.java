@@ -148,7 +148,7 @@ public class VacuumWorldWhitelister {
 	is.accept(AbstractCoordinates.class);
 	is.accept(Coordinates.class);
 	is.accept(ImmutableMap.class);
-	is.accept("SerializedForm");
+	is.accept("com.google.common.collect.ImmutableMap$SerializedForm");
 	is.accept(EnvironmentAppearance.class);
 	is.accept(VacuumWorldGridPerceptionInterface.class);
 	is.accept(VacuumWorldLocationAppearance.class);

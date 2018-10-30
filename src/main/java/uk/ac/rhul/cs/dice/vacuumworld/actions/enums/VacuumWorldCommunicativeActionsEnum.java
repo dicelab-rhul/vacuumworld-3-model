@@ -1,19 +1,15 @@
 package uk.ac.rhul.cs.dice.vacuumworld.actions.enums;
 
 public enum VacuumWorldCommunicativeActionsEnum {
-    SPEAK('T'), BROADCAST('B');
+    SPEAK("S"), BROADCAST("B");
     
-    private char code;
+    private String code;
     
-    private VacuumWorldCommunicativeActionsEnum(char code) {
+    private VacuumWorldCommunicativeActionsEnum(String code) {
 	this.code = code;
     }
     
-    public char getCode() {
+    public String getCode() {
 	return this.code;
-    }
-    
-    public VacuumWorldCommunicativeActionsEnum valueOf(char c) {
-	return valueOf(String.valueOf(c));
     }
 }

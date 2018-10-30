@@ -13,16 +13,24 @@ import uk.ac.rhul.cs.dice.vacuumworld.actions.enums.VacuumWorldSensingActionsEnu
 public abstract class VacuumWorldAbstractAction implements VacuumWorldAbstractActionInterface, Serializable {
     private static final long serialVersionUID = -600283328134615689L;
     private String actor;
-    private static BiMap<Enum<?>, Character> codeMapping = initMapping();
+    private String shortStringRepresentation;
+    private static BiMap<Enum<?>, String> codeMapping = initMapping();
     
-    public VacuumWorldAbstractAction() {}
-    
-    public VacuumWorldAbstractAction(String actor) {
-	this.actor = actor;
+    public VacuumWorldAbstractAction() {
+	this("-UNDEFINED-ACTOR-", "-UNDEFINED-");
     }
     
-    private static BiMap<Enum<?>, Character> initMapping() {
-	BiMap<Enum<?>, Character> map = HashBiMap.create();
+    public VacuumWorldAbstractAction(String shortStringRepresentation) {
+	this("-UNDEFINED-", shortStringRepresentation);
+    }
+    
+    public VacuumWorldAbstractAction(String actor, String shortStringRepresentation) {
+	this.actor = actor;
+	this.shortStringRepresentation = shortStringRepresentation;
+    }
+    
+    private static BiMap<Enum<?>, String> initMapping() {
+	BiMap<Enum<?>, String> map = HashBiMap.create();
 	
 	Stream.of(VacuumWorldPhysicalActionsEnum.values()).forEach( v -> map.put(v, v.getCode()));
 	Stream.of(VacuumWorldSensingActionsEnum.values()).forEach( v -> map.put(v, v.getCode()));
@@ -41,8 +49,8 @@ public abstract class VacuumWorldAbstractAction implements VacuumWorldAbstractAc
 	this.actor = actor;
     }
     
-    public static VacuumWorldAbstractAction generate(char c, Object... additional) {
-	return VacuumWorldActionFactory.generate(VacuumWorldAbstractAction.codeMapping.inverse().get(c), additional);
+    public static VacuumWorldAbstractAction generate(String code, Object... additional) {
+	return VacuumWorldActionFactory.generate(VacuumWorldAbstractAction.codeMapping.inverse().get(code), additional);
     }
     
     @Override
@@ -50,5 +58,8 @@ public abstract class VacuumWorldAbstractAction implements VacuumWorldAbstractAc
         return this.getClass().getSimpleName();
     }
     
-    public abstract String toShortString();
+    @Override
+    public String toShortString() {
+	return this.shortStringRepresentation;
+    }
 }

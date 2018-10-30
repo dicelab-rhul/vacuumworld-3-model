@@ -48,9 +48,4 @@ public class VacuumWorldTurnRightAction extends VacuumWorldTurnAction {
         
         return false;
     }
-    
-    @Override
-    public String toShortString() {
-        return "R";
-    }
 }

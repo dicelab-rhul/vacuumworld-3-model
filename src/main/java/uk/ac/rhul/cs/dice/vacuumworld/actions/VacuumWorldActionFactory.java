@@ -45,7 +45,7 @@ public class VacuumWorldActionFactory {
 
     private static VacuumWorldAbstractAction attemptCreationOfUserActions(VacuumWorldPhysicalActionsEnum code) {
 	if(VacuumWorldPhysicalActionsEnum.DROP_DIRT.equals(code)) {
-	    return new VacuumWorldDropDirtAction(null); //i.e., random color.
+	    return new VacuumWorldDropDirtAction(); //i.e., random color.
 	}
 	else {
 	    throw new IllegalArgumentException();
@@ -53,12 +53,10 @@ public class VacuumWorldActionFactory {
     }
 
     private static VacuumWorldAbstractAction generateSensing(VacuumWorldSensingActionsEnum code) {
-	switch(code) {
-	case SENSE:
+	if(VacuumWorldSensingActionsEnum.STAY_IDLE.equals(code)) {
 	    return new VacuumWorldIdleAction();
-	case STAY_IDLE:
-	    throw new UnsupportedOperationException("Not yet implemeted.");
-	default:
+	}
+	else {
 	    throw new IllegalArgumentException();
 	}
     }

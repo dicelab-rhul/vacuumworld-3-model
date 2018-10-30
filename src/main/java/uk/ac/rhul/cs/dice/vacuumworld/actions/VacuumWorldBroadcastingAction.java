@@ -55,9 +55,4 @@ public class VacuumWorldBroadcastingAction extends VacuumWorldSpeakAction {
         
         return false;
     }
-    
-    @Override
-    public String toShortString() {
-        return "B";
-    }
 }

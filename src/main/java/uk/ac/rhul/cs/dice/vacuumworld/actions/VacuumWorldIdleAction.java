@@ -47,9 +47,4 @@ public class VacuumWorldIdleAction extends VacuumWorldAbstractSensingAction {
         
         return false;
     }
-    
-    @Override
-    public String toShortString() {
-        return "I";
-    }
 }

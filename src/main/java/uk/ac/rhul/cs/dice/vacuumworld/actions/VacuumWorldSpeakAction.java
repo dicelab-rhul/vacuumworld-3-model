@@ -62,9 +62,4 @@ public class VacuumWorldSpeakAction extends VacuumWorldAbstractCommunicativeActi
         
         return false;
     }
-    
-    @Override
-    public String toShortString() {
-        return "S";
-    }
 }

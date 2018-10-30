@@ -19,6 +19,10 @@ public class VacuumWorldDropDirtAction extends VacuumWorldAbstractPhysicalAction
 	
 	this.droppedDirtColor = droppedDirtColor == null ? selectRandomDirtColor() : droppedDirtColor;
     }
+    
+    public VacuumWorldDropDirtAction() {
+	this(null);
+    }
 
     private VacuumWorldDirtColor selectRandomDirtColor() {
 	return VacuumWorldDirtColor.random();
@@ -58,10 +62,5 @@ public class VacuumWorldDropDirtAction extends VacuumWorldAbstractPhysicalAction
         }
         
         return false;
-    }
-    
-    @Override
-    public String toShortString() {
-        return "D";
     }
 }

@@ -15,6 +15,8 @@ public abstract class VacuumWorldAbstractSensingAction extends VacuumWorldAbstra
     private VacuumWorldSensingActionsEnum type;
     
     public VacuumWorldAbstractSensingAction(VacuumWorldSensingActionsEnum type) {
+	super(type.getCode());
+	
 	this.type = type;
     }
     

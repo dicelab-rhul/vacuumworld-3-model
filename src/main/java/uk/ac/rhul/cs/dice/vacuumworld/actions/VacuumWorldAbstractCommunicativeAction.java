@@ -21,6 +21,8 @@ public abstract class VacuumWorldAbstractCommunicativeAction extends VacuumWorld
     private Set<String> recipientsIDs;
 
     public VacuumWorldAbstractCommunicativeAction(VacuumWorldCommunicativeActionsEnum type, VacuumWorldMessage message, Set<String> recipientsIDs) {
+	super(type.getCode());
+	
 	this.type = type;
 	this.message = message;
 	this.recipientsIDs = recipientsIDs == null ? new HashSet<>() : recipientsIDs;

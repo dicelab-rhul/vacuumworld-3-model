@@ -15,6 +15,8 @@ public abstract class VacuumWorldAbstractPhysicalAction extends VacuumWorldAbstr
     private VacuumWorldPhysicalActionsEnum type;
 
     public VacuumWorldAbstractPhysicalAction(VacuumWorldPhysicalActionsEnum type) {
+	super(type.getCode());
+	
 	this.type = type;
     }
 

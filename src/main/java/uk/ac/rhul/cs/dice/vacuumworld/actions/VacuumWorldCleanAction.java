@@ -57,9 +57,4 @@ public class VacuumWorldCleanAction extends VacuumWorldAbstractPhysicalAction {
         
         return false;
     }
-    
-    @Override
-    public String toShortString() {
-        return "C";
-    }
 }

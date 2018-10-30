@@ -2,23 +2,45 @@ package uk.ac.rhul.cs.dice.vacuumworld.actions.messages;
 
 public class VacuumWorldMessage implements VacuumWorldMessageInterface {
     private static final long serialVersionUID = -8042200960462345055L;
-    private String text;
+    private StringBuilder builder;
 
     public VacuumWorldMessage() {
-	this.text = "";
+	this("");
     }
 
-    public VacuumWorldMessage(String text) {
-	this.text = text;
+    public VacuumWorldMessage(CharSequence text) {
+	this.builder = new StringBuilder(text);
     }
 
     @Override
     public String getText() {
-	return this.text;
+	return this.builder.toString();
     }
-
+    
+    @Override
+    public void setText(CharSequence text) {
+	this.builder = new StringBuilder(text);
+    }
+    
+    @Override
+    public void appendAsIs(CharSequence toAppend) {
+	this.builder.append(toAppend);
+    }
+    
+    @Override
+    public void appendWithSpaceBefore(CharSequence toAppend) {
+	this.builder.append(' ');
+	this.builder.append(toAppend);
+    }
+    
+    @Override
+    public void appendWithNewLineBefore(CharSequence toAppend) {
+	this.builder.append('\n');
+	this.builder.append(toAppend);
+    }
+    
     @Override
     public String toString() {
-	return "message: " + text;
+	return "Message: " + getText();
     }
 }

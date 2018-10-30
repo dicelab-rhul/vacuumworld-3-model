@@ -43,6 +43,8 @@ import uk.ac.rhul.cs.dice.vacuumworld.environment.physics.VacuumWorldPhysics;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.NothingMoreIncomingPerception;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldPerception;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldSpeechPerception;
+import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VWAbstractMessage;
+import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VWMessage;
 import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VWMessageCodes;
 import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VacuumWorldRuntimeException;
 
@@ -258,7 +260,7 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 
     private void checkForStop() {
 	try {
-	    this.fromController.accept(uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VacuumWorldMessage.class);
+	    this.fromController.accept(uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VacuumWorldMessage.class, VWAbstractMessage.class, VWMessage.class);
 	    uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VacuumWorldMessage message = (uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VacuumWorldMessage) this.fromController.readObject();
 	    
 	    if(VWMessageCodes.QUIT_FROM_VIEW.equals(message.getCode())) {

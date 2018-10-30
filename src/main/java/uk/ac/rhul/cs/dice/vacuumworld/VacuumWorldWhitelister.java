@@ -43,6 +43,8 @@ import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldIdleAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldMoveAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldSpeakAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldTurnAction;
+import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldTurnLeftAction;
+import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldTurnRightAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.enums.TurnDirection;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.enums.VacuumWorldCommunicativeActionsEnum;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.enums.VacuumWorldPhysicalActionsEnum;
@@ -53,6 +55,7 @@ import uk.ac.rhul.cs.dice.vacuumworld.actors.AgentColor;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldActuator;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldSensor;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
+import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldAutonomousActorAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldDirtAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldDirtColor;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldEnvironmentAppearance;
@@ -102,6 +105,8 @@ public class VacuumWorldWhitelister {
 	is.accept(Coordinates.class);
 	is.accept(Integer.class);
 	is.accept(TurnDirection.class);
+	is.accept(VacuumWorldTurnLeftAction.class);
+	is.accept(VacuumWorldTurnRightAction.class);
 	is.accept(Orientation.class);
 	is.accept(VacuumWorldCleanAction.class);
 	is.accept(VacuumWorldDirtColor.class);
@@ -156,5 +161,9 @@ public class VacuumWorldWhitelister {
 	is.accept(Boolean.class);
 	is.accept(VacuumWorldDirtAppearance.class);
 	is.accept(VacuumWorldDirtColor.class);
+	is.accept("[Ljava.lang.Object;");
+	is.accept(Number.class);
+	is.accept(VacuumWorldAutonomousActorAppearance.class);
+	is.accept("com.google.common.collect.ImmutableList$SerializedForm");
     }
 }

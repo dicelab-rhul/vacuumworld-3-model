@@ -1,6 +1,7 @@
-package uk.ac.rhul.cs.dice.vacuumworld.actors.minds;
+package uk.ac.rhul.cs.dice.vacuumworld.actors.minds.coursework.part3;
 
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractAction;
+import uk.ac.rhul.cs.dice.vacuumworld.actors.minds.VacuumWorldAbstractMind;
 
 /*
  * 
@@ -8,11 +9,11 @@ import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractAction;
  * This class is for white agents.
  * 
  */
-public class VacuumWorldWhiteMind extends VacuumWorldAbstractMind {
+public class VacuumWorldWhiteAdvancedMind extends VacuumWorldAbstractMind {
     private static final long serialVersionUID = 2760454725661174370L;
     //Add any class attribute you want/need.
 
-    public VacuumWorldWhiteMind(String bodyId) { //Add any additional parameter you need.
+    public VacuumWorldWhiteAdvancedMind(String bodyId) { //Add any additional parameter you need.
 	super(bodyId);
 	
 	//Edit here if needed.

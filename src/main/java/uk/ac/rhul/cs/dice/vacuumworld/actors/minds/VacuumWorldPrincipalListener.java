@@ -10,6 +10,13 @@ import uk.ac.rhul.cs.dice.agent.abstractimpl.AbstractPrincipalListener;
 import uk.ac.rhul.cs.dice.agent.interfaces.Analyzable;
 import uk.ac.rhul.cs.dice.agentcommon.interfaces.Action;
 
+/**
+ * 
+ * DO NOT USE THIS CLASS IN THE COURSE-WORK!!!
+ * 
+ * @author cloudstrife9999
+ *
+ */
 public class VacuumWorldPrincipalListener extends AbstractPrincipalListener {
     private static final long serialVersionUID = 587747917705356370L;
 

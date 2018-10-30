@@ -15,6 +15,13 @@ import uk.ac.rhul.cs.dice.vacuumworld.actions.advanced.GoToPositionGoal;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldDirtColor;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldCoordinates;
 
+/**
+ * 
+ * DO NOT ASSIGN THIS MIND TO AN AGENT.
+ * 
+ * @author cloudstrife9999
+ *
+ */
 public class VacuumWorldUserMind extends VacuumWorldAbstractMind implements VacuumWorldPerceptiveEntity {
     private static final long serialVersionUID = 2345235975881410062L;
     private boolean verticalPath;

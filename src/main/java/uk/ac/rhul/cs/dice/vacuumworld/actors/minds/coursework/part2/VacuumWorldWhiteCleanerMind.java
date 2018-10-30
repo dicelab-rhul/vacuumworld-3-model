@@ -1,22 +1,24 @@
-package uk.ac.rhul.cs.dice.vacuumworld.actors.minds;
+package uk.ac.rhul.cs.dice.vacuumworld.actors.minds.coursework.part2;
 
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractAction;
+import uk.ac.rhul.cs.dice.vacuumworld.actors.minds.VacuumWorldAbstractMind;
 
 /*
  * 
  * This is for part 2 of the course-work only.
+ * This class is for white agents.
  * 
  */
-public class VacuumWorldCleanerMind extends VacuumWorldAbstractMind {
-    private static final long serialVersionUID = 2175174131294190700L;
+public class VacuumWorldWhiteCleanerMind extends VacuumWorldAbstractMind {
+    private static final long serialVersionUID = 2760454725661174370L;
     //Add any class attribute you want/need.
 
-    public VacuumWorldCleanerMind(String bodyId) { //Add any additional parameter you need.
+    public VacuumWorldWhiteCleanerMind(String bodyId) { //Add any additional parameter you need.
 	super(bodyId);
 	
 	//Edit here if needed.
     }
-
+    
     @Override
     public VacuumWorldAbstractAction decide() {
 	//Edit here.
@@ -24,7 +26,7 @@ public class VacuumWorldCleanerMind extends VacuumWorldAbstractMind {
 	//Change this with the desired behavior. Remember: NEVER return null!
 	return super.decideRandomly();
     }
-    
+
     @Override
     public void revise() {
 	//Edit here.

@@ -1,6 +1,7 @@
-package uk.ac.rhul.cs.dice.vacuumworld.actors.minds;
+package uk.ac.rhul.cs.dice.vacuumworld.actors.minds.coursework.part1;
 
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractAction;
+import uk.ac.rhul.cs.dice.vacuumworld.actors.minds.VacuumWorldAbstractMind;
 
 /*
  * 

@@ -1,18 +1,18 @@
-package uk.ac.rhul.cs.dice.vacuumworld.actors.minds;
+package uk.ac.rhul.cs.dice.vacuumworld.actors.minds.coursework.part2;
 
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractAction;
 
 /*
  * 
- * This is for part 3 of the course-work only.
+ * This is for part 2 of the course-work only.
  * This class is for green agents.
  * 
  */
-public class VacuumWorldGreenMind extends VacuumWorldColoredMind {
+public class VacuumWorldGreenCleanerMind extends VacuumWorldColoredCleanerMind {
     private static final long serialVersionUID = -3848363346194146181L;
     //Add any class attribute you want/need.
 
-    public VacuumWorldGreenMind(String bodyId) { //Add any additional parameter you need.
+    public VacuumWorldGreenCleanerMind(String bodyId) { //Add any additional parameter you need.
 	super(bodyId); //Add any additional parameter you need, if the superclass constructor requires more.
 	
 	//Edit here if needed.

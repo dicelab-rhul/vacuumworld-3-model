@@ -19,8 +19,7 @@ import org.json.JSONObject;
 
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldEnvironment;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.StopPerception;
-import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VWAbstractMessage;
-import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VWMessage;
+import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VWHandshakeWhitelister;
 import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VWMessageCodes;
 import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VacuumWorldMessage;
 
@@ -144,7 +143,7 @@ public class VacuumWorldComponentsManager {
 	LogUtils.log("Waiting for the initial state...");
 	
 	try {
-	    this.fromController.accept(VacuumWorldMessage.class, VWAbstractMessage.class, VWMessage.class, VWMessageCodes.class);
+	    VWHandshakeWhitelister.whitelistHandshakeClasses(this.fromController);
 	    VacuumWorldMessage message = (VacuumWorldMessage) this.fromController.readObject();
 	    
 	    return message.getContent();
@@ -193,7 +192,7 @@ public class VacuumWorldComponentsManager {
 
     private void receiveHCM() {
 	try {
-	    this.fromController.accept(VacuumWorldMessage.class, VWAbstractMessage.class, VWMessage.class, VWMessageCodes.class);
+	    VWHandshakeWhitelister.whitelistHandshakeClasses(this.fromController);
 	    this.latestFromController = (VacuumWorldMessage) this.fromController.readObject();
 	    parseHCM();
 	    sendHMC();
@@ -209,7 +208,7 @@ public class VacuumWorldComponentsManager {
 
     private void receiveHVM() {
 	try {
-	    this.fromController.accept(VacuumWorldMessage.class, VWAbstractMessage.class, VWMessage.class, VWMessageCodes.class);
+	    VWHandshakeWhitelister.whitelistHandshakeClasses(this.fromController);
 	    this.latestFromController = (VacuumWorldMessage) this.fromController.readObject();
 	    parseHVM();
 	    sendHMV();

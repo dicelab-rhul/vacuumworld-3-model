@@ -29,7 +29,7 @@ import uk.ac.rhul.cs.dice.agentcontainers.enums.Orientation;
 import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldEvent;
 import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldPrinter;
 import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldSerializer;
-import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractAction;
+import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldWhitelister;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractActionInterface;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractCommunicativeAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractPhysicalAction;
@@ -44,8 +44,7 @@ import uk.ac.rhul.cs.dice.vacuumworld.environment.physics.VacuumWorldPhysics;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.NothingMoreIncomingPerception;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldPerception;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldSpeechPerception;
-import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VWAbstractMessage;
-import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VWMessage;
+import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VWHandshakeWhitelister;
 import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VWMessageCodes;
 import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VacuumWorldRuntimeException;
 
@@ -261,7 +260,7 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 
     private void checkForStop() {
 	try {
-	    this.fromController.accept(uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VacuumWorldMessage.class, VWAbstractMessage.class, VWMessage.class, VWMessageCodes.class);
+	    VWHandshakeWhitelister.whitelistHandshakeClasses(this.fromController);
 	    uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VacuumWorldMessage message = (uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VacuumWorldMessage) this.fromController.readObject();
 	    
 	    if(VWMessageCodes.QUIT_FROM_VIEW.equals(message.getCode())) {
@@ -306,7 +305,7 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 	    ValidatingObjectInputStream is = input.getValue();
 	    LogUtils.log(this.getClass().getSimpleName() + ": waiting for action from " + input.getKey() + "...");
 	    
-	    is.accept(VacuumWorldEvent.class, VacuumWorldAbstractActionInterface.class, VacuumWorldAbstractAction.class);
+	    VacuumWorldWhitelister.whitelistEventClasses(is);
 	    VacuumWorldEvent event = (VacuumWorldEvent) is.readObject();
 	    LogUtils.log(this.getClass().getSimpleName() + ": got " + event.getAction().getClass().getSimpleName() + " from " + input.getKey() + "...");
 		

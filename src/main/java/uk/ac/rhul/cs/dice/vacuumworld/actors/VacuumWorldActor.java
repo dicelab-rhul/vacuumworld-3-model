@@ -1,9 +1,10 @@
 package uk.ac.rhul.cs.dice.vacuumworld.actors;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+
+import org.apache.commons.io.serialization.ValidatingObjectInputStream;
 
 import com.google.gson.JsonObject;
 
@@ -48,7 +49,7 @@ public interface VacuumWorldActor extends Actor, Avatar {
 	setSocketWithEnvironment(new Socket(hostname, port));
 
 	ObjectOutputStream o = new ObjectOutputStream(getSocketWithEnvironment().getOutputStream());
-	ObjectInputStream i = new ObjectInputStream(getSocketWithEnvironment().getInputStream());
+	ValidatingObjectInputStream i = new ValidatingObjectInputStream(getSocketWithEnvironment().getInputStream());
 	o.writeUTF(getID());
 	o.flush();
 	setOutputChannels(o);

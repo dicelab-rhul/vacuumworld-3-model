@@ -1,10 +1,10 @@
 package uk.ac.rhul.cs.dice.vacuumworld.actors;
 
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.List;
 
+import org.apache.commons.io.serialization.ValidatingObjectInputStream;
 import org.cloudstrife9999.logutilities.LogUtils;
 
 import uk.ac.rhul.cs.dice.agent.abstractimpl.AbstractAvatar;
@@ -66,7 +66,7 @@ public class VacuumWorldAvatar extends AbstractAvatar implements VacuumWorldActo
     }
 
     @Override
-    public ObjectInputStream getInputChannels() {
+    public ValidatingObjectInputStream getInputChannels() {
 	throw new UnsupportedOperationException();
     }
 
@@ -76,7 +76,7 @@ public class VacuumWorldAvatar extends AbstractAvatar implements VacuumWorldActo
     }
 
     @Override
-    public void setInputChannels(ObjectInputStream input) {
+    public void setInputChannels(ValidatingObjectInputStream input) {
 	throw new UnsupportedOperationException();
     }
 

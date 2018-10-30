@@ -2,7 +2,6 @@ package uk.ac.rhul.cs.dice.vacuumworld;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
@@ -14,6 +13,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.io.serialization.ValidatingObjectInputStream;
 import org.cloudstrife9999.logutilities.LogUtils;
 import org.json.JSONObject;
 
@@ -29,7 +29,7 @@ public class VacuumWorldComponentsManager {
     private int controllerPort;
     private String hostname;
     private int port;
-    private ObjectInputStream fromController;
+    private ValidatingObjectInputStream fromController;
     private ObjectOutputStream toController;
     private VacuumWorldMessage latestFromController;
     private ExecutorService executor;
@@ -170,7 +170,7 @@ public class VacuumWorldComponentsManager {
 	    OutputStream out = controllerSocket.getOutputStream();
 	    InputStream in = controllerSocket.getInputStream();
 	    this.toController = new ObjectOutputStream(out);
-	    this.fromController = new ObjectInputStream(in);
+	    this.fromController = new ValidatingObjectInputStream(in);
 	    
 	    doHandshake();
 	}

@@ -1,7 +1,6 @@
 package uk.ac.rhul.cs.dice.vacuumworld.environment;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -15,6 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.commons.io.serialization.ValidatingObjectInputStream;
 import org.cloudstrife9999.logutilities.LogUtils;
 import org.json.JSONObject;
 
@@ -54,17 +54,17 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
     private Map<VacuumWorldCoordinates, VacuumWorldLocation> grid;
     private VacuumWorldPhysics physics;
     private ServerSocket server;
-    private Map<String, ObjectInputStream> input;
+    private Map<String, ValidatingObjectInputStream> input;
     private Map<String, ObjectOutputStream> output;
     private volatile boolean stopFlag;
     private volatile boolean initializationComplete;
     private volatile boolean goodToGo;
     private int numberOfActors;
-    private ObjectInputStream fromController;
+    private ValidatingObjectInputStream fromController;
     private ObjectOutputStream toController;
     private Map<String, Result> cycleResults;
 
-    public VacuumWorldEnvironment(Map<VacuumWorldCoordinates, VacuumWorldLocation> grid, boolean stopFlag, String hostname, int port, ObjectOutputStream toController, ObjectInputStream fromController) {
+    public VacuumWorldEnvironment(Map<VacuumWorldCoordinates, VacuumWorldLocation> grid, boolean stopFlag, String hostname, int port, ObjectOutputStream toController, ValidatingObjectInputStream fromController) {
 	this.grid = new ConcurrentHashMap<>(grid);
 	this.toController = toController;
 	this.fromController = fromController;
@@ -127,7 +127,7 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 	    counter++;
 
 	    ObjectOutputStream o = new ObjectOutputStream(socket.getOutputStream());
-	    ObjectInputStream i = new ObjectInputStream(socket.getInputStream());
+	    ValidatingObjectInputStream i = new ValidatingObjectInputStream(socket.getInputStream());
 	    String recipientId = i.readUTF();
 	    this.input.put(recipientId, i);
 	    this.output.put(recipientId, o);
@@ -182,7 +182,7 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 	provideFeedback(result, actor);
     }
 
-    public void setInputStreams(Map<String, ObjectInputStream> input) {
+    public void setInputStreams(Map<String, ValidatingObjectInputStream> input) {
 	this.input = input;
     }
 
@@ -297,9 +297,9 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 	}
     }
 
-    private void listenForActorAndExecute(Entry<String, ObjectInputStream> input) {
+    private void listenForActorAndExecute(Entry<String, ValidatingObjectInputStream> input) {
 	try {
-	    ObjectInputStream is = input.getValue();
+	    ValidatingObjectInputStream is = input.getValue();
 	    LogUtils.log(this.getClass().getSimpleName() + ": waiting for action from " + input.getKey() + "...");
 		
 	    VacuumWorldEvent event = (VacuumWorldEvent) is.readObject();

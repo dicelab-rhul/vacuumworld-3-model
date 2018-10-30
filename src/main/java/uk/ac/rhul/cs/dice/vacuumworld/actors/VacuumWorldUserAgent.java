@@ -1,7 +1,6 @@
 package uk.ac.rhul.cs.dice.vacuumworld.actors;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Collections;
@@ -9,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.io.serialization.ValidatingObjectInputStream;
 import org.cloudstrife9999.logutilities.LogUtils;
 
 import uk.ac.rhul.cs.dice.agent.abstractimpl.AbstractAgent;
@@ -28,7 +28,7 @@ import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VacuumWorldRuntimeException;
 public class VacuumWorldUserAgent extends AbstractAgent implements VacuumWorldActor {
     private static final long serialVersionUID = -2882228263580151389L;
     private transient Socket socketWithEnvironment;
-    private transient ObjectInputStream input;
+    private transient ValidatingObjectInputStream input;
     private transient ObjectOutputStream output;
     private volatile boolean stop;
     private volatile boolean pause;
@@ -180,7 +180,7 @@ public class VacuumWorldUserAgent extends AbstractAgent implements VacuumWorldAc
     }
 
     @Override
-    public ObjectInputStream getInputChannels() {
+    public ValidatingObjectInputStream getInputChannels() {
 	return this.input;
     }
 
@@ -190,7 +190,7 @@ public class VacuumWorldUserAgent extends AbstractAgent implements VacuumWorldAc
     }
 
     @Override
-    public void setInputChannels(ObjectInputStream input) {
+    public void setInputChannels(ValidatingObjectInputStream input) {
 	this.input = input;
     }
 

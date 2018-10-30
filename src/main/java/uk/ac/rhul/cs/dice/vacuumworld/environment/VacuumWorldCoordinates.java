@@ -1,5 +1,7 @@
 package uk.ac.rhul.cs.dice.vacuumworld.environment;
 
+import java.util.Random;
+
 import uk.ac.rhul.cs.dice.agentcontainers.abstractimpl.AbstractCoordinates;
 import uk.ac.rhul.cs.dice.agentcontainers.enums.Orientation;
 import uk.ac.rhul.cs.dice.agentcontainers.interfaces.Coordinates;
@@ -57,11 +59,6 @@ public class VacuumWorldCoordinates extends AbstractCoordinates {
     }
     
     @Override
-    public VacuumWorldCoordinates getNeighborCoordinates(Orientation orientation) {
-        return new VacuumWorldCoordinates(super.getNeighborCoordinates(orientation));
-    }
-    
-    @Override
     public VacuumWorldCoordinates getNorthEasternCoordinates() {
         return (VacuumWorldCoordinates) super.getNorthEasternCoordinates();
     }
@@ -101,48 +98,44 @@ public class VacuumWorldCoordinates extends AbstractCoordinates {
         return (VacuumWorldCoordinates) super.getWesternCoordinates();
     }
     
-    public boolean match(int x, int y) {
-	return getX() == x && getY() == y;
-    }
-    
-    public boolean matchForX(int x) {
-	return match(x, getY());
-    }
-    
-    public boolean matchForX(VacuumWorldCoordinates coordinates) {
-	return matchForX(coordinates.getX());
-    }
-    
-    public boolean matchForY(int y) {
-	return match(getX(), y);
-    }
-    
-    public boolean matchForY(VacuumWorldCoordinates coordinates) {
-	return matchForY(coordinates.getY());
-    }
-    
-    public boolean noMatchForXAndY(VacuumWorldCoordinates coordinates) {
-	return noMatchForXAndY(coordinates.getX(), coordinates.getY());
-    }
-    
-    private boolean noMatchForXAndY(int x, int y) {
-	return x != getX() && y != getY();
-    }
-
-    public boolean onTheMainDiagonal() {
-	return getX() == getY();
-    }
-    
-    public static VacuumWorldCoordinates randomCoordinates(Integer maxX, Integer maxY) {
-	return (VacuumWorldCoordinates) AbstractCoordinates.randomCoordinates(maxX, maxY);
-    }
-    
     public static VacuumWorldCoordinates of(int x, int y) {
 	if(x == 0 && y == 0) {
 	    return VacuumWorldCoordinates.origin;
 	}
 	else {
 	    return new VacuumWorldCoordinates(x, y);
+	}
+    }
+    
+    /**
+     * 
+     * Returns a pair of random {@link Coordinates}.
+     * 
+     * @param maxX the inclusive upper limit for the X coordinate.
+     * @param maxY the inclusive upper limit for the Y coordinate.
+     * 
+     * @return a pair of random {@link Coordinates}.
+     * 
+     */
+    public static VacuumWorldCoordinates randomCoordinates(Integer maxX, Integer maxY) {
+	Random rng = new Random(System.nanoTime());
+	
+	return new VacuumWorldCoordinates(rng.nextInt(maxX + 1), rng.nextInt(maxY + 1));
+    }
+    
+    @Override
+    public VacuumWorldCoordinates getNeighborCoordinates(Orientation orientation) {
+	switch (orientation) {
+	case NORTH:
+	    return new VacuumWorldCoordinates(getX(), getY() - 1);
+	case SOUTH:
+	    return new VacuumWorldCoordinates(getX(), getY() + 1);
+	case WEST:
+	    return new VacuumWorldCoordinates(getX() - 1, getY());
+	case EAST:
+	    return new VacuumWorldCoordinates(getX() + 1, getY());
+	default:
+	    throw new IllegalArgumentException();
 	}
     }
 }

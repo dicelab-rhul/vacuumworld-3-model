@@ -23,6 +23,8 @@ import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractAction;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.NothingMoreIncomingPerception;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.StopPerception;
+import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldPerception;
+import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldSpeechPerception;
 import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VacuumWorldRuntimeException;
 
 public class VacuumWorldCleaningAgent extends AbstractAgent implements VacuumWorldActor {
@@ -110,6 +112,7 @@ public class VacuumWorldCleaningAgent extends AbstractAgent implements VacuumWor
     private void getFirstPerception() {
 	try {
 	    LogUtils.log(getID() + ": waiting for the initial perception from the VacuumWorldEnvironment...");
+	    this.input.accept(Analyzable.class, Perception.class, VacuumWorldPerception.class, VacuumWorldSpeechPerception.class, StopPerception.class, NothingMoreIncomingPerception.class);
 	    Analyzable firstCyclePerception = (Analyzable) this.input.readObject();
 	    getMind().receiveFirstPerception(firstCyclePerception);
 	    LogUtils.log(getID() + ": successfully received the initial perception from the VacuumWorldEnvironment...");
@@ -173,7 +176,8 @@ public class VacuumWorldCleaningAgent extends AbstractAgent implements VacuumWor
 
 	do {
 	    LogUtils.log(getID() + ": waiting for perception.");
-		
+	    
+	    this.input.accept(Perception.class, VacuumWorldPerception.class, VacuumWorldSpeechPerception.class, StopPerception.class, NothingMoreIncomingPerception.class);
 	    candidate = (Perception) this.input.readObject();
 	    checkStop(candidate);
 	    

@@ -23,6 +23,8 @@ import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractAction;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.NothingMoreIncomingPerception;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.StopPerception;
+import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldPerception;
+import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldSpeechPerception;
 import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VacuumWorldRuntimeException;
 
 public class VacuumWorldUserAgent extends AbstractAgent implements VacuumWorldActor {
@@ -158,6 +160,7 @@ public class VacuumWorldUserAgent extends AbstractAgent implements VacuumWorldAc
 	do {
 	    LogUtils.log(getID() + ": waiting for perception.");
 
+	    this.input.accept(Perception.class, VacuumWorldPerception.class, VacuumWorldSpeechPerception.class, StopPerception.class, NothingMoreIncomingPerception.class);
 	    candidate = (Perception) this.input.readObject();
 	    checkStop(candidate);
 	    LogUtils.log(getID() + ": got perception: " + candidate.getClass().getSimpleName() + ".");

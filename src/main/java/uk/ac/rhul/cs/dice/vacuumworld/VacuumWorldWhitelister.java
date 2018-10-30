@@ -1,10 +1,13 @@
 package uk.ac.rhul.cs.dice.vacuumworld;
 
 import java.io.Serializable;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
 import org.apache.commons.io.serialization.ValidatingObjectInputStream;
+
+import com.google.common.collect.ImmutableMap;
 
 import uk.ac.rhul.cs.dice.agent.abstractimpl.AbstractActuator;
 import uk.ac.rhul.cs.dice.agent.abstractimpl.AbstractSensor;
@@ -27,6 +30,7 @@ import uk.ac.rhul.cs.dice.agentcommon.interfaces.Event;
 import uk.ac.rhul.cs.dice.agentcontainers.abstractimpl.AbstractCoordinates;
 import uk.ac.rhul.cs.dice.agentcontainers.enums.Orientation;
 import uk.ac.rhul.cs.dice.agentcontainers.interfaces.Coordinates;
+import uk.ac.rhul.cs.dice.agentcontainers.interfaces.EnvironmentAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractActionInterface;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractCommunicativeAction;
@@ -49,13 +53,16 @@ import uk.ac.rhul.cs.dice.vacuumworld.actors.AgentColor;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldActuator;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.VacuumWorldSensor;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
+import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldDirtAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldDirtColor;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldEnvironmentAppearance;
+import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldLocationAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldMindAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldPrincipalListenerAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldCoordinates;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.NothingMoreIncomingPerception;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.StopPerception;
+import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldGridPerceptionInterface;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldPerception;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldSpeechPerception;
 
@@ -136,6 +143,17 @@ public class VacuumWorldWhitelister {
 	is.accept(Integer.class);
 	is.accept(VacuumWorldPrincipalListenerAppearance.class);
 	is.accept(VacuumWorldEnvironmentAppearance.class);
-	//TODO
+	is.accept(Map.class);
+	is.accept(VacuumWorldCoordinates.class);
+	is.accept(AbstractCoordinates.class);
+	is.accept(Coordinates.class);
+	is.accept(ImmutableMap.class);
+	is.accept(EnvironmentAppearance.class);
+	is.accept(VacuumWorldGridPerceptionInterface.class);
+	is.accept(VacuumWorldLocationAppearance.class);
+	is.accept(Comparable.class);
+	is.accept(Boolean.class);
+	is.accept(VacuumWorldDirtAppearance.class);
+	is.accept(VacuumWorldDirtColor.class);
     }
 }

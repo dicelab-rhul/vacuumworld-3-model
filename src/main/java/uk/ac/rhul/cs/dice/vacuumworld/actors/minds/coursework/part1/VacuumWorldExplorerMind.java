@@ -6,6 +6,8 @@ import uk.ac.rhul.cs.dice.vacuumworld.actors.minds.VacuumWorldAbstractMind;
 /*
  * 
  * This is for part 1 of the course-work only.
+ * Feel free to change the superclass, if needed.
+ * Do not subclass this class.
  * 
  */
 public class VacuumWorldExplorerMind extends VacuumWorldAbstractMind {

@@ -7,6 +7,7 @@ import uk.ac.rhul.cs.dice.vacuumworld.actors.minds.VacuumWorldAbstractMind;
  * This is for part 3 of the course-work only.
  * This class MUST remain abstract.
  * Think of this class as the common superclass of VacuumWorldGreenAdvancedMind and VacuumWorldOrangeAdvancedMind.
+ * Feel free to change the superclass, if needed.
  * 
  */
 public abstract class VacuumWorldColoredAdvancedMind extends VacuumWorldAbstractMind {

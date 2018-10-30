@@ -6,6 +6,8 @@ import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractAction;
  * 
  * This is for part 2 of the course-work only.
  * This class is for orange agents.
+ * Feel free to change the superclass, if needed.
+ * Do not subclass this class.
  * 
  */
 public class VacuumWorldOrangeCleanerMind extends VacuumWorldColoredCleanerMind {

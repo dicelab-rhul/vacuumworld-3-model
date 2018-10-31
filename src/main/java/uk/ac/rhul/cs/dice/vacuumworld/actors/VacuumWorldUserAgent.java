@@ -21,9 +21,12 @@ import uk.ac.rhul.cs.dice.agentcommon.interfaces.Action;
 import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldEvent;
 import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldWhitelister;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractAction;
+import uk.ac.rhul.cs.dice.vacuumworld.actors.minds.VacuumWorldAbstractMind;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.NothingMoreIncomingPerception;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.StopPerception;
+import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldPerception;
+import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VacuumWorldCheckedException;
 import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VacuumWorldRuntimeException;
 
 public class VacuumWorldUserAgent extends AbstractAgent implements VacuumWorldActor {
@@ -141,14 +144,24 @@ public class VacuumWorldUserAgent extends AbstractAgent implements VacuumWorldAc
 	    return collectPerceptions();
 	}
 	catch (IOException e) {
-	    LogUtils.log(getID() + ": stop.");
+	    manageIOException(e);
 	    LogUtils.fakeLog(e);
-	    this.stop = true;
 
-	    return Collections.emptySet();
+	    VacuumWorldPerception lastCyclePerception = ((VacuumWorldAbstractMind) getMind()).getPerception();
+	    Set<Analyzable> perceptions = new HashSet<>();
+	    perceptions.add(lastCyclePerception);
+	    
+	    return perceptions; 
 	}
 	catch (Exception e) {
 	    throw new VacuumWorldRuntimeException(e);
+	}
+    }
+    
+    private void manageIOException(IOException e) {
+	if(VacuumWorldCheckedException.class.equals(e.getCause().getClass())) {
+	    LogUtils.log(getID() + ": received stop signal from the environment via StopPerception.");
+	    this.stop = true;
 	}
     }
 

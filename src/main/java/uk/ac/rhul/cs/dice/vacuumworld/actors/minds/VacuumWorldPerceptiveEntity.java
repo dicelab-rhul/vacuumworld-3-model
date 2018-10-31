@@ -440,105 +440,105 @@ public interface VacuumWorldPerceptiveEntity {
      * Is the location dirty immediately forward?
      */
     public default boolean isDirtForward() {
-	return getPerception().getAppearance().isThereDirtAhead(this.getBodyId());
+	return !isWallForward() && getPerception().getAppearance().isThereDirtAhead(this.getBodyId());
     }
 
     /**
      * Is the location dirty immediately left?
      */
     public default boolean isDirtLeft() {
-	return getPerception().getAppearance().isThereDirtOnTheLeft(this.getBodyId());
+	return !isWallLeft() && getPerception().getAppearance().isThereDirtOnTheLeft(this.getBodyId());
     }
 
     /**
      * Is the location dirty immediately left?
      */
     public default boolean isDirtRight() {
-	return getPerception().getAppearance().isThereDirtOnTheRight(this.getBodyId());
+	return !isWallRight() && getPerception().getAppearance().isThereDirtOnTheRight(this.getBodyId());
     }
 
     /**
      * Is the location dirty forward left?
      */
     public default boolean isDirtForwardLeft() {
-	return getPerception().getAppearance().isThereDirtOnForwardLeft(this.getBodyId());
+	return !isWallForward() && !isWallLeft() && getPerception().getAppearance().isThereDirtOnForwardLeft(this.getBodyId());
     }
 
     /**
      * Is the location dirty forward right?
      */
     public default boolean isDirtForwardRight() {
-	return getPerception().getAppearance().isThereDirtOnForwardRight(this.getBodyId());
+	return !isWallForward() && !isWallRight() && getPerception().getAppearance().isThereDirtOnForwardRight(this.getBodyId());
     }
 
     /**
      * Is there another agent at this agents immediate forward location?
      */
     public default boolean isAgentForward() {
-	return getPerception().getAppearance().getGrid().get(this.getCoordinatesForward()).isACleaningAgentThere();
+	return !isWallForward() && getPerception().getAppearance().getGrid().get(this.getCoordinatesForward()).isACleaningAgentThere();
     }
 
     /**
      * Is there another agent at this agents immediate left location?
      */
     public default boolean isAgentLeft() {
-	return getPerception().getAppearance().getGrid().get(this.getCoordinatesLeft()).isACleaningAgentThere();
+	return !isWallLeft() && getPerception().getAppearance().getGrid().get(this.getCoordinatesLeft()).isACleaningAgentThere();
     }
 
     /**
      * Is there another agent at this agents immediate right location?
      */
     public default boolean isAgentRight() {
-	return getPerception().getAppearance().getGrid().get(this.getCoordinatesRight()).isACleaningAgentThere();
+	return !isWallRight() && getPerception().getAppearance().getGrid().get(this.getCoordinatesRight()).isACleaningAgentThere();
     }
 
     /**
      * Is there another agent at this agents forward right location?
      */
     public default boolean isAgentForwardRight() {
-	return getPerception().getAppearance().getGrid().get(this.getCoordinatesForwardRight()).isACleaningAgentThere();
+	return !isWallForward() && !isWallRight() && getPerception().getAppearance().getGrid().get(this.getCoordinatesForwardRight()).isACleaningAgentThere();
     }
 
     /**
      * Is there another agent at this agents forward left location?
      */
     public default boolean isAgentForwardLeft() {
-	return getPerception().getAppearance().getGrid().get(this.getCoordinatesForwardLeft()).isACleaningAgentThere();
+	return !isWallForward() && !isWallLeft() && getPerception().getAppearance().getGrid().get(this.getCoordinatesForwardLeft()).isACleaningAgentThere();
     }
 
     /**
      * Is there a user at this agents immediate forward location?
      */
     public default boolean isUserForward() {
-	return getPerception().getAppearance().getGrid().get(this.getCoordinatesForward()).isAUserThere();
+	return !isWallForward() && getPerception().getAppearance().getGrid().get(this.getCoordinatesForward()).isAUserThere();
     }
 
     /**
      * Is there a user at this agents immediate left location?
      */
     public default boolean isUserLeft() {
-	return getPerception().getAppearance().getGrid().get(this.getCoordinatesLeft()).isAUserThere();
+	return !isWallLeft() && getPerception().getAppearance().getGrid().get(this.getCoordinatesLeft()).isAUserThere();
     }
 
     /**
      * Is there a user at this agents immediate right location?
      */
     public default boolean isUserRight() {
-	return getPerception().getAppearance().getGrid().get(this.getCoordinatesRight()).isAUserThere();
+	return !isWallRight() && getPerception().getAppearance().getGrid().get(this.getCoordinatesRight()).isAUserThere();
     }
 
     /**
      * Is there a user at this agents forward right location?
      */
     public default boolean isUserForwardRight() {
-	return getPerception().getAppearance().getGrid().get(this.getCoordinatesForwardRight()).isAUserThere();
+	return !isWallForward() && !isWallRight() && getPerception().getAppearance().getGrid().get(this.getCoordinatesForwardRight()).isAUserThere();
     }
 
     /**
      * Is there a user at this agents forward left location?
      */
     public default boolean isUserForwardLeft() {
-	return getPerception().getAppearance().getGrid().get(this.getCoordinatesForwardLeft()).isAUserThere();
+	return !isWallForward() && !isWallLeft() && getPerception().getAppearance().getGrid().get(this.getCoordinatesForwardLeft()).isAUserThere();
     }
 
     /**

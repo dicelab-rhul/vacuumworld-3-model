@@ -285,7 +285,8 @@ public interface VacuumWorldGridPerceptionInterface {
     
     /**
      * 
-     * Returns whether the {@link Actor} whose ID matches <code>id</code>, has a wall in front of it.
+     * Returns whether the {@link Actor} whose ID matches <code>id</code>, has a wall in front of it.<br /><br />
+     * If the target location is outside of the perception, <code>false</code> is always returned.
      * 
      * @param id the ID of the {@link Actor} of interest.
      * 
@@ -298,7 +299,8 @@ public interface VacuumWorldGridPerceptionInterface {
     
     /**
      * 
-     * Returns whether the {@link Actor} whose ID matches <code>id</code>, has a wall on its immediate left.
+     * Returns whether the {@link Actor} whose ID matches <code>id</code>, has a wall on its immediate left.<br /><br />
+     * If the target location is outside of the perception, <code>false</code> is always returned.
      * 
      * @param id the ID of the {@link Actor} of interest.
      * 
@@ -311,7 +313,8 @@ public interface VacuumWorldGridPerceptionInterface {
     
     /**
      * 
-     * Returns whether the {@link Actor} whose ID matches <code>id</code>, has a wall on its immediate right.
+     * Returns whether the {@link Actor} whose ID matches <code>id</code>, has a wall on its immediate right.<br /><br />
+     * If the target location is outside of the perception, <code>false</code> is always returned.
      * 
      * @param id the ID of the {@link Actor} of interest.
      * 
@@ -324,7 +327,8 @@ public interface VacuumWorldGridPerceptionInterface {
     
     /**
      * 
-     * Returns whether the {@link Actor} whose ID matches <code>id</code>, has a wall on its back.
+     * Returns whether the {@link Actor} whose ID matches <code>id</code>, has a wall on its back.<br /><br />
+     * If the target location is outside of the perception, <code>false</code> is always returned.
      * 
      * @param id the ID of the {@link Actor} of interest.
      * 
@@ -337,7 +341,8 @@ public interface VacuumWorldGridPerceptionInterface {
     
     /**
      * 
-     * Returns whether the {@link Actor} whose ID matches <code>id</code>, can see a wall in front of itself at the straight-end of the {@link VacuumWorldLocation} ahead of its location.
+     * Returns whether the {@link Actor} whose ID matches <code>id</code>, can see a wall in front of itself at the straight-end of the {@link VacuumWorldLocation} ahead of its location.<br /><br />
+     * If the target location is outside of the perception, <code>false</code> is always returned.
      * 
      * @param id the ID of the {@link Actor} of interest.
      * 
@@ -348,7 +353,8 @@ public interface VacuumWorldGridPerceptionInterface {
     
     /**
      * 
-     * Returns whether the {@link Actor} whose ID matches <code>id</code>, can see a wall on its left at the left-end of the {@link VacuumWorldLocation} on the left of its location.
+     * Returns whether the {@link Actor} whose ID matches <code>id</code>, can see a wall on its left at the left-end of the {@link VacuumWorldLocation} on the left of its location.<br /><br />
+     * If the target location is outside of the perception, <code>false</code> is always returned.
      * 
      * @param id the ID of the {@link Actor} of interest.
      * 
@@ -359,7 +365,8 @@ public interface VacuumWorldGridPerceptionInterface {
     
     /**
      * 
-     * Returns whether the {@link Actor} whose ID matches <code>id</code>, can see a wall on its right at the right-end of the {@link VacuumWorldLocation} on the right of its location.
+     * Returns whether the {@link Actor} whose ID matches <code>id</code>, can see a wall on its right at the right-end of the {@link VacuumWorldLocation} on the right of its location.<br /><br />
+     * If the target location is outside of the perception, <code>false</code> is always returned.
      * 
      * @param id the ID of the {@link Actor} of interest.
      * 
@@ -371,7 +378,8 @@ public interface VacuumWorldGridPerceptionInterface {
     /**
      * 
      * Returns the return value of the {@link VacuumWorldLocationAppearance#isEmpty()} method of the {@link VacuumWorldLocationAppearance} of the {@link VacuumWorldLocation} ahead of the location of the {@link Actor} whose ID matches <code>id</code>.
-     * Ahead is considered w.r.t. the {@link Actor}'s {@link Orientation}.
+     * Ahead is considered w.r.t. the {@link Actor}'s {@link Orientation}.<br /><br />
+     * If the target location is outside of the perception, <code>false</code> is always returned.
      * 
      * @param id the ID of the {@link Actor} of interest.
      * 
@@ -383,7 +391,8 @@ public interface VacuumWorldGridPerceptionInterface {
     /**
      * 
      * Returns the return value of the {@link VacuumWorldLocationAppearance#isEmpty()} method of the {@link VacuumWorldLocationAppearance} of the {@link VacuumWorldLocation} on the left of the location of the {@link Actor} whose ID matches <code>id</code>.
-     * Left is considered w.r.t. the {@link Actor}'s {@link Orientation}.
+     * Left is considered w.r.t. the {@link Actor}'s {@link Orientation}.<br /><br />
+     * If the target location is outside of the perception, <code>false</code> is always returned.
      * 
      * @param id the ID of the {@link Actor} of interest.
      * 
@@ -395,7 +404,8 @@ public interface VacuumWorldGridPerceptionInterface {
     /**
      * 
      * Returns the return value of the {@link VacuumWorldLocationAppearance#isEmpty()} method of the {@link VacuumWorldLocationAppearance} of the {@link VacuumWorldLocation} on the right of the location of the {@link Actor} whose ID matches <code>id</code>.
-     * Right is considered w.r.t. the {@link Actor}'s {@link Orientation}.
+     * Right is considered w.r.t. the {@link Actor}'s {@link Orientation}.<br /><br />
+     * If the target location is outside of the perception, <code>false</code> is always returned.
      * 
      * @param id the ID of the {@link Actor} of interest.
      * 
@@ -407,7 +417,8 @@ public interface VacuumWorldGridPerceptionInterface {
     /**
      * 
      * Returns the return value of the {@link VacuumWorldLocationAppearance#isEmpty()} method of the {@link VacuumWorldLocationAppearance} of the {@link VacuumWorldLocation} on the forward-left of the location of the {@link Actor} whose ID matches <code>id</code>.
-     * Forward-left is considered w.r.t. the {@link Actor}'s {@link Orientation}.
+     * Forward-left is considered w.r.t. the {@link Actor}'s {@link Orientation}.<br /><br />
+     * If the target location is outside of the perception, <code>false</code> is always returned.
      * 
      * @param id the ID of the {@link Actor} of interest.
      * 
@@ -419,7 +430,8 @@ public interface VacuumWorldGridPerceptionInterface {
     /**
      * 
      * Returns the return value of the {@link VacuumWorldLocationAppearance#isEmpty()} method of the {@link VacuumWorldLocationAppearance} of the {@link VacuumWorldLocation} on the forward-right of the location of the {@link Actor} whose ID matches <code>id</code>.
-     * Forward-right is considered w.r.t. the {@link Actor}'s {@link Orientation}.
+     * Forward-right is considered w.r.t. the {@link Actor}'s {@link Orientation}.<br /><br />
+     * If the target location is outside of the perception, <code>false</code> is always returned.
      * 
      * @param id the ID of the {@link Actor} of interest.
      * 
@@ -431,7 +443,8 @@ public interface VacuumWorldGridPerceptionInterface {
     /**
      * 
      * Returns the return value of the {@link VacuumWorldLocationAppearance#isFreeFromActiveBodies()} method of the {@link VacuumWorldLocationAppearance} of the {@link VacuumWorldLocation} ahead of the location of the {@link Actor} whose ID matches <code>id</code>.
-     * Ahead is considered w.r.t. the {@link Actor}'s {@link Orientation}.
+     * Ahead is considered w.r.t. the {@link Actor}'s {@link Orientation}.<br /><br />
+     * If the target location is outside of the perception, <code>false</code> is always returned.
      * 
      * @param id the ID of the {@link Actor} of interest.
      * 
@@ -443,7 +456,8 @@ public interface VacuumWorldGridPerceptionInterface {
     /**
      * 
      * Returns the return value of the {@link VacuumWorldLocationAppearance#isFreeFromActiveBodies()} method of the {@link VacuumWorldLocationAppearance} of the {@link VacuumWorldLocation} on the left of the location of the {@link Actor} whose ID matches <code>id</code>.
-     * Left is considered w.r.t. the {@link Actor}'s {@link Orientation}.
+     * Left is considered w.r.t. the {@link Actor}'s {@link Orientation}.<br /><br />
+     * If the target location is outside of the perception, <code>false</code> is always returned.
      * 
      * @param id the ID of the {@link Actor} of interest.
      * 
@@ -455,7 +469,8 @@ public interface VacuumWorldGridPerceptionInterface {
     /**
      * 
      * Returns the return value of the {@link VacuumWorldLocationAppearance#isFreeFromActiveBodies()} method of the {@link VacuumWorldLocationAppearance} of the {@link VacuumWorldLocation} on the right of the location of the {@link Actor} whose ID matches <code>id</code>.
-     * Right is considered w.r.t. the {@link Actor}'s {@link Orientation}.
+     * Right is considered w.r.t. the {@link Actor}'s {@link Orientation}.<br /><br />
+     * If the target location is outside of the perception, <code>false</code> is always returned.
      * 
      * @param id the ID of the {@link Actor} of interest.
      * 
@@ -467,7 +482,8 @@ public interface VacuumWorldGridPerceptionInterface {
     /**
      * 
      * Returns the return value of the {@link VacuumWorldLocationAppearance#isFreeFromActiveBodies()} method of the {@link VacuumWorldLocationAppearance} of the {@link VacuumWorldLocation} on the forward-left of the location of the {@link Actor} whose ID matches <code>id</code>.
-     * Forward-left is considered w.r.t. the {@link Actor}'s {@link Orientation}.
+     * Forward-left is considered w.r.t. the {@link Actor}'s {@link Orientation}.<br /><br />
+     * If the target location is outside of the perception, <code>false</code> is always returned.
      * 
      * @param id the ID of the {@link Actor} of interest.
      * 
@@ -479,7 +495,8 @@ public interface VacuumWorldGridPerceptionInterface {
     /**
      * 
      * Returns the return value of the {@link VacuumWorldLocationAppearance#isFreeFromActiveBodies()} method of the {@link VacuumWorldLocationAppearance} of the {@link VacuumWorldLocation} on the forward-right of the location of the {@link Actor} whose ID matches <code>id</code>.
-     * Forward-right is considered w.r.t. the {@link Actor}'s {@link Orientation}.
+     * Forward-right is considered w.r.t. the {@link Actor}'s {@link Orientation}.<br /><br />
+     * If the target location is outside of the perception, <code>false</code> is always returned.
      * 
      * @param id the ID of the {@link Actor} of interest.
      * 
@@ -502,7 +519,8 @@ public interface VacuumWorldGridPerceptionInterface {
     /**
      * 
      * Returns whether there is {@link VacuumWorldDirt} on the {@link VacuumWorldLocation} ahead of the one where the {@link Actor} whose ID matches <code>id</code> resides.
-     * Ahead is considered w.r.t. the {@link Actor}'s {@link Orientation}.
+     * Ahead is considered w.r.t. the {@link Actor}'s {@link Orientation}.<br /><br />
+     * If the target location is outside of the perception, <code>false</code> is always returned.
      * 
      * @param id the ID of the {@link Actor} of interest.
      * 
@@ -514,7 +532,8 @@ public interface VacuumWorldGridPerceptionInterface {
     /**
      * 
      * Returns whether there is {@link VacuumWorldDirt} on the {@link VacuumWorldLocation} on the left of the one where the {@link Actor} whose ID matches <code>id</code> resides.
-     * Left is considered w.r.t. the {@link Actor}'s {@link Orientation}.
+     * Left is considered w.r.t. the {@link Actor}'s {@link Orientation}.<br /><br />
+     * If the target location is outside of the perception, <code>false</code> is always returned.
      * 
      * @param id the ID of the {@link Actor} of interest.
      * 
@@ -526,7 +545,8 @@ public interface VacuumWorldGridPerceptionInterface {
     /**
      * 
      * Returns whether there is {@link VacuumWorldDirt} on the {@link VacuumWorldLocation} on the right of the one where the {@link Actor} whose ID matches <code>id</code> resides.
-     * Right is considered w.r.t. the {@link Actor}'s {@link Orientation}.
+     * Right is considered w.r.t. the {@link Actor}'s {@link Orientation}.<br /><br />
+     * If the target location is outside of the perception, <code>false</code> is always returned.
      * 
      * @param id the ID of the {@link Actor} of interest.
      * 
@@ -539,7 +559,8 @@ public interface VacuumWorldGridPerceptionInterface {
     /**
      * 
      * Returns whether there is {@link VacuumWorldDirt} on the {@link VacuumWorldLocation} on the forward-left of the one where the {@link Actor} whose ID matches <code>id</code> resides.
-     * Forward-left is considered w.r.t. the {@link Actor}'s {@link Orientation}.
+     * Forward-left is considered w.r.t. the {@link Actor}'s {@link Orientation}.<br /><br />
+     * If the target location is outside of the perception, <code>false</code> is always returned.
      * 
      * @param id the ID of the {@link Actor} of interest.
      * 
@@ -551,7 +572,8 @@ public interface VacuumWorldGridPerceptionInterface {
     /**
      * 
      * Returns whether there is {@link VacuumWorldDirt} on the {@link VacuumWorldLocation} on the forward-right of the one where the {@link Actor} whose ID matches <code>id</code> resides.
-     * Forward-right is considered w.r.t. the {@link Actor}'s {@link Orientation}.
+     * Forward-right is considered w.r.t. the {@link Actor}'s {@link Orientation}.<br /><br />
+     * If the target location is outside of the perception, <code>false</code> is always returned.
      * 
      * @param id the ID of the {@link Actor} of interest.
      * 
@@ -589,7 +611,8 @@ public interface VacuumWorldGridPerceptionInterface {
     /**
      * 
      * Returns whether there is compatible {@link VacuumWorldDirt} on the {@link VacuumWorldLocation} ahead of the one where the {@link Actor} whose ID matches <code>id</code> resides.
-     * Ahead is considered w.r.t. the {@link Actor}'s {@link Orientation}.
+     * Ahead is considered w.r.t. the {@link Actor}'s {@link Orientation}.<br /><br />
+     * If the target location is outside of the perception, <code>false</code> is always returned.
      * 
      * @param id the ID of the {@link Actor} of interest.
      * 
@@ -601,7 +624,8 @@ public interface VacuumWorldGridPerceptionInterface {
     /**
      * 
      * Returns whether there is compatible {@link VacuumWorldDirt} on the {@link VacuumWorldLocation} on the left of the one where the {@link Actor} whose ID matches <code>id</code> resides.
-     * Left is considered w.r.t. the {@link Actor}'s {@link Orientation}.
+     * Left is considered w.r.t. the {@link Actor}'s {@link Orientation}.<br /><br />
+     * If the target location is outside of the perception, <code>false</code> is always returned.
      * 
      * @param id the ID of the {@link Actor} of interest.
      * 
@@ -613,7 +637,8 @@ public interface VacuumWorldGridPerceptionInterface {
     /**
      * 
      * Returns whether there is compatible {@link VacuumWorldDirt} on the {@link VacuumWorldLocation} on the right of the one where the {@link Actor} whose ID matches <code>id</code> resides.
-     * Right is considered w.r.t. the {@link Actor}'s {@link Orientation}.
+     * Right is considered w.r.t. the {@link Actor}'s {@link Orientation}.<br /><br />
+     * If the target location is outside of the perception, <code>false</code> is always returned.
      * 
      * @param id the ID of the {@link Actor} of interest.
      * 
@@ -625,7 +650,8 @@ public interface VacuumWorldGridPerceptionInterface {
     /**
      * 
      * Returns whether there is compatible {@link VacuumWorldDirt} on the {@link VacuumWorldLocation} on the forward-left of the one where the {@link Actor} whose ID matches <code>id</code> resides.
-     * Forward-left is considered w.r.t. the {@link Actor}'s {@link Orientation}.
+     * Forward-left is considered w.r.t. the {@link Actor}'s {@link Orientation}.<br /><br />
+     * If the target location is outside of the perception, <code>false</code> is always returned.
      * 
      * @param id the ID of the {@link Actor} of interest.
      * 
@@ -637,7 +663,8 @@ public interface VacuumWorldGridPerceptionInterface {
     /**
      * 
      * Returns whether there is compatible {@link VacuumWorldDirt} on the {@link VacuumWorldLocation} on the forward-right of the one where the {@link Actor} whose ID matches <code>id</code> resides.
-     * Forward-right is considered w.r.t. the {@link Actor}'s {@link Orientation}.
+     * Forward-right is considered w.r.t. the {@link Actor}'s {@link Orientation}.<br /><br />
+     * If the target location is outside of the perception, <code>false</code> is always returned.
      * 
      * @param id the ID of the {@link Actor} of interest.
      * 
@@ -658,4 +685,145 @@ public interface VacuumWorldGridPerceptionInterface {
     public default VacuumWorldActorAppearance getActorAppearance(String id) {
 	return getLocationFromActiveBodyId(id).getActiveBodyAppearanceIfAny();
     }
+    
+    /**
+     * 
+     * Returns whether there is a cleaning agent on the {@link VacuumWorldLocation} ahead of the one where the {@link Actor} whose ID matches <code>id</code> resides.
+     * Ahead is considered w.r.t. the {@link Actor}'s {@link Orientation}.<br /><br />
+     * If the target location is outside of the perception, <code>false</code> is always returned.
+     * 
+     * @param id a {@link String} ID.
+     * 
+     * @return whether or not there is a cleaning agent on the {@link VacuumWorldLocation} ahead of the one where the {@link Actor} whose ID matches <code>id</code> resides.
+     *
+     */
+    public abstract boolean isThereACleaningAgentForward(String id);
+
+    /**
+     * 
+     * Returns whether there is a cleaning agent on the {@link VacuumWorldLocation} on the left of the one where the {@link Actor} whose ID matches <code>id</code> resides.
+     * Ahead is considered w.r.t. the {@link Actor}'s {@link Orientation}.<br /><br />
+     * If the target location is outside of the perception, <code>false</code> is always returned.
+     * 
+     * @param id a {@link String} ID.
+     * 
+     * @return whether or not there is a cleaning agent on the {@link VacuumWorldLocation} on the left of the one where the {@link Actor} whose ID matches <code>id</code> resides.
+     *
+     */
+    public abstract boolean isThereACleaningAgentOnTheLeft(String id);
+
+    /**
+     * 
+     * Returns whether there is a cleaning agent on the {@link VacuumWorldLocation} on the right of the one where the {@link Actor} whose ID matches <code>id</code> resides.
+     * Ahead is considered w.r.t. the {@link Actor}'s {@link Orientation}.<br /><br />
+     * If the target location is outside of the perception, <code>false</code> is always returned.
+     * 
+     * @param id a {@link String} ID.
+     * 
+     * @return whether or not there is a cleaning agent on the {@link VacuumWorldLocation} on the right of the one where the {@link Actor} whose ID matches <code>id</code> resides.
+     *
+     */
+    public abstract boolean isThereACleaningAgentOnTheRight(String id);
+
+    /**
+     * 
+     * Returns whether there is a cleaning agent on the {@link VacuumWorldLocation} on the forward-left of the one where the {@link Actor} whose ID matches <code>id</code> resides.
+     * Ahead is considered w.r.t. the {@link Actor}'s {@link Orientation}.<br /><br />
+     * If the target location is outside of the perception, <code>false</code> is always returned.
+     * 
+     * @param id a {@link String} ID.
+     * 
+     * @return whether or not there is a cleaning agent on the {@link VacuumWorldLocation} on the forward-left of the one where the {@link Actor} whose ID matches <code>id</code> resides.
+     *
+     */
+    public abstract boolean isThereACleaningAgentOnForwardLeft(String id);
+
+    /**
+     * 
+     * Returns whether there is a cleaning agent on the {@link VacuumWorldLocation} on the forward-right of the one where the {@link Actor} whose ID matches <code>id</code> resides.
+     * Ahead is considered w.r.t. the {@link Actor}'s {@link Orientation}.<br /><br />
+     * If the target location is outside of the perception, <code>false</code> is always returned.
+     * 
+     * @param id a {@link String} ID.
+     * 
+     * @return whether or not there is a cleaning agent on the {@link VacuumWorldLocation} on the forward-right of the one where the {@link Actor} whose ID matches <code>id</code> resides.
+     *
+     */
+    public abstract boolean isThereACleaningAgentOnForwardRight(String id);
+
+    /**
+     * 
+     * Returns whether there is a user on the {@link VacuumWorldLocation} ahead of the one where the {@link Actor} whose ID matches <code>id</code> resides.
+     * Ahead is considered w.r.t. the {@link Actor}'s {@link Orientation}.<br /><br />
+     * If the target location is outside of the perception, <code>false</code> is always returned.
+     * 
+     * @param id a {@link String} ID.
+     * 
+     * @return whether or not there is a user on the {@link VacuumWorldLocation} ahead of the one where the {@link Actor} whose ID matches <code>id</code> resides.
+     *
+     */
+    public abstract boolean isThereAUserForward(String id);
+
+    /**
+     * 
+     * Returns whether there is a cleaning agent on the {@link VacuumWorldLocation} on the left of the one where the {@link Actor} whose ID matches <code>id</code> resides.
+     * Ahead is considered w.r.t. the {@link Actor}'s {@link Orientation}.<br /><br />
+     * If the target location is outside of the perception, <code>false</code> is always returned.
+     * 
+     * @param id a {@link String} ID.
+     * 
+     * @return whether or not there is a cleaning agent on the {@link VacuumWorldLocation} on the left of the one where the {@link Actor} whose ID matches <code>id</code> resides.
+     *
+     */
+    public abstract boolean isThereAUserOnTheLeft(String id);
+
+    /**
+     * 
+     * Returns whether there is a cleaning agent on the {@link VacuumWorldLocation} on the right of the one where the {@link Actor} whose ID matches <code>id</code> resides.
+     * Ahead is considered w.r.t. the {@link Actor}'s {@link Orientation}.<br /><br />
+     * If the target location is outside of the perception, <code>false</code> is always returned.
+     * 
+     * @param id a {@link String} ID.
+     * 
+     * @return whether or not there is a cleaning agent on the {@link VacuumWorldLocation} on the right of the one where the {@link Actor} whose ID matches <code>id</code> resides.
+     *
+     */
+    public abstract boolean isThereAUserOnTheRight(String id);
+
+    /**
+     * 
+     * Returns whether there is a user on the {@link VacuumWorldLocation} on the forward-left of the one where the {@link Actor} whose ID matches <code>id</code> resides.
+     * Ahead is considered w.r.t. the {@link Actor}'s {@link Orientation}.<br /><br />
+     * If the target location is outside of the perception, <code>false</code> is always returned.
+     * 
+     * @param id a {@link String} ID.
+     * 
+     * @return whether or not there is a user on the {@link VacuumWorldLocation} on the forward-left of the one where the {@link Actor} whose ID matches <code>id</code> resides.
+     *
+     */
+    public abstract boolean isThereAUserOnForwardLeft(String id);
+
+    /**
+     * 
+     * Returns whether there is a user on the {@link VacuumWorldLocation} on the forward-right of the one where the {@link Actor} whose ID matches <code>id</code> resides.
+     * Ahead is considered w.r.t. the {@link Actor}'s {@link Orientation}.<br /><br />
+     * If the target location is outside of the perception, <code>false</code> is always returned.
+     * 
+     * @param id a {@link String} ID.
+     * 
+     * @return whether or not there is a user on the {@link VacuumWorldLocation} on the forward-right of the one where the {@link Actor} whose ID matches <code>id</code> resides.
+     *
+     */
+    public abstract boolean isThereAUserOnForwardRight(String id);
+    
+    /**
+     * 
+     * Returns whether a {@link VacuumWorldLocation} whose {@link VacuumWorldCoordinates} match <code>coordinates</code> exists within the perception.
+     * 
+     * @param coordinates a {@link VacuumWorldCoordinates} object.
+     * 
+     * @return whether or not a {@link VacuumWorldLocation} whose {@link VacuumWorldCoordinates} match <code>coordinates</code> exists within the perception.
+     * 
+     */
+    public abstract boolean doesSuchLocationExistInPerception(VacuumWorldCoordinates coordinates);
 }

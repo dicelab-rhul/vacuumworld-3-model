@@ -11,6 +11,7 @@ import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldDirtAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldLocationAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldCoordinates;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldEnvironment;
+import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldLocation;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldPerception;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldSpeechPerception;
 
@@ -19,10 +20,7 @@ public interface VacuumWorldPerceptiveEntity {
     /**
      * 
      * Gets the {@link VacuumWorldPerception} that the agent has received from the
-     * {@link VacuumWorldEnvironment} at the end of the previous cycle.<br/>
-     * <br/>
-     * BEWARE: it can be <code>null</code>, ant it WILL be <code>null</code> during
-     * the first cycle.
+     * {@link VacuumWorldEnvironment} at the end of the previous cycle.
      * 
      * @return the {@link VacuumWorldPerception} that the agent has received from
      *         the {@link VacuumWorldEnvironment} at the end of the previous cycle.
@@ -69,6 +67,19 @@ public interface VacuumWorldPerceptiveEntity {
     }
     
     /**
+     * 
+     * Returns whether a {@link VacuumWorldLocation} whose {@link VacuumWorldCoordinates} match <code>coordinates</code> exists within the perception.
+     * 
+     * @param coordinates a {@link VacuumWorldCoordinates} object.
+     * 
+     * @return whether or not a {@link VacuumWorldLocation} whose {@link VacuumWorldCoordinates} match <code>coordinates</code> exists within the perception.
+     * 
+     */
+    public default boolean doesThisLocationExistInThePerception(VacuumWorldCoordinates coordinates) {
+	return getPerception().getAppearance().doesSuchLocationExistInPerception(coordinates);
+    }
+    
+    /**
      * Checks if this agent is able to clean the given dirt. An example use:
      * canClean(getDirt()) checks if the agent is able to clean the dirt that it is
      * currently on top of. Recall that,
@@ -85,7 +96,8 @@ public interface VacuumWorldPerceptiveEntity {
     public default boolean canClean(VacuumWorldDirtAppearance dirt) {
 	if (dirt != null) {
 	    return dirt.getColor().canBeCleanedBy(getAgent().getColor());
-	} else {
+	}
+	else {
 	    return false;
 	}
     }
@@ -95,7 +107,7 @@ public interface VacuumWorldPerceptiveEntity {
      * if there is no such dirt).
      * 
      * @return the appearance of the dirt that is at this agents current location
-     *         (or null)
+     *         (or null).
      */
     public default VacuumWorldDirtAppearance getDirt() {
 	return this.getLocation().getDirtAppearanceIfAny();
@@ -103,121 +115,235 @@ public interface VacuumWorldPerceptiveEntity {
 
     /**
      * Gets the appearance of dirt that is to the left of this agent (or null if
-     * there is no such dirt).
+     * there is no such dirt, or the target location does not exist within the perception.).
      * 
-     * @return the appearance of dirt that is to the left of this agent (or null)
+     * @return the appearance of dirt that is to the left of this agent (or null).
      */
     public default VacuumWorldDirtAppearance getDirtLeft() {
-	return this.getLocationLeft().getDirtAppearanceIfAny();
+	return isDirtLeft() ? this.getLocationLeft().getDirtAppearanceIfAny() : null;
     }
 
     /**
      * Gets the appearance of dirt that is to the right of this agent (or null if
-     * there is no such dirt).
+     * there is no such dirt, or the target location does not exist within the perception.).
      * 
-     * @return the appearance of dirt that is to the right of this agent (or null)
+     * @return the appearance of dirt that is to the right of this agent (or null).
      */
     public default VacuumWorldDirtAppearance getDirtRight() {
-	return this.getLocationRight().getDirtAppearanceIfAny();
+	return isDirtRight() ?  this.getLocationRight().getDirtAppearanceIfAny() : null;
     }
 
     /**
      * Gets the appearance of dirt that is immediately forward of this agent (or
-     * null if there is no such dirt).
+     * null if there is no such dirt, or the target location does not exist within the perception.).
      * 
      * @return the appearance of dirt that is to the immediately forward of this
-     *         agent (or null)
+     *         agent (or null).
      */
     public default VacuumWorldDirtAppearance getDirtForward() {
-	return this.getLocationForward().getDirtAppearanceIfAny();
+	return isDirtForward() ? this.getLocationForward().getDirtAppearanceIfAny() : null;
     }
 
     /**
      * Gets the appearance of dirt that is forward left of this agent (or null if
-     * there is no such dirt).
+     * there is no such dirt, or the target location does not exist within the perception.).
      * 
-     * @return the appearance of dirt that is forward left of this agent (or null)
+     * @return the appearance of dirt that is forward left of this agent (or null).
      */
     public default VacuumWorldDirtAppearance getDirtForwardLeft() {
-	return this.getLocationForardLeft().getDirtAppearanceIfAny();
+	return isDirtForwardLeft() ? this.getLocationForwardLeft().getDirtAppearanceIfAny() : null;
     }
 
     /**
      * Gets the appearance of dirt that is forward right of this agent (or null if
-     * there is no such dirt).
+     * there is no such dirt, or the target location does not exist within the perception.).
      * 
-     * @return the appearance of dirt that is forward right of this agent (or null)
+     * @return the appearance of dirt that is forward right of this agent (or null).
      */
     public default VacuumWorldDirtAppearance getDirtForwardRight() {
-	return this.getLocationForardRight().getDirtAppearanceIfAny();
+	return isDirtForwardRight() ? this.getLocationForwardRight().getDirtAppearanceIfAny() : null;
     }
-
+    
     /**
      * Gets the appearance of this agent.
      * 
-     * @return the appearance of this agent
+     * @return the appearance of this agent.
      */
     public default VacuumWorldActorAppearance getAgent() {
 	return this.getLocation().getActiveBodyAppearanceIfAny();
     }
 
     /**
-     * Gets the appearance of the agent to the left of this agent (or null if there
-     * is no such agent)
+     * Gets the appearance of the actor (agent of user) to the left of this agent (or null if there
+     * is no such actor, or the target location does not exist within the perception.)
      * 
-     * @return the appearance of the agent to the left of this agent (or null)
+     * @return the appearance of the actor (agent of user) to the left of this agent (or null).
+     */
+    public default VacuumWorldActorAppearance getActorLeft() {
+	return isAgentLeft() || isUserLeft() ? this.getLocationLeft().getActiveBodyAppearanceIfAny() : null;
+    }
+
+    /**
+     * Gets the appearance of the actor (agent of user) to the right of this agent (or null if there
+     * is no such actor, or the target location does not exist within the perception.)
+     * 
+     * @return the appearance of the actor (agent of user) to the right of this agent (or null).
+     */
+
+    public default VacuumWorldActorAppearance getActorRight() {
+	return isAgentRight() || isUserRight() ? this.getLocationRight().getActiveBodyAppearanceIfAny() : null;
+    }
+
+    /**
+     * Gets the appearance of the actor (agent of user) immediately forward of this agent (or null
+     * if there is no such actor, or the target location does not exist within the perception.)
+     * 
+     * @return the appearance of the actor (agent of user) immediately forward of this agent (or
+     *         null).
+     */
+
+    public default VacuumWorldActorAppearance getActorForward() {
+	return isAgentForward() || isUserForward() ? this.getLocationForward().getActiveBodyAppearanceIfAny() : null;
+    }
+
+    /**
+     * Gets the appearance of the actor (agent of user) to the forward left of this agent (or null
+     * if there is no such actor, or the target location does not exist within the perception.)
+     * 
+     * @return the appearance of the actor (agent of user) to the forward left of this agent (or
+     *         null).
+     */
+
+    public default VacuumWorldActorAppearance getActorForwardLeft() {
+	return isAgentForwardLeft() || isUserForwardLeft() ? this.getLocationForwardLeft().getActiveBodyAppearanceIfAny() : null;
+    }
+
+    /**
+     * Gets the appearance of the actor (agent of user) to the forward right of this agent (or null
+     * if there is no such actor, or the target location does not exist within the perception.)
+     * 
+     * @return the appearance of the actor (agent of user) to the forward right of this agent (or
+     *         null).
+     */
+
+    public default VacuumWorldActorAppearance getActorForwardRight() {
+	return isAgentForwardRight() || isUserForwardRight() ? this.getLocationForwardRight().getActiveBodyAppearanceIfAny() : null;
+    }
+    
+    /**
+     * Gets the appearance of the agent to the left of this agent (or null if there
+     * is no such agent, or the target location does not exist within the perception.)
+     * 
+     * @return the appearance of the agent to the left of this agent (or null).
      */
     public default VacuumWorldActorAppearance getAgentLeft() {
-	return this.getLocationLeft().getActiveBodyAppearanceIfAny();
+	return isAgentLeft() ? this.getLocationLeft().getActiveBodyAppearanceIfAny() : null;
     }
 
     /**
      * Gets the appearance of the agent to the right of this agent (or null if there
-     * is no such agent)
+     * is no such agent, or the target location does not exist within the perception.)
      * 
-     * @return the appearance of the agent to the right of this agent (or null)
+     * @return the appearance of the agent to the right of this agent (or null).
      */
 
     public default VacuumWorldActorAppearance getAgentRight() {
-	return this.getLocationRight().getActiveBodyAppearanceIfAny();
+	return isAgentRight() ? this.getLocationRight().getActiveBodyAppearanceIfAny() : null;
     }
 
     /**
      * Gets the appearance of the agent immediately forward of this agent (or null
-     * if there is no such agent)
+     * if there is no such agent, or the target location does not exist within the perception.)
      * 
      * @return the appearance of the agent immediately forward of this agent (or
-     *         null)
+     *         null).
      */
 
     public default VacuumWorldActorAppearance getAgentForward() {
-	return this.getLocationForward().getActiveBodyAppearanceIfAny();
+	return isAgentForward() ? this.getLocationForward().getActiveBodyAppearanceIfAny() : null;
     }
 
     /**
      * Gets the appearance of the agent to the forward left of this agent (or null
-     * if there is no such agent)
+     * if there is no such agent, or the target location does not exist within the perception.)
      * 
      * @return the appearance of the agent to the forward left of this agent (or
-     *         null)
+     *         null).
      */
 
     public default VacuumWorldActorAppearance getAgentForwardLeft() {
-	return this.getLocationForardLeft().getActiveBodyAppearanceIfAny();
+	return isAgentForwardLeft() ? this.getLocationForwardLeft().getActiveBodyAppearanceIfAny() : null;
     }
 
     /**
      * Gets the appearance of the agent to the forward right of this agent (or null
-     * if there is no such agent)
+     * if there is no such agent, or the target location does not exist within the perception.)
      * 
      * @return the appearance of the agent to the forward right of this agent (or
-     *         null)
+     *         null).
      */
 
     public default VacuumWorldActorAppearance getAgentForwardRight() {
-	return this.getLocationForardRight().getActiveBodyAppearanceIfAny();
+	return isAgentForwardRight() ? this.getLocationForwardRight().getActiveBodyAppearanceIfAny() : null;
+    }
+    
+    /**
+     * Gets the appearance of the user to the left of this agent (or null if there
+     * is no such agent, or the target location does not exist within the perception.)
+     * 
+     * @return the appearance of the user to the left of this agent (or null).
+     */
+    public default VacuumWorldActorAppearance getUserLeft() {
+	return isUserLeft() ? this.getLocationLeft().getActiveBodyAppearanceIfAny() : null;
     }
 
+    /**
+     * Gets the appearance of the user to the right of this agent (or null if there
+     * is no such agent, or the target location does not exist within the perception.)
+     * 
+     * @return the appearance of the user to the right of this agent (or null).
+     */
+
+    public default VacuumWorldActorAppearance getUserRight() {
+	return isUserRight() ? this.getLocationRight().getActiveBodyAppearanceIfAny() : null;
+    }
+
+    /**
+     * Gets the appearance of the user immediately forward of this agent (or null
+     * if there is no such agent, or the target location does not exist within the perception.)
+     * 
+     * @return the appearance of the user immediately forward of this agent (or
+     *         null).
+     */
+
+    public default VacuumWorldActorAppearance getUserForward() {
+	return isUserForward() ? this.getLocationForward().getActiveBodyAppearanceIfAny() : null;
+    }
+
+    /**
+     * Gets the appearance of the user to the forward left of this agent (or null
+     * if there is no such agent, or the target location does not exist within the perception.)
+     * 
+     * @return the appearance of the user to the forward left of this agent (or
+     *         null).
+     */
+
+    public default VacuumWorldActorAppearance getUserForwardLeft() {
+	return isUserForwardLeft() ? this.getLocationForwardLeft().getActiveBodyAppearanceIfAny() : null;
+    }
+
+    /**
+     * Gets the appearance of the user to the forward right of this agent (or null
+     * if there is no such agent, or the target location does not exist within the perception.)
+     * 
+     * @return the appearance of the user to the forward right of this agent (or
+     *         null).
+     */
+
+    public default VacuumWorldActorAppearance getUserForwardRight() {
+	return isUserForwardRight() ? this.getLocationForwardRight().getActiveBodyAppearanceIfAny() : null;
+    }
+    
     /**
      * Is this agent currently facing north?
      */
@@ -440,105 +566,105 @@ public interface VacuumWorldPerceptiveEntity {
      * Is the location dirty immediately forward?
      */
     public default boolean isDirtForward() {
-	return !isWallForward() && getPerception().getAppearance().isThereDirtAhead(this.getBodyId());
+	return getPerception().getAppearance().isThereDirtAhead(this.getBodyId());
     }
 
     /**
      * Is the location dirty immediately left?
      */
     public default boolean isDirtLeft() {
-	return !isWallLeft() && getPerception().getAppearance().isThereDirtOnTheLeft(this.getBodyId());
+	return getPerception().getAppearance().isThereDirtOnTheLeft(this.getBodyId());
     }
 
     /**
      * Is the location dirty immediately left?
      */
     public default boolean isDirtRight() {
-	return !isWallRight() && getPerception().getAppearance().isThereDirtOnTheRight(this.getBodyId());
+	return getPerception().getAppearance().isThereDirtOnTheRight(this.getBodyId());
     }
 
     /**
      * Is the location dirty forward left?
      */
     public default boolean isDirtForwardLeft() {
-	return !isWallForward() && !isWallLeft() && getPerception().getAppearance().isThereDirtOnForwardLeft(this.getBodyId());
+	return getPerception().getAppearance().isThereDirtOnForwardLeft(this.getBodyId());
     }
 
     /**
      * Is the location dirty forward right?
      */
     public default boolean isDirtForwardRight() {
-	return !isWallForward() && !isWallRight() && getPerception().getAppearance().isThereDirtOnForwardRight(this.getBodyId());
+	return getPerception().getAppearance().isThereDirtOnForwardRight(this.getBodyId());
     }
 
     /**
      * Is there another agent at this agents immediate forward location?
      */
     public default boolean isAgentForward() {
-	return !isWallForward() && getPerception().getAppearance().getGrid().get(this.getCoordinatesForward()).isACleaningAgentThere();
+	return getPerception().getAppearance().isThereACleaningAgentForward(this.getBodyId());
     }
 
     /**
      * Is there another agent at this agents immediate left location?
      */
     public default boolean isAgentLeft() {
-	return !isWallLeft() && getPerception().getAppearance().getGrid().get(this.getCoordinatesLeft()).isACleaningAgentThere();
+	return getPerception().getAppearance().isThereACleaningAgentOnTheLeft(this.getBodyId());
     }
 
     /**
      * Is there another agent at this agents immediate right location?
      */
     public default boolean isAgentRight() {
-	return !isWallRight() && getPerception().getAppearance().getGrid().get(this.getCoordinatesRight()).isACleaningAgentThere();
+	return getPerception().getAppearance().isThereACleaningAgentOnTheRight(this.getBodyId());
     }
 
     /**
      * Is there another agent at this agents forward right location?
      */
     public default boolean isAgentForwardRight() {
-	return !isWallForward() && !isWallRight() && getPerception().getAppearance().getGrid().get(this.getCoordinatesForwardRight()).isACleaningAgentThere();
+	return getPerception().getAppearance().isThereACleaningAgentOnForwardRight(this.getBodyId());
     }
 
     /**
      * Is there another agent at this agents forward left location?
      */
     public default boolean isAgentForwardLeft() {
-	return !isWallForward() && !isWallLeft() && getPerception().getAppearance().getGrid().get(this.getCoordinatesForwardLeft()).isACleaningAgentThere();
+	return getPerception().getAppearance().isThereACleaningAgentOnForwardLeft(this.getBodyId());
     }
 
     /**
      * Is there a user at this agents immediate forward location?
      */
     public default boolean isUserForward() {
-	return !isWallForward() && getPerception().getAppearance().getGrid().get(this.getCoordinatesForward()).isAUserThere();
+	return getPerception().getAppearance().isThereAUserForward(this.getBodyId());
     }
 
     /**
      * Is there a user at this agents immediate left location?
      */
     public default boolean isUserLeft() {
-	return !isWallLeft() && getPerception().getAppearance().getGrid().get(this.getCoordinatesLeft()).isAUserThere();
+	return getPerception().getAppearance().isThereAUserOnTheLeft(this.getBodyId());
     }
 
     /**
      * Is there a user at this agents immediate right location?
      */
     public default boolean isUserRight() {
-	return !isWallRight() && getPerception().getAppearance().getGrid().get(this.getCoordinatesRight()).isAUserThere();
+	return getPerception().getAppearance().isThereAUserOnTheRight(this.getBodyId());
     }
 
     /**
      * Is there a user at this agents forward right location?
      */
     public default boolean isUserForwardRight() {
-	return !isWallForward() && !isWallRight() && getPerception().getAppearance().getGrid().get(this.getCoordinatesForwardRight()).isAUserThere();
+	return getPerception().getAppearance().isThereAUserOnForwardRight(this.getBodyId());
     }
 
     /**
      * Is there a user at this agents forward left location?
      */
     public default boolean isUserForwardLeft() {
-	return !isWallForward() && !isWallLeft() && getPerception().getAppearance().getGrid().get(this.getCoordinatesForwardLeft()).isAUserThere();
+	return getPerception().getAppearance().isThereAUserOnForwardLeft(this.getBodyId());
     }
 
     /**
@@ -553,111 +679,116 @@ public interface VacuumWorldPerceptiveEntity {
     }
 
     /**
-     * Gets the current coordinates of this agent
+     * Gets the current coordinates of this agent's location.
      * 
-     * @return the current coordinates of this agent
+     * @return the current coordinates of this agent's location.
      */
     public default VacuumWorldCoordinates getCoordinates() {
 	return getPerception().getAppearance().getLocationFromActiveBodyId(this.getBodyId()).getCoordinates();
     }
 
     /**
-     * Gets the current coordinates immediately left of this agent
+     * Gets the current coordinates immediately left of this agent.<br /><br />
+     * While this method always returns a valid {@link VacuumWorldCoordinates} object, please note that the existence (either within the perception, or in the real environment) of a location whose coordinates match the return value of this method is not guaranteed, nor checked by this method.
      * 
-     * @return the current coordinates immediately left of this agent
+     * @return the current coordinates immediately left of this agent.
      */
     public default VacuumWorldCoordinates getCoordinatesLeft() {
 	return getCoordinates().getLeftCoordinates(getPerception().getAppearance().getActorAppearance(this.getBodyId()).getOrientation());
     }
 
     /**
-     * Gets the current coordinates immediately right of this agent
+     * Gets the current coordinates immediately right of this agent.<br /><br />
+     * While this method always returns a valid {@link VacuumWorldCoordinates} object, please note that the existence (either within the perception, or in the real environment) of a location whose coordinates match the return value of this method is not guaranteed, nor checked by this method.
      * 
-     * @return the current coordinates immediately right of this agent
+     * @return the current coordinates immediately right of this agent.
      */
     public default VacuumWorldCoordinates getCoordinatesRight() {
 	return getCoordinates().getRightCoordinates(getPerception().getAppearance().getActorAppearance(this.getBodyId()).getOrientation());
     }
 
     /**
-     * Gets the current coordinates immediately forward of this agent
+     * Gets the current coordinates immediately forward of this agent.<br /><br />
+     * While this method always returns a valid {@link VacuumWorldCoordinates} object, please note that the existence (either within the perception, or in the real environment) of a location whose coordinates match the return value of this method is not guaranteed, nor checked by this method.
      * 
-     * @return the current coordinates immediately forward of this agent
+     * @return the current coordinates immediately forward of this agent.
      */
     public default VacuumWorldCoordinates getCoordinatesForward() {
 	return getCoordinates().getForwardCoordinates(getPerception().getAppearance().getActorAppearance(this.getBodyId()).getOrientation());
     }
 
     /**
-     * Gets the current coordinates forward left of this agent
+     * Gets the current coordinates forward left of this agent.<br /><br />
+     * While this method always returns a valid {@link VacuumWorldCoordinates} object, please note that the existence (either within the perception, or in the real environment) of a location whose coordinates match the return value of this method is not guaranteed, nor checked by this method.
      * 
-     * @return the current coordinates forward left of this agent
+     * @return the current coordinates forward left of this agent.
      */
     public default VacuumWorldCoordinates getCoordinatesForwardLeft() {
-	return getCoordinates().getForwardLeftCoordinates(
-		getPerception().getAppearance().getActorAppearance(this.getBodyId()).getOrientation());
+	return getCoordinates().getForwardLeftCoordinates(getPerception().getAppearance().getActorAppearance(this.getBodyId()).getOrientation());
     }
 
     /**
-     * Gets the current coordinates forward right of this agent
+     * Gets the current coordinates forward right of this agent.<br /><br />
+     * While this method always returns a valid {@link VacuumWorldCoordinates} object, please note that the existence (either within the perception, or in the real environment) of a location whose coordinates match the return value of this method is not guaranteed, nor checked by this method.
      * 
-     * @return the current coordinates forward right of this agent
+     * @return the current coordinates forward right of this agent.
      */
     public default VacuumWorldCoordinates getCoordinatesForwardRight() {
 	return getCoordinates().getForwardRightCoordinates(getPerception().getAppearance().getActorAppearance(this.getBodyId()).getOrientation());
     }
 
     /**
-     * Gets the current location of this agent
+     * Gets the current location of this agent.<br /><br />
+     * While this method always returns a valid {@link VacuumWorldCoordinates} object, please note that the existence (either within the perception, or in the real environment) of a location whose coordinates match the return value of this method is not guaranteed, nor checked by this method.
      * 
-     * @return the current location of this agent
+     * @return the current location of this agent.
      */
     public default VacuumWorldLocationAppearance getLocation() {
 	return this.getGrid().get(getCoordinates());
     }
 
     /**
-     * Gets the current location immediately left of this agent
+     * Gets the current location immediately left of this agent, if it exists within the perception, otherwise <code>null</code>.
      * 
-     * @return the current location immediately left of this agent
+     * @return the current location immediately left of this agent, if it exists within the perception, otherwise <code>null</code>.
      */
     public default VacuumWorldLocationAppearance getLocationLeft() {
-	return this.getGrid().get(getCoordinatesLeft());
+	return doesThisLocationExistInThePerception(getCoordinatesLeft()) ? this.getGrid().get(getCoordinatesLeft()) : null;
     }
 
     /**
-     * Gets the current location immediately right of this agent
+     * Gets the current location immediately right of this agent, if it exists within the perception, otherwise <code>null</code>.
      * 
-     * @return the current location immediately right of this agent
+     * @return the current location immediately right of this agent, if it exists within the perception, otherwise <code>null</code>.
      */
     public default VacuumWorldLocationAppearance getLocationRight() {
-	return this.getGrid().get(getCoordinatesRight());
+	return doesThisLocationExistInThePerception(getCoordinatesRight()) ? this.getGrid().get(getCoordinatesRight()) : null;
     }
 
     /**
-     * Gets the current location immediately forward of this agent
+     * Gets the current location immediately forward of this agent, if it exists within the perception, otherwise <code>null</code>.
      * 
-     * @return the current location immediately forward of this agent
+     * @return the current location immediately forward of this agent, if it exists within the perception, otherwise <code>null</code>.
      */
     public default VacuumWorldLocationAppearance getLocationForward() {
-	return this.getGrid().get(getCoordinatesForward());
+	return doesThisLocationExistInThePerception(getCoordinatesForward()) ? this.getGrid().get(getCoordinatesForward()) : null;
     }
 
     /**
-     * Gets the current location forward left of this agent
+     * Gets the current location forward left of this agent, if it exists within the perception, otherwise <code>null</code>.
      * 
-     * @return the current location forward left of this agent
+     * @return the current location forward left of this agent, if it exists within the perception, otherwise <code>null</code>.
      */
-    public default VacuumWorldLocationAppearance getLocationForardLeft() {
-	return this.getGrid().get(getCoordinatesForwardLeft());
+    public default VacuumWorldLocationAppearance getLocationForwardLeft() {
+	return doesThisLocationExistInThePerception(getCoordinatesForwardLeft()) ? this.getGrid().get(getCoordinatesForwardLeft()) : null;
     }
 
     /**
-     * Gets the current location forward right of this agent
+     * Gets the current location forward right of this agent, if it exists within the perception, otherwise <code>null</code>.
      * 
-     * @return the current location forward right of this agent
+     * @return the current location forward right of this agent, if it exists within the perception, otherwise <code>null</code>.
      */
-    public default VacuumWorldLocationAppearance getLocationForardRight() {
-	return this.getGrid().get(getCoordinatesForwardRight());
+    public default VacuumWorldLocationAppearance getLocationForwardRight() {
+	return doesThisLocationExistInThePerception(getCoordinatesForwardRight()) ? this.getGrid().get(getCoordinatesForwardRight()) : null;
     }
 }

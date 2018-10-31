@@ -175,5 +175,6 @@ public class VacuumWorldWhitelister {
 	is.accept(Number.class);
 	is.accept(VacuumWorldAutonomousActorAppearance.class);
 	is.accept("com.google.common.collect.ImmutableList$SerializedForm");
+	is.accept("[C");
     }
 }

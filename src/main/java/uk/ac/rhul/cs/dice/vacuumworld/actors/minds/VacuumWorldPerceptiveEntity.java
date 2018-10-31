@@ -668,14 +668,16 @@ public interface VacuumWorldPerceptiveEntity {
     }
 
     /**
-     * Gets the coordinates of an agent (or user) given its appearance.
+     * Gets the coordinates of an agent (or user) given its appearance. It will return null, if the agent or user is not within the perception.
      * 
      * @param appearance
      *                       of an agent (or user)
      * @return the coordinates
      */
     public default VacuumWorldCoordinates getCoordinatesOf(VacuumWorldActorAppearance appearance) {
-	return getPerception().getAppearance().getLocationFromActiveBodyId(appearance.getId()).getCoordinates();
+	VacuumWorldLocationAppearance a = getPerception().getAppearance().getLocationFromActiveBodyId(appearance.getId());
+	
+	return a == null ? null : a.getCoordinates();
     }
 
     /**

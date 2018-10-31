@@ -76,7 +76,12 @@ public class VacuumWorldWhitelister {
     private VacuumWorldWhitelister() {}
     
     public static void whitelistEventClasses(ValidatingObjectInputStream is) {
-	is.accept("*");
+	is.accept("uk.ac.rhul.cs.dice.*");
+	is.accept("org.cloudstrife9999.*");
+	is.accept("java.lang.*");
+	is.accept("java.util.*");
+	is.accept("[Ljava.lang.*");
+	is.accept("[Ljava.util.*");
 	is.accept(VacuumWorldEvent.class);
 	is.accept(VacuumWorldEventInterface.class);
 	is.accept(Serializable.class);
@@ -124,7 +129,12 @@ public class VacuumWorldWhitelister {
     }
     
     public static void whitelistPerceptionClasses(ValidatingObjectInputStream is) {
-	is.accept("*");
+	is.accept("uk.ac.rhul.cs.dice.*");
+	is.accept("org.cloudstrife9999.*");
+	is.accept("java.lang.*");
+	is.accept("java.util.*");
+	is.accept("[Ljava.lang.*");
+	is.accept("[Ljava.util.*");
 	is.accept(VacuumWorldMessageInterface.class);
 	is.accept(VacuumWorldMessage.class);
 	is.accept(StringBuilder.class);

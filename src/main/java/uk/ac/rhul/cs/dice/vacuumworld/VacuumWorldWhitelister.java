@@ -186,5 +186,7 @@ public class VacuumWorldWhitelister {
 	is.accept(VacuumWorldAutonomousActorAppearance.class);
 	is.accept("com.google.common.collect.ImmutableList$SerializedForm");
 	is.accept("[C");
+	is.accept(Set.class);
+	is.accept(HashSet.class);
     }
 }

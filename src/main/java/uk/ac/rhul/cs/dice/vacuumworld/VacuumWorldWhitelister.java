@@ -1,6 +1,7 @@
 package uk.ac.rhul.cs.dice.vacuumworld;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -49,6 +50,7 @@ import uk.ac.rhul.cs.dice.vacuumworld.actions.enums.TurnDirection;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.enums.VacuumWorldCommunicativeActionsEnum;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.enums.VacuumWorldPhysicalActionsEnum;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.enums.VacuumWorldSensingActionsEnum;
+import uk.ac.rhul.cs.dice.vacuumworld.actions.messages.VacuumWorldMessage;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.messages.VacuumWorldMessageInterface;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.ActorType;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.AgentColor;
@@ -74,6 +76,7 @@ public class VacuumWorldWhitelister {
     private VacuumWorldWhitelister() {}
     
     public static void whitelistEventClasses(ValidatingObjectInputStream is) {
+	is.accept("*");
 	is.accept(VacuumWorldEvent.class);
 	is.accept(VacuumWorldEventInterface.class);
 	is.accept(Serializable.class);
@@ -97,6 +100,7 @@ public class VacuumWorldWhitelister {
 	is.accept(Set.class);
 	is.accept(uk.ac.rhul.cs.dice.vacuumworld.actions.messages.VacuumWorldMessage.class);
 	is.accept(VacuumWorldMessageInterface.class);
+	is.accept(VacuumWorldMessage.class);
 	is.accept(StringBuilder.class);
 	is.accept(VacuumWorldMoveAction.class);
 	is.accept(VacuumWorldTurnAction.class);
@@ -115,9 +119,15 @@ public class VacuumWorldWhitelister {
 	is.accept(VacuumWorldIdleAction.class);
 	is.accept(VacuumWorldSpeakAction.class);
 	is.accept(VacuumWorldBroadcastingAction.class);
+	is.accept("[C");
+	is.accept(HashSet.class);
     }
     
     public static void whitelistPerceptionClasses(ValidatingObjectInputStream is) {
+	is.accept("*");
+	is.accept(VacuumWorldMessageInterface.class);
+	is.accept(VacuumWorldMessage.class);
+	is.accept(StringBuilder.class);
 	is.accept(VacuumWorldPerception.class);
 	is.accept(Perception.class);
 	is.accept(VacuumWorldSpeechPerception.class);

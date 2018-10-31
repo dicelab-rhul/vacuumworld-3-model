@@ -159,7 +159,7 @@ public class VacuumWorldCleaningAgent extends AbstractAgent implements VacuumWor
 	}
 	catch (IOException e) {
 	    LogUtils.log(getID() + ": stop.");
-	    LogUtils.fakeLog(e);
+	    LogUtils.log(e);
 	    this.stop = true;
 
 	    return Collections.emptySet();

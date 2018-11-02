@@ -176,7 +176,7 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 	    }
 	}
 	
-	this.grid.entrySet().stream().filter(e -> e.getValue().containsAnActor()).map(e -> e.getValue().getActorIfAny()).forEach(this::sendFirstPerceptionToActor);
+	this.grid.entrySet().stream().filter(e -> e.getValue().containsACleaningAgent()).map(e -> e.getValue().getActorIfAny()).forEach(this::sendFirstPerceptionToActor);
     }
     
     private void sendFirstPerceptionToActor(VacuumWorldActor actor) {

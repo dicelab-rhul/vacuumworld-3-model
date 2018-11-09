@@ -1,3 +1,4 @@
 1) Remove the code duplications in VacuumWorldCleaningAgent and VacuumWorldUserAgent.
 2) Unify the JSON parsers / generators.
 3) Test git username aliases.
+4) To test the integration with Slack.

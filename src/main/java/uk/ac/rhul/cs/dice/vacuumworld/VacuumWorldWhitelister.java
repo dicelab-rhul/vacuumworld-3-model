@@ -75,7 +75,15 @@ public class VacuumWorldWhitelister {
     
     private VacuumWorldWhitelister() {}
     
+    public static void checkInputStream(ValidatingObjectInputStream is) {
+	if(is == null) {
+	    throw new IllegalArgumentException();
+	}
+    }
+    
     public static void whitelistEventClasses(ValidatingObjectInputStream is) {
+	checkInputStream(is);
+	
 	is.accept("uk.ac.rhul.cs.dice.*");
 	is.accept("org.cloudstrife9999.*");
 	is.accept("java.lang.*");
@@ -129,6 +137,8 @@ public class VacuumWorldWhitelister {
     }
     
     public static void whitelistPerceptionClasses(ValidatingObjectInputStream is) {
+	checkInputStream(is);
+	
 	is.accept("uk.ac.rhul.cs.dice.*");
 	is.accept("org.cloudstrife9999.*");
 	is.accept("java.lang.*");

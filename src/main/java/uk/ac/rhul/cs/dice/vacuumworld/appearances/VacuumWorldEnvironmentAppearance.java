@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import uk.ac.rhul.cs.dice.agentcontainers.enums.Orientation;
+import uk.ac.rhul.cs.dice.agentcontainers.interfaces.CycleBasedEnvironmentAppearance;
 import uk.ac.rhul.cs.dice.agentcontainers.interfaces.EnvironmentAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.AgentColor;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldCoordinates;
@@ -23,9 +24,10 @@ import com.google.common.collect.ImmutableSet;
  * @author cloudstrife9999
  *
  */
-public class VacuumWorldEnvironmentAppearance implements EnvironmentAppearance, VacuumWorldGridPerceptionInterface {
+public class VacuumWorldEnvironmentAppearance implements CycleBasedEnvironmentAppearance, VacuumWorldGridPerceptionInterface {
     private static final long serialVersionUID = 3587669408864383174L;
     private Map<VacuumWorldCoordinates, VacuumWorldLocationAppearance> grid;
+    private long currentCycleNumber;
 
     /**
      * 
@@ -38,13 +40,20 @@ public class VacuumWorldEnvironmentAppearance implements EnvironmentAppearance, 
      *                 {@link VacuumWorldLocation} representing the grid.
      * 
      */
-    public VacuumWorldEnvironmentAppearance(Map<VacuumWorldCoordinates, VacuumWorldLocation> grid) {
+    public VacuumWorldEnvironmentAppearance(Map<VacuumWorldCoordinates, VacuumWorldLocation> grid, long currentCycleNumber) {
+	this.currentCycleNumber = currentCycleNumber;
+	
 	Map<VacuumWorldCoordinates, VacuumWorldLocationAppearance> appearancesGrid = new HashMap<>();
 	grid.entrySet().forEach(e -> appearancesGrid.put(e.getKey(), e.getValue().getAppearance()));
 
 	this.grid = ImmutableMap.copyOf(appearancesGrid);
     }
-
+    
+    @Override
+    public long getCurrentCycleNumber() {
+	return this.currentCycleNumber;
+    }
+    
     @Override
     public Map<VacuumWorldCoordinates, VacuumWorldLocationAppearance> getGrid() {
 	return this.grid;

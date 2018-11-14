@@ -26,6 +26,7 @@ import uk.ac.rhul.cs.dice.agentactions.interfaces.Result;
 import uk.ac.rhul.cs.dice.agentcommon.enums.ContentType;
 import uk.ac.rhul.cs.dice.agentcontainers.abstractimpl.AbstractEnvironment;
 import uk.ac.rhul.cs.dice.agentcontainers.enums.Orientation;
+import uk.ac.rhul.cs.dice.agentcontainers.interfaces.CycleBasedEnvironment;
 import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldEvent;
 import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldPrinter;
 import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldSerializer;
@@ -48,7 +49,7 @@ import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VWHandshakeWhitelister;
 import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VWMessageCodes;
 import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VacuumWorldRuntimeException;
 
-public class VacuumWorldEnvironment extends AbstractEnvironment implements Runnable {
+public class VacuumWorldEnvironment extends AbstractEnvironment implements CycleBasedEnvironment, Runnable {
     public static final int MINIMUM_SIZE = 1; //Make this configurable sometime in the future. For now it is fine.
     public static final int MAXIMUM_SIZE = 10; //Make this configurable sometime in the future. For now it is fine.
     private int port;
@@ -65,6 +66,7 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
     private ValidatingObjectInputStream fromController;
     private ObjectOutputStream toController;
     private Map<String, Result> cycleResults;
+    private long currentCycleNumber;
 
     public VacuumWorldEnvironment(Map<VacuumWorldCoordinates, VacuumWorldLocation> grid, boolean stopFlag, String hostname, int port, ObjectOutputStream toController, ValidatingObjectInputStream fromController) {
 	this.grid = new ConcurrentHashMap<>(grid);
@@ -73,7 +75,12 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 	this.cycleResults = new HashMap<>();
 
 	initCommon(stopFlag, hostname, port);
-	setAppearance(new VacuumWorldEnvironmentAppearance(this.grid));
+	setAppearance(new VacuumWorldEnvironmentAppearance(this.grid, this.currentCycleNumber));
+    }
+    
+    @Override
+    public long getCurrentCycleNumber() {
+	return this.currentCycleNumber;
     }
     
     public void setNumberOfExpectedActors(int numberOfActors) {
@@ -105,6 +112,7 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 	this.output = new HashMap<>();
 	this.hostname = hostname;
 	this.port = port;
+	this.currentCycleNumber = 0;
     }
 
     public void initSocket() {
@@ -404,7 +412,7 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 	Map<VacuumWorldCoordinates, VacuumWorldLocation> locationsMap = new HashMap<>();
 	nonNullLocations.forEach(location -> locationsMap.put(location.getCoordinates(), location));
 
-	return new VacuumWorldEnvironmentAppearance(locationsMap);
+	return new VacuumWorldEnvironmentAppearance(locationsMap, this.currentCycleNumber);
     }
 
     private void sendPerception(VacuumWorldPerception perception, VacuumWorldActor actor) {
@@ -513,6 +521,7 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Runna
 
 	while (!this.stopFlag) {
 	    listenAndExecute();
+	    this.currentCycleNumber++;
 	}
 
 	stopServer();

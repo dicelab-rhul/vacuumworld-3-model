@@ -69,13 +69,25 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Cycle
     private long currentCycleNumber;
 
     public VacuumWorldEnvironment(Map<VacuumWorldCoordinates, VacuumWorldLocation> grid, boolean stopFlag, String hostname, int port, ObjectOutputStream toController, ValidatingObjectInputStream fromController) {
+	super();
+	
 	this.grid = new ConcurrentHashMap<>(grid);
 	this.toController = toController;
 	this.fromController = fromController;
 	this.cycleResults = new HashMap<>();
+	this.physics = new VacuumWorldPhysics();
+	this.stopFlag = stopFlag;
+	this.input = new HashMap<>();
+	this.output = new HashMap<>();
+	this.hostname = hostname;
+	this.port = port;
+	this.currentCycleNumber = 0;
 
-	initCommon(stopFlag, hostname, port);
-	setAppearance(new VacuumWorldEnvironmentAppearance(this.grid, this.currentCycleNumber));
+	setAppearance(buildUpdatedAppearance());
+    }
+    
+    private VacuumWorldEnvironmentAppearance buildUpdatedAppearance() {
+	return new VacuumWorldEnvironmentAppearance(this.grid, this.currentCycleNumber);
     }
     
     @Override
@@ -93,7 +105,7 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Cycle
 
     @Override
     public VacuumWorldEnvironmentAppearance getAppearance() {
-	return (VacuumWorldEnvironmentAppearance) super.getAppearance();
+	return buildUpdatedAppearance();
     }
 
     private void stopServer() {
@@ -103,16 +115,6 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Cycle
 	catch (IOException e) {
 	    LogUtils.log(e);
 	}
-    }
-
-    private void initCommon(boolean stopFlag, String hostname, int port) {
-	this.physics = new VacuumWorldPhysics();
-	this.stopFlag = stopFlag;
-	this.input = new HashMap<>();
-	this.output = new HashMap<>();
-	this.hostname = hostname;
-	this.port = port;
-	this.currentCycleNumber = 0;
     }
 
     public void initSocket() {
@@ -217,25 +219,45 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Cycle
 	return walls;
     }
 
-    public Map<VacuumWorldCoordinates, VacuumWorldLocation> getGrid() {
+    public Map<VacuumWorldCoordinates, VacuumWorldLocation> getGridReadOnly() {
 	return ImmutableMap.copyOf(this.grid);
     }
 
     public void listenAndExecute() {
-	waitForInitialization();
-	this.input.entrySet().forEach(this::listenForActorAndExecute);
-	this.output.entrySet().forEach(this::sendPerceptions);
-	
+	waitForActorsDecisionAndExecute();
+	setAppearance(buildUpdatedAppearance());
+	sendPerceptionToActors();
+	sendStateToController();
+	endCycle();
+	sendGreenLightForNextCycleToActors();
+	insertDelay();
+	checkForStopFromController();
+    }
+    
+    private void sendGreenLightForNextCycleToActors() {
+	this.output.entrySet().forEach(this::sendLastPerception);
+    }
+
+    private void sendStateToController() {
 	informController();
+    }
+
+    private void endCycle() {
 	LogUtils.log(this.getClass().getSimpleName() + ": end of the cycle.\n\n--------------------\n");
 	
 	LogUtils.log(this.getClass().getSimpleName() + ": printing current configuration...");
 	VacuumWorldPrinter.dumpModelFromLocations(this.grid);
 	
 	LogUtils.log(this.getClass().getSimpleName() + ": start of the cycle.\n");
-	
-	this.output.entrySet().forEach(this::sendLastPerception);
+    }
 
+    private void checkForStopFromController() {
+	if(this.fromController != null) {
+	    checkForStop();
+	}
+    }
+
+    private void insertDelay() {
 	long timestamp = System.nanoTime();
 
 	while (true) {
@@ -243,12 +265,16 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Cycle
 		break;
 	    }
 	}
-	
-	if(this.fromController != null) {
-	    checkForStop();
-	}
     }
-    
+
+    private void waitForActorsDecisionAndExecute() {
+	this.input.entrySet().forEach(this::listenForActorAndExecute);
+    }
+
+    private void sendPerceptionToActors() {
+	this.output.entrySet().forEach(this::sendPerceptions);
+    }
+
     private void sendPerceptions(Entry<String, ObjectOutputStream> output) {
 	Result result = this.cycleResults.remove(output.getKey());
 	provideFeedback(result, getActorFromId(output.getKey()));
@@ -300,7 +326,7 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Cycle
 	}
     }
 
-    private void waitForInitialization() {
+    private void waitForActorsInitialization() {
 	while (true) {
 	    if (this.initializationComplete && this.goodToGo) {
 		break;
@@ -326,6 +352,7 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Cycle
 	}
 	catch (ClassNotFoundException | IOException e) {
 	    LogUtils.log(e);
+	    
 	    throw new VacuumWorldRuntimeException(e);
 	}
     }
@@ -519,6 +546,8 @@ public class VacuumWorldEnvironment extends AbstractEnvironment implements Cycle
 	LogUtils.log(this.getClass().getSimpleName() + ": printed initial configuration\n\n--------------------\n");
 	LogUtils.log(this.getClass().getSimpleName() + ": start of the cycle.\n");
 
+	waitForActorsInitialization();
+	
 	while (!this.stopFlag) {
 	    listenAndExecute();
 	    this.currentCycleNumber++;

@@ -143,7 +143,7 @@ public class VacuumWorldPhysics implements VacuumWorldPhysicsInterface {
 
     @Override
     public synchronized VacuumWorldCommunicativeActionResult perform(VacuumWorldBroadcastingAction action, VacuumWorldEnvironment context) {
-	Set<String> recipients = context.getGrid().entrySet().stream().filter(e -> e.getValue().containsAnActorDifferentFrom(action.getActorID())).map(e -> e.getValue().getActorIfAny()).map(VacuumWorldActor::getID).collect(Collectors.toSet());
+	Set<String> recipients = context.getGridReadOnly().entrySet().stream().filter(e -> e.getValue().containsAnActorDifferentFrom(action.getActorID())).map(e -> e.getValue().getActorIfAny()).map(VacuumWorldActor::getID).collect(Collectors.toSet());
 	action.addRecipients(recipients);
 	
 	return new VacuumWorldCommunicativeActionResult(ActionResult.SUCCESS, action.getMessage(), action.getRecipientsIds());

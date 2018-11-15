@@ -44,7 +44,7 @@ public class VacuumWorldSerializer {
     }
     
     public static JsonObject serialize(VacuumWorldEnvironment environment) {
-	return serialize(environment.getGrid());
+	return serialize(environment.getGridReadOnly());
     }
     
     public static JsonObject serialize(Map<VacuumWorldCoordinates, VacuumWorldLocation> grid) {

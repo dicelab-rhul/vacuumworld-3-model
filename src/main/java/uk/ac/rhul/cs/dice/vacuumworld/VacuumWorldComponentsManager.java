@@ -91,7 +91,7 @@ public class VacuumWorldComponentsManager {
     }
     
     public void stopUniverse() {
-	while(!this.universe.getMainAmbient().getStopFlag()) {
+	while(!this.universe.getVWEnvironment().getStopFlag()) {
 	    if(System.currentTimeMillis() % 100000000 == 0) {
 		LogUtils.log("Final Fantasy VII is the best!");
 	    }
@@ -104,7 +104,7 @@ public class VacuumWorldComponentsManager {
     private void shutdown() {
 	try {
 	    setStopFlag(true);
-	    this.universe.getMainAmbient().getAllOutputStreams().forEach(this::shutdownChannel);
+	    this.universe.getVWEnvironment().getAllOutputStreams().forEach(this::shutdownChannel);
 	    this.executor.shutdownNow();
 	    this.executor.awaitTermination(5, TimeUnit.SECONDS);
 	}
@@ -130,10 +130,10 @@ public class VacuumWorldComponentsManager {
 	this.executor = Executors.newFixedThreadPool(1 + this.universe.countActiveBodies());
 
 	LogUtils.log(this.getClass().getSimpleName() + ": starting environment...");
-	this.executor.submit(this.universe.getEnvironment());
+	this.executor.submit(this.universe.getVWEnvironment());
 
 	LogUtils.log(this.getClass().getSimpleName() + ": starting actors...");
-	this.universe.getAllActors().forEach(actor -> actor.setStopFlag(this.universe.getEnvironment().getStopFlag()));
+	this.universe.getAllActors().forEach(actor -> actor.setStopFlag(this.universe.getVWEnvironment().getStopFlag()));
 	this.universe.getAllActors().forEach(this.executor::submit);
 	
 	stopUniverse();
@@ -266,7 +266,7 @@ public class VacuumWorldComponentsManager {
     }
 
     private void setStopFlag(boolean flag) {
-	this.universe.getEnvironment().setStopFlag(flag);
-	this.universe.getAllActors().forEach(actor -> actor.setStopFlag(this.universe.getEnvironment().getStopFlag()));
+	this.universe.getVWEnvironment().setStopFlag(flag);
+	this.universe.getAllActors().forEach(actor -> actor.setStopFlag(this.universe.getVWEnvironment().getStopFlag()));
     }
 }

@@ -1,3 +1,4 @@
 1) Remove the code duplications in VacuumWorldCleaningAgent and VacuumWorldUserAgent.
 2) Unify the JSON parsers / generators. Maybe extract some methods to vwcommon?
 3) Make the delay (excluding the syncronization latency) between cycles - currently 0.75 seconds, hardcoded in VacuumWorldEnvironment - configurable.
+4) Write a whole lot of tests.

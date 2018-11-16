@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TARGET_DIR="target"
+source common.sh
 
 if [ ! -d ${TARGET_DIR} ]; then
     echo "${TARGET_DIR} is not a directory or does not exist. Aborting..."

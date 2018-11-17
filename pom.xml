@@ -24,28 +24,28 @@
 			<version>5.3.1</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.junit.platform</groupId>
 			<artifactId>junit-platform-engine</artifactId>
 			<version>1.3.1</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.junit.platform</groupId>
 			<artifactId>junit-platform-commons</artifactId>
 			<version>1.3.1</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.junit.platform</groupId>
 			<artifactId>junit-platform-launcher</artifactId>
 			<version>1.3.1</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.junit.vintage</groupId>
 			<artifactId>junit-vintage-engine</artifactId>
@@ -60,25 +60,25 @@
 			<artifactId>guava</artifactId>
 			<version>27.0-jre</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 			<version>2.8.5</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
 			<version>20180813</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>it.unibo.alice.tuprolog</groupId>
 			<artifactId>tuprolog</artifactId>
 			<version>3.3.0</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
@@ -92,31 +92,31 @@
 			<artifactId>LogUtilities</artifactId>
 			<version>1.0.1</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>uk.ac.rhul.cs.dice</groupId>
 			<artifactId>agentactions</artifactId>
 			<version>1.0.1</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>uk.ac.rhul.cs.dice</groupId>
 			<artifactId>agentcommon</artifactId>
 			<version>1.0.1</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>uk.ac.rhul.cs.dice</groupId>
 			<artifactId>agentcontainers</artifactId>
 			<version>1.0.1</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>uk.ac.rhul.cs.dice</groupId>
 			<artifactId>agentprototype</artifactId>
 			<version>1.0.1</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>uk.ac.rhul.cs.dice.vacuumworld</groupId>
 			<artifactId>vwcommon</artifactId>
@@ -143,6 +143,19 @@
 		</resources>
 		<testSourceDirectory>src/test/java</testSourceDirectory>
 		<plugins>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.0.0-M1</version>
+				<executions>
+					<execution>
+						<id>default-test</id>
+						<phase>test</phase>
+						<goals>
+							<goal>test</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.8.0</version>

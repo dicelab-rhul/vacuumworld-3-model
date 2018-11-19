@@ -91,36 +91,42 @@
 			<groupId>org.cloudstrife9999</groupId>
 			<artifactId>LogUtilities</artifactId>
 			<version>1.0.1</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>uk.ac.rhul.cs.dice</groupId>
 			<artifactId>agentactions</artifactId>
 			<version>1.0.1</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>uk.ac.rhul.cs.dice</groupId>
 			<artifactId>agentcommon</artifactId>
 			<version>1.0.1</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>uk.ac.rhul.cs.dice</groupId>
 			<artifactId>agentcontainers</artifactId>
 			<version>1.0.1</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>uk.ac.rhul.cs.dice</groupId>
 			<artifactId>agentprototype</artifactId>
 			<version>1.0.1</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>uk.ac.rhul.cs.dice.vacuumworld</groupId>
 			<artifactId>vwcommon</artifactId>
 			<version>1.0.1</version>
+			<scope>provided</scope>
 		</dependency>
 		<!-- END INTERNAL DEPENDENCIES -->
 

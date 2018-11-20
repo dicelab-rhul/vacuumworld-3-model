@@ -316,22 +316,23 @@ def __setup_scripts(working_dir: str, scripts_dir: str) -> None:
     print("# Additional Scripts Setup Section #")
     print("####################################\n")
 
-    for dir, subdir, file in os.walk(scripts_dir):
-        src_path: str = os.path.join(scripts_dir, file)
-        target_path: str = os.path.join(working_dir, file)
+    for dir, subdir, files in os.walk(scripts_dir):
+        for f in files:
+            src_path: str = os.path.join(scripts_dir, f)
+            target_path: str = os.path.join(working_dir, f)
 
-        if not os.path.exists(path=file):
-            print("Copying %s to %s ..." % (src_path, target_path))
-            shutil.copyfile(src=scr_path, dst=target_path)
+            if not os.path.exists(path=target_path):
+                print("Copying %s to %s ..." % (src_path, target_path))
+                shutil.copyfile(src=scr_path, dst=target_path)
 
-            if target_path.endswith(".sh"):
-                os.chmod(path=target_path, mode=0o700)
+                if target_path.endswith(".sh"):
+                    os.chmod(path=target_path, mode=0o700)
+                else:
+                    os.chmod(path=target_path, mode=0o644)
+
+                print("Done.\n")
             else:
-                os.chmod(path=target_path, mode=0o644)
-
-            print("Done.\n")
-        else:
-            print("%s already exists. No need to overwrite it.\n" % target_path)
+                print("%s already exists. No need to overwrite it.\n" % target_path)
 
 
 def __finish_installation() -> None:

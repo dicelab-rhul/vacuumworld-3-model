@@ -312,9 +312,9 @@ def __setup_scripts_if_necessary(maven_data: dict, working_dir: str, workspace: 
 
 
 def __setup_scripts(working_dir: str, scripts_dir: str) -> None:
-    print("####################################")
-    print("# Additional Scripts Setup Section #")
-    print("####################################\n")
+    print("########################################")
+    print("# Additional Scripts Setup Sub-section #")
+    print("########################################\n")
 
     for dir, subdir, files in os.walk(scripts_dir):
         for f in files:
@@ -333,6 +333,10 @@ def __setup_scripts(working_dir: str, scripts_dir: str) -> None:
                 print("Done.\n")
             else:
                 print("%s already exists. No need to overwrite it.\n" % target_path)
+
+    print("#######################################################")
+    print("# Back To MVC Projects Fetching And Compiling Section #")
+    print("#######################################################\n")
 
 
 def __finish_installation() -> None:

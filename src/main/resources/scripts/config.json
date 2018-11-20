@@ -1,0 +1,7 @@
+{
+    "controller_hostname": "127.0.0.1",
+    "model_hostname": "127.0.0.1",
+    "controller_port": "13337",
+    "model_port": "17777",
+    "environment_port": "10890" 
+}

@@ -1,0 +1,18 @@
+{
+    "agents_default": "uk.ac.rhul.cs.dice.vacuumworld.actors.minds.VacuumWorldDefaultMind",
+    "agents": [
+        "uk.ac.rhul.cs.dice.vacuumworld.actors.minds.VacuumWorldDefaultMind",
+        "uk.ac.rhul.cs.dice.vacuumworld.actors.minds.VacuumWorldShoutingMind",
+        "uk.ac.rhul.cs.dice.vacuumworld.actors.minds.VacuumWorldPrologMind",
+        "uk.ac.rhul.cs.dice.vacuumworld.actors.minds.VacuumWorldGoalOrientedMind",
+        "uk.ac.rhul.cs.dice.vacuumworld.actors.minds.coursework.part1.VacuumWorldExplorerMind",
+        "uk.ac.rhul.cs.dice.vacuumworld.actors.minds.coursework.part2.VacuumWorldOrangeCleanerMind",
+        "uk.ac.rhul.cs.dice.vacuumworld.actors.minds.coursework.part2.VacuumWorldGreenCleanerMind",
+        "uk.ac.rhul.cs.dice.vacuumworld.actors.minds.coursework.part2.VacuumWorldWhiteCleanerMind",
+        "uk.ac.rhul.cs.dice.vacuumworld.actors.minds.coursework.part3.VacuumWorldGreenAdvancedMind",
+        "uk.ac.rhul.cs.dice.vacuumworld.actors.minds.coursework.part3.VacuumWorldOrangeAdvancedMind",
+        "uk.ac.rhul.cs.dice.vacuumworld.actors.minds.coursework.part3.VacuumWorldWhiteAdvancedMind",
+        "uk.ac.rhul.cs.dice.vacuumworld.actors.minds.tutorials.Tutorial1AgentMind"
+    ],
+    "users": "uk.ac.rhul.cs.dice.vacuumworld.actors.minds.VacuumWorldUserMind"
+}

@@ -6,13 +6,13 @@ MINOR=$(echo ${DEFAULT_PYTHON3} | cut -d'.' -f2)
 
 if [[ ${MAJOR} < "3" ]]; then
     echo "Python 3.6+ is required. Aborting..."
-    
+
     exit 1
 fi
 
 if [[ ${MINOR} -lt "6" ]]; then
     echo "Python 3.6+ is required. Aborting..."
-    
+
     exit 1
 fi
 
@@ -76,7 +76,7 @@ def __check_for_javac_version(java_version: str) -> None:
     try:
         tokens: list = str(check_output(["javac", "--version"]), "utf-8").split(" ")
         version: str = tokens[1].replace("\n", "").replace("\r", "")
-        
+
         if version != java_version:
             __die("Java version: %s. Javac version: %s. Please fix this mismatching and retry." % (java_version, version))
         else:
@@ -164,7 +164,7 @@ def __check_entry_in_ssh_config_file(file_path: str, entry: str) -> bool:
         for line in f.readlines():
             if "Host vacuumworld3bitbucket" in line:
                 return True
-        
+
         return False
 
 
@@ -219,7 +219,7 @@ def __clone_or_pull_project(maven_data: dict, workspace: str, branch: str) -> bo
             print("%s is up to date. No need to pull." % project_dir)
 
             return False
-            
+
     elif not os.path.exists(path=project_dir):
         call(["git", "clone", bitbucket_project_url, project_dir])
 
@@ -252,9 +252,9 @@ def __build_and_install_dependency_if_necessary(maven_data: dict, workspace: str
         return
     elif new_version:
         shutil.rmtree(path=os.path.dirname(jar_path))
-    
+
     __create_dir_if_necessary(path=os.path.dirname(jar_path), mode=0o644)
-    
+
     project_dir: str = os.path.join(workspace, aid)
     old_dir: str = os.getcwd()
     os.chdir(path=project_dir)
@@ -285,7 +285,7 @@ def __get_and_compile_mvc_projects(working_dir: str, branch: str="master") -> No
     for project in projects:
         new_version: bool = __clone_or_pull_project(maven_data=project, workspace=workspace, branch=branch)
         __build_project_if_necessary(maven_data=project, working_dir=working_dir, workspace=workspace, new_version=new_version)
-		__setup_scripts_if_necessary(maven_data=project, working_dir=working_dir, workspace=workspace)
+        __setup_scripts_if_necessary(maven_data=project, working_dir=working_dir, workspace=workspace)
 
 
 def __build_project_if_necessary(maven_data: dict, working_dir: str, workspace: str, new_version: bool) -> None:
@@ -303,37 +303,36 @@ def __build_project_if_necessary(maven_data: dict, working_dir: str, workspace: 
     else:
         print("%s is already up to date.\n" % jar_path)
 
-        
+
 def __setup_scripts_if_necessary(maven_data: dict, working_dir: str, workspace: str) -> None:
     scripts_dir : str = os.path.join(workspace, maven_data["name"], "src", "main", "resources", "scripts")
-    
+
     if os.path.isdir(s=scripts_dir):
     	__setup_scripts(working_dir=working_dir, scripts_dir=scripts_dir)
-    	
+
 
 def __setup_scripts(working_dir: str, scripts_dir: str) -> None:
-	print("####################################")
+    print("####################################")
     print("# Additional Scripts Setup Section #")
     print("####################################\n")
-    
-	for dir, subdir, file in os.walk(scripts_dir):
-		src_path: str = os.path.join(scripts_dir, file)
-		target_path: str = os.path.join(working_dir, file)
-		
-		if not os.path.exists(path=file):
-			print("Copying %s to %s ..." % (src_path, target_path))
-			shutil.copyfile(src=scr_path, dst=target_path)
-			
-			if target_path.endswith(".sh"):
-				os.chmod(path=target_path, mode=0o700)
-			else:
-				os.chmod(path=target_path, mode=0o644)
-			
-			print("Done.\n")
-		else:
-			print("%s already exists. No need to overwrite it.\n" % target_path)
-		
-        
+
+    for dir, subdir, file in os.walk(scripts_dir):
+        src_path: str = os.path.join(scripts_dir, file)
+        target_path: str = os.path.join(working_dir, file)
+
+        if not os.path.exists(path=file):
+            print("Copying %s to %s ..." % (src_path, target_path))
+            shutil.copyfile(src=scr_path, dst=target_path)
+
+            if target_path.endswith(".sh"):
+                os.chmod(path=target_path, mode=0o700)
+            else:
+                os.chmod(path=target_path, mode=0o644)
+
+            print("Done.\n")
+        else:
+            print("%s already exists. No need to overwrite it.\n" % target_path)
+
 
 def __finish_installation() -> None:
     print("Installation complete!")
@@ -363,5 +362,5 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-    
+
 END

@@ -6,13 +6,13 @@ MINOR=$(echo ${DEFAULT_PYTHON3} | cut -d'.' -f2)
 
 if [[ ${MAJOR} < "3" ]]; then
     echo "Python 3.6+ is required. Aborting..."
-    
+
     exit 1
 fi
 
 if [[ ${MINOR} -lt "6" ]]; then
     echo "Python 3.6+ is required. Aborting..."
-    
+
     exit 1
 fi
 
@@ -49,7 +49,7 @@ def __check_for_consistency(size: int, number_of_active_bodies: int, number_of_d
         raise Exception("The number of cleaning agents must be at least 1.")
 
     if number_of_active_bodies == 1 and user:
-        raise Exception("The number of cleaning agents must be at least 1. The user does not count, as it is not a cleaning agent.")        
+        raise Exception("The number of cleaning agents must be at least 1. The user does not count, as it is not a cleaning agent.")
 
 
 def __generate_state(size: int=5, nga: int=1, noa: int=0, nwa: int=0, user: bool=False, ngd: int=1, nod: int=0, wm: str="", om: str="", gm: str="") -> dict:

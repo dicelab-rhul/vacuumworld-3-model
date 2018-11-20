@@ -40,4 +40,4 @@ elif [ "" != "XFCE_OK" ]; then
     $XFCE_TERMINAL -x $VIEW_SCRIPT_CMD # We do not need to detach it with &
 else
     echo "Could not find a suitable terminal. You have to run $MODEL_SCRIPT_CMD, $CONTROLLER_SCRIPT_CMD, and $VIEW_SCRIPT_CMD (in this order) in three separate terminal tabs."
-fi 
+fi

@@ -6,13 +6,13 @@ MINOR=$(echo ${DEFAULT_PYTHON3} | cut -d'.' -f2)
 
 if [[ ${MAJOR} < "3" ]]; then
     echo "Python 3.6+ is required. Aborting..."
-    
+
     exit 1
 fi
 
 if [[ ${MINOR} -lt "6" ]]; then
     echo "Python 3.6+ is required. Aborting..."
-    
+
     exit 1
 fi
 
@@ -54,10 +54,10 @@ def main() -> None:
 
     working_dir: str = os.getcwd()
     workspace: str = os.path.join(working_dir, "workspace")
-    
+
     for project in projects:
         __build_project_if_necessary(maven_data=project, working_dir=working_dir, workspace=workspace, new_version=True)
-    
+
 
 if __name__ == "__main__":
     main()

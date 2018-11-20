@@ -6,13 +6,13 @@ MINOR=$(echo ${DEFAULT_PYTHON3} | cut -d'.' -f2)
 
 if [[ ${MAJOR} < "3" ]]; then
     echo "Python 3.6+ is required. Aborting..."
-    
+
     exit 1
 fi
 
 if [[ ${MINOR} -lt "6" ]]; then
     echo "Python 3.6+ is required. Aborting..."
-    
+
     exit 1
 fi
 

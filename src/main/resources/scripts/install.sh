@@ -323,6 +323,12 @@ def __setup_scripts(working_dir: str, scripts_dir: str) -> None:
 		if not os.path.exists(path=file):
 			print("Copying %s to %s ..." % (src_path, target_path))
 			shutil.copyfile(src=scr_path, dst=target_path)
+			
+			if target_path.endswith(".sh"):
+				os.chmod(path=target_path, mode=0o700)
+			else:
+				os.chmod(path=target_path, mode=0o644)
+			
 			print("Done.\n")
 		else:
 			print("%s already exists. No need to overwrite it.\n" % target_path)

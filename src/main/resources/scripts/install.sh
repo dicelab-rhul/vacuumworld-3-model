@@ -357,7 +357,6 @@ def main() -> None:
 
     __setup_maven_dependencies(working_dir=working_dir, branch="dev")
     __get_and_compile_mvc_projects(working_dir=working_dir, branch="dev")
-    __setup_scripts(working_dir=working_dir)
     __finish_installation()
 
 

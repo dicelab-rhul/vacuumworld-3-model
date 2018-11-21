@@ -1,5 +1,19 @@
 #!/bin/bash
 
+PKG_NAME="python3"
+PKG="python3"
+PKG_OK=$(which "$PKG")
+
+echo Checking for "$PKG"... $PKG_OK
+
+if [ "" == "$PKG_OK" ]; then
+    echo "$PKG could not be found. Install $PKG_NAME and retry. Aborting..."
+    exit 1
+else
+    echo "$PKG found! It is provided by $PKG_NAME"
+    echo ""
+fi
+
 DEFAULT_PYTHON3=$(/usr/bin/env python3 --version |& cut -d' ' -f2)
 MAJOR=$(echo ${DEFAULT_PYTHON3} | cut -d'.' -f1)
 MINOR=$(echo ${DEFAULT_PYTHON3} | cut -d'.' -f2)
@@ -8,12 +22,18 @@ if [[ ${MAJOR} < "3" ]]; then
     echo "Python 3.6+ is required. Aborting..."
 
     exit 1
-fi
+elif [ ${MAJOR} == "3" ]; then
+    if [[ ${MINOR} < "6" ]]; then
+        echo "Python 3.6+ is required. Aborting..."
 
-if [[ ${MINOR} -lt "6" ]]; then
-    echo "Python 3.6+ is required. Aborting..."
-
-    exit 1
+        exit 1
+    else
+        echo "The ${PKG} sub-version looks good."
+        echo ""
+    fi
+else  
+    echo "The ${PKG} sub-version looks good."
+    echo ""
 fi
 
 /usr/bin/env python3 - <<END

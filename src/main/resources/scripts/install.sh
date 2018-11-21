@@ -227,6 +227,7 @@ def __clone_or_pull_project(maven_data: dict, workspace: str, branch: str) -> bo
 
         Popen(["git", "checkout", branch], stdout=DEVNULL, stderr=DEVNULL).wait()
         Popen(["git", "branch", "-u", "origin/dev", "dev"], stdout=DEVNULL, stderr=DEVNULL).wait()
+        Popen(["git", "remote", "update"], stdout=DEVNULL, stderr=DEVNULL).wait()
 
         if "Your branch is behind" in str(check_output(["git", "status", "-uno"]), "utf-8"):
             call(["git", "pull", "-f"])

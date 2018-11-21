@@ -31,6 +31,7 @@ public class VacuumWorldUserMind extends VacuumWorldAbstractMind implements Vacu
     private boolean visitedOrigin;
     private boolean readyToStart;
     private transient GoToPositionGoal goToOrigin;
+    private static final int RNG_UPPER_LIMIT_INCLUSIVE = 4; // {0, 1, 2, 3} -> resume behaviour; 4 -> drop dirt.
 
     public VacuumWorldUserMind(String bodyId) {
 	super(bodyId);
@@ -95,16 +96,16 @@ public class VacuumWorldUserMind extends VacuumWorldAbstractMind implements Vacu
     }
 
     private VacuumWorldAbstractAction decideWithRNG() {
-	switch (getRng().nextInt(4)) {
-	case 0:
-	case 1:
-	case 2:
-	case 3:
+	int nextRandomInt = getRng().nextInt(VacuumWorldUserMind.RNG_UPPER_LIMIT_INCLUSIVE + 1);
+	
+	if(nextRandomInt >= 0 && nextRandomInt < VacuumWorldUserMind.RNG_UPPER_LIMIT_INCLUSIVE) {
 	    return resumeBehavior();
-	case 4:
+	}
+	else if(nextRandomInt == VacuumWorldUserMind.RNG_UPPER_LIMIT_INCLUSIVE) {
 	    return isDirt() ? resumeBehavior() : new VacuumWorldDropDirtAction(VacuumWorldDirtColor.random());
-	default:
-	    return new VacuumWorldIdleAction();
+	}
+	else {
+	    return new VacuumWorldIdleAction(); //Technically unreachable, as 0 <= nextRandomInt <= RNG_UPPER_LIMIT_INCLUSIVE by construction, but here for safety.
 	}
     }
 

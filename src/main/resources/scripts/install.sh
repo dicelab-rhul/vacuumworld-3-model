@@ -344,7 +344,7 @@ def __setup_scripts(working_dir: str, scripts_dir: str) -> None:
 
             if not os.path.exists(path=target_path):
                 print("Copying %s to %s ..." % (src_path, target_path))
-                shutil.copyfile(src=src_path, dst=target_path)
+                os.symlink(src=src_path, dst=target_path)
 
                 if target_path.endswith(".sh"):
                     os.chmod(path=target_path, mode=0o700)

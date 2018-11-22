@@ -31,7 +31,10 @@ def __fetch_all_minds(minds_folder_path: str) -> list:
 
     for d, _, files in os.walk(minds_folder_path):
         for f in files:
-            minds.append(os.path.join(d, f))
+            if f.endswith(".java"):
+                minds.append(os.path.join(d, f))
+            else:
+                print("Skipping %s because it does not end with \".java\".\n" % f)
 
     return minds
 
@@ -59,13 +62,16 @@ def __get_concrete_minds(minds: list) -> list:
     concrete: list = []
 
     for mind in minds:
-        with open(mind, "r") as mind_file:
-            lines: list = mind_file.readlines()
+        try:
+            with open(mind, "r") as mind_file:
+                lines: list = mind_file.readlines()
 
-            for line in lines:
-                if "public class " in line and " extends " in line and "Mind" in line:
-                    concrete.append(__parse(mind_file=mind))
-                    break
+                for line in lines:
+                    if "public class " in line and " extends " in line and "Mind" in line:
+                        concrete.append(__parse(mind_file=mind))
+                        break
+        except UnicodeDecodeError:
+            print("Skipping %s because of a parsing error.\n" % mind)
 
     return concrete
 

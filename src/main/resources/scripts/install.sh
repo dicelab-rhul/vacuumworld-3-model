@@ -317,7 +317,7 @@ def __build_project_if_necessary(maven_data: dict, working_dir: str, workspace: 
         old_dir: str = os.getcwd()
         os.chdir(path=project_dir)
         call(["./build.sh"])
-        os.symlink(src=os.path.join("target", maven_data["jar_name"]), dst=jar_path)
+        os.symlink(src=os.path.join(project_dir, "target", maven_data["jar_name"]), dst=jar_path)
         os.chdir(path=old_dir)
 
         print("%s is now up to date.\n" % jar_path)

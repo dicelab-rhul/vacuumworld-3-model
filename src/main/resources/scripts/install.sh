@@ -311,11 +311,15 @@ def __get_and_compile_mvc_projects(working_dir: str, branch: str="master") -> No
 
 def __remove_or_unlink_resource_if_necessary(file_path: str) -> None:
     if not os.path.exists(file_path):
-        return
+        print("%s does not exist. No need to remove it or unlink it.\n")
     elif os.is_symlink(file_path):
+        print("%s exists and is a symlink Unlinking it..")
     	os.unlink(file_path)
+    	print("Done.\n")
     else:
-        os.remove(file_path)
+        print("%s exists and is a not symlink Removing it..")
+        shutil.rmtree(path=file_path)
+        print("Done.\n")
 
 
 def __build_project_if_necessary(maven_data: dict, working_dir: str, workspace: str, new_version: bool) -> None:

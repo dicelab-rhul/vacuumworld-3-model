@@ -317,7 +317,7 @@ def __build_project_if_necessary(maven_data: dict, working_dir: str, workspace: 
         old_dir: str = os.getcwd()
         os.chdir(path=project_dir)
         call(["./build.sh"])
-        shutil.copyfile(src=os.path.join("target", maven_data["jar_name"]), dst=jar_path)
+        os.symlink(src=os.path.join("target", maven_data["jar_name"]), dst=jar_path)
         os.chdir(path=old_dir)
 
         print("%s is now up to date.\n" % jar_path)
@@ -343,7 +343,7 @@ def __setup_scripts(working_dir: str, scripts_dir: str) -> None:
             target_path: str = os.path.join(working_dir, f)
 
             if not os.path.exists(path=target_path):
-                print("Copying %s to %s ..." % (src_path, target_path))
+                print("Creating a symlink %s -> %s ..." % (src_path, target_path))
                 os.symlink(src=src_path, dst=target_path)
 
                 if target_path.endswith(".sh"):
@@ -353,7 +353,7 @@ def __setup_scripts(working_dir: str, scripts_dir: str) -> None:
 
                 print("Done.\n")
             else:
-                print("%s already exists. No need to overwrite it.\n" % target_path)
+                print("%s already exists. No need to create symlinks.\n" % target_path)
 
     print("#######################################################")
     print("# Back To MVC Projects Fetching And Compiling Section #")

@@ -310,14 +310,14 @@ def __get_and_compile_mvc_projects(working_dir: str, branch: str="master") -> No
 
 
 def __remove_or_unlink_resource_if_necessary(file_path: str) -> None:
-    if not os.path.exists(file_path):
-        print("%s does not exist. No need to remove it or unlink it.\n")
-    elif os.is_symlink(file_path):
-        print("%s exists and is a symlink Unlinking it..")
+    if os.is_symlink(file_path):
+        print("%s exists and is a symlink Unlinking it.." % file_path)
         os.unlink(file_path)
         print("Done.\n")
+    elif not os.path.exists(file_path):
+        print("%s does not exist. No need to remove it or unlink it.\n" % file_path)
     else:
-        print("%s exists and is a not symlink Removing it..")
+        print("%s exists and is a not symlink Removing it.." % file_path)
         shutil.rmtree(path=file_path)
         print("Done.\n")
 

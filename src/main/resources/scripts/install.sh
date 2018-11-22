@@ -310,12 +310,12 @@ def __get_and_compile_mvc_projects(working_dir: str, branch: str="master") -> No
 
 
 def __remove_or_unlink_resource_if_necessary(file_path: str) -> None:
-    if not os.path.exists(jar_path):
+    if not os.path.exists(file_path):
         return
-    elif os.is_symlink(jar_path):
-    	os.unlink(jar_path)
+    elif os.is_symlink(file_path):
+    	os.unlink(file_path)
     else:
-        os.remove(jar_path)
+        os.remove(file_path)
 
 
 def __build_project_if_necessary(maven_data: dict, working_dir: str, workspace: str, new_version: bool) -> None:

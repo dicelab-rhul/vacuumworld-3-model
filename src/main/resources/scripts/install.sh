@@ -309,10 +309,21 @@ def __get_and_compile_mvc_projects(working_dir: str, branch: str="master") -> No
         __setup_scripts_if_necessary(maven_data=project, working_dir=working_dir, workspace=workspace)
 
 
+def __remove_or_unlink_resource_if_necessary(file_path: str) -> None:
+    if not os.path.exists(jar_path):
+        return
+    elif os.is_symlink(jar_path):
+    	os.unlink(jar_path)
+    else:
+        os.remove(jar_path)
+
+
 def __build_project_if_necessary(maven_data: dict, working_dir: str, workspace: str, new_version: bool) -> None:
     jar_path: str = os.path.join(working_dir, maven_data["jar_name"])
 
     if new_version or not os.path.exists(jar_path):
+        __remove_or_unlink_resource_if_necessary(file_path=jar_path)
+
         project_dir: str = os.path.join(workspace, maven_data["name"])
         old_dir: str = os.getcwd()
         os.chdir(path=project_dir)

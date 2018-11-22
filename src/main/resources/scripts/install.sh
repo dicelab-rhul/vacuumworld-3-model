@@ -314,8 +314,8 @@ def __remove_or_unlink_resource_if_necessary(file_path: str) -> None:
         print("%s does not exist. No need to remove it or unlink it.\n")
     elif os.is_symlink(file_path):
         print("%s exists and is a symlink Unlinking it..")
-    	os.unlink(file_path)
-    	print("Done.\n")
+        os.unlink(file_path)
+        print("Done.\n")
     else:
         print("%s exists and is a not symlink Removing it..")
         shutil.rmtree(path=file_path)

@@ -2,15 +2,15 @@
 
 PKG_NAME="python3"
 PKG="python3"
-PKG_OK=$(which "$PKG")
+PKG_OK=$(which "${PKG}")
 
-echo Checking for "$PKG"... $PKG_OK
+echo Checking for "${PKG}"... ${PKG_OK}
 
-if [ "" == "$PKG_OK" ]; then
-    echo "$PKG could not be found. Install $PKG_NAME and retry. Aborting..."
+if [ "" == "${PKG_OK}" ]; then
+    echo "${PKG} could not be found. Install ${PKG_NAME} and retry. Aborting..."
     exit 1
 else
-    echo "$PKG found! It is provided by $PKG_NAME"
+    echo "${PKG} found! It is provided by ${PKG_NAME}"
     echo ""
 fi
 
@@ -83,11 +83,11 @@ def __check_for_java_version() -> str:
 
             return version
         else:
-            __die("There is something wrong with Java. Please double check that a provider for Java 10 is installed, and set as default Java.")
+            __die(message="There is something wrong with Java. Please double check that a provider for Java 10 is installed, and set as default Java.")
 
             return ""
     except Exception:
-        __die("There is something wrong with Java. Please double check that a provider for Java 10 is installed, and set as default Java.")
+        __die(message="There is something wrong with Java. Please double check that a provider for Java 10 is installed, and set as default Java.")
 
         return ""
 
@@ -98,24 +98,24 @@ def __check_for_javac_version(java_version: str) -> None:
         version: str = tokens[1].replace("\n", "").replace("\r", "")
 
         if version != java_version:
-            __die("Java version: %s. Javac version: %s. Please fix this mismatching and retry." % (java_version, version))
+            __die(message="Java version: %s. Javac version: %s. Please fix this mismatching and retry." % (java_version, version))
         else:
             print("Javac version: %s. Good!\n" % version)
     except Exception:
-        __die("There is something wrong with Javac. Please double check that a provider for Java 10 is installed, and set as default Javac.")
+        __die(message="There is something wrong with Javac. Please double check that a provider for Java 10 is installed, and set as default Javac.")
 
 
 def __check_java_version(candidate: str, provider: str) -> None:
     tokens: list = [int(_, 10) for _ in candidate.split(".")]
 
     if "openjdk" == provider and tokens[0] < 10:
-        __die("Your Java version appears to be %d. %d is the minimum needed." % (tokens[0], 10))
+        __die(message="Your Java version appears to be %d. %d is the minimum needed." % (tokens[0], 10))
     elif "java" == provider and (tokens[0] < 1 or tokens[0] == 1 and tokens[1] < 10):
-        __die("Your Java version appears to be %d.%d. %d.%d is the minimum needed." % (tokens[0], tokens[1], 1, 10))
+        __die(message="Your Java version appears to be %d.%d. %d.%d is the minimum needed." % (tokens[0], tokens[1], 1, 10))
     elif "openjdk" == provider or "java" == provider:
         return
     else:
-        __die("There is something wrong with Java. Please double check that a provider for Java 10 is installed, and set as default Java.")
+        __die(message="There is something wrong with Java. Please double check that a provider for Java 10 is installed, and set as default Java.")
 
 
 def __setup_ssh(bitbucket_public_project_url: str) -> None:
@@ -143,13 +143,13 @@ def __download_key_if_necessary(key_url: str, path: str, mode=int) -> None:
         call(["curl", "-L", key_url, "-o", path])
 
         if not os.path.isfile(path=path):
-            __die("Failed to download %s to %s." % (key_url, path))
+            __die(message="Failed to download %s to %s." % (key_url, path))
 
             return
         else:
             print("Done.\n")
     elif not os.path.isfile(path=path):
-        __die("%s already exists, but it is not a file." % path)
+        __die(message="%s already exists, but it is not a file." % path)
 
         return
 
@@ -160,7 +160,7 @@ def __create_dir_if_necessary(path: str, mode: int=0o744) -> None:
     if not os.path.exists(path=path):
         os.makedirs(name=path, mode=0o744)
     elif not os.path.isdir(s=path):
-        __die("%s already exists, but it is not a directory." % path)
+        __die(message="%s already exists, but it is not a directory." % path)
 
 
 def __create_or_update_config_file_if_necessary(ssh_private_key_path: str, ssh_config_file_path: str) -> None:
@@ -176,7 +176,7 @@ def __create_or_update_config_file_if_necessary(ssh_private_key_path: str, ssh_c
         else:
             print("No need to modify %s.\n" % ssh_config_file_path)
     else:
-        __die("%s already exists, but is is not a regular file." % ssh_config_file_path)
+        __die(message="%s already exists, but is is not a regular file." % ssh_config_file_path)
 
 
 def __check_entry_in_ssh_config_file(file_path: str, entry: str) -> bool:
@@ -256,7 +256,7 @@ def __clone_or_pull_project(maven_data: dict, workspace: str, branch: str) -> bo
 
         return True
     else:
-        __die("%s already exists, but is not a directory. Cannot clone anything into it." % project_dir)
+        __die(message="%s already exists, but is not a directory. Cannot clone anything into it." % project_dir)
 
         return False
 

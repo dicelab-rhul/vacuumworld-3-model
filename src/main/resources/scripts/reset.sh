@@ -16,7 +16,7 @@ for ((i=0;i<${#MVN_DEPS_GR_IDS[@]};++i)); do
   PARENT_DIR=${GID//\./\/}/${AID}/${VERSION}/
   DEP_PATH=${MVN_LOCAL_REPO}/${PARENT_DIR}
 
-  if [ -d "$DEP_PATH" ]; then
+  if [ -d "${DEP_PATH}" ]; then
     echo Deleting ${DEP_PATH} ...
     rm -rf ${DEP_PATH}
     echo "Done."
@@ -30,11 +30,16 @@ done
 for ADDITIONAL in vw3model.jar model.sh vw3gui.jar view.sh vw3controller.jar controller.sh run.sh recompile.sh recompile_and_run.sh config.json minds.json random_state_generator.sh update_minds.sh reset.sh; do
   PATH_TO_CHECK=${INSTALL_DIR}/${ADDITIONAL}
 
-  if [ -f ${PATH_TO_CHECK} ]; then
-    echo "${PATH_TO_CHECK} found. Deleting it."
-    rm -f "$PATH_TO_CHECK"
+  if [ -L ${PATH_TO_CHECK} ]; then
+    echo "${PATH_TO_CHECK} found. It is a symlink. Unlinking it..."
+    unlink ${PATH_TO_CHECK}
+    echo "Done.\n"
+  elif [ -f ${PATH_TO_CHECK} ]; then
+    echo "${PATH_TO_CHECK} found. It is a regular file. Deleting it."
+    rm -f "${PATH_TO_CHECK}"
+    echo "Done.\n"
   else
-    echo "${PATH_TO_CHECK} not found (or it is not a regular file). Not deleting it either way."
+    echo "${PATH_TO_CHECK} not found (or it is not a regular file or a symlink). Not deleting/unlinking it either way."
   fi
 
   echo ""

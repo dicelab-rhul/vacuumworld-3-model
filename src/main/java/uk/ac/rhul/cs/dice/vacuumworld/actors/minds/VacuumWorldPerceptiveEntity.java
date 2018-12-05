@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import uk.ac.rhul.cs.dice.agentactions.enums.ActionResult;
+import uk.ac.rhul.cs.dice.agentcommon.interfaces.Action;
 import uk.ac.rhul.cs.dice.agentcontainers.enums.Orientation;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldDirtAppearance;
@@ -19,15 +21,24 @@ public interface VacuumWorldPerceptiveEntity {
 
     /**
      * 
-     * Gets the {@link VacuumWorldPerception} that the agent has received from the
-     * {@link VacuumWorldEnvironment} at the end of the previous cycle.
+     * Gets the {@link VacuumWorldPerception} that the agent has received from the {@link VacuumWorldEnvironment} at the end of the previous cycle.
      * 
-     * @return the {@link VacuumWorldPerception} that the agent has received from
-     *         the {@link VacuumWorldEnvironment} at the end of the previous cycle.
+     * @return the {@link VacuumWorldPerception} that the agent has received from the {@link VacuumWorldEnvironment} at the end of the previous cycle.
      * 
      */
     public abstract VacuumWorldPerception getPerception();
 
+    /**
+     * 
+     * Returns the {@link ActionResult} of the {@link Action} that was executed during the latest cycle.
+     * 
+     * @return the {@link ActionResult} of the {@link Action} that was executed during the latest cycle.
+     * 
+     */
+    public default ActionResult getLatestActionResult() {
+	return getPerception() == null ? null : getPerception().getResult();
+    }
+    
     /**
      * 
      * Returns whether new messages are available (i.e., whether at least an actor sent a message to this actor during last cycle).

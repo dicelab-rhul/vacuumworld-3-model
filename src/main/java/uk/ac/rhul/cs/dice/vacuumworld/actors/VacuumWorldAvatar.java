@@ -1,121 +1,140 @@
 package uk.ac.rhul.cs.dice.vacuumworld.actors;
 
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.Socket;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.serialization.ValidatingObjectInputStream;
-import org.cloudstrife9999.logutilities.LogUtils;
 
-import uk.ac.rhul.cs.dice.agent.abstractimpl.AbstractAvatar;
+import uk.ac.rhul.cs.dice.agent.enums.ActuatorPurposeEnum;
+import uk.ac.rhul.cs.dice.agent.enums.SensorPurposeEnum;
 import uk.ac.rhul.cs.dice.agent.interfaces.Actuator;
-import uk.ac.rhul.cs.dice.agent.interfaces.Analyzable;
 import uk.ac.rhul.cs.dice.agent.interfaces.AvatarAppearance;
-import uk.ac.rhul.cs.dice.agent.interfaces.PrincipalListener;
 import uk.ac.rhul.cs.dice.agent.interfaces.Sensor;
-import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
+import uk.ac.rhul.cs.dice.vacuumworld.actors.minds.VacuumWorldPrincipalListener;
+import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldAvatarAppearance;
+import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VacuumWorldRuntimeException;
 
-public class VacuumWorldAvatar extends AbstractAvatar implements VacuumWorldActor {
-    private static final long serialVersionUID = 7363668279670343837L;
-    private transient Socket socketWithEnvironment;
-    private volatile boolean stop;
-    private volatile boolean pause;
-    private boolean simulatedRun;
-    
-    public VacuumWorldAvatar(String id, AvatarAppearance appearance, List<Sensor> sensors, List<Actuator> actuators, PrincipalListener principalListener) {
-	super(id, appearance, sensors, actuators, principalListener);
-    }
+//This class needs to be implemented in the future.
+public class VacuumWorldAvatar implements VacuumWorldActor, Serializable {
+    private static final long serialVersionUID = 1270465779420663151L;
+    private static final String TEMP_MSG = "TBD";
     
     public VacuumWorldAvatar(VacuumWorldAvatar toCopy) {
-	this(toCopy.getID(), toCopy.getAppearance(), toCopy.getAllSensors(), toCopy.getAllActuators(), toCopy.getPrincipalListener());
+	throw new VacuumWorldRuntimeException(VacuumWorldAvatar.TEMP_MSG);
+    }
+    
+    public VacuumWorldAvatar(String id, AvatarAppearance avatarAppearance, List<Sensor> sensors, List<Actuator> actuators, VacuumWorldPrincipalListener listener) {
+	throw new VacuumWorldRuntimeException(VacuumWorldAvatar.TEMP_MSG);
+    }
+
+    public String getID() {
+	throw new VacuumWorldRuntimeException(VacuumWorldAvatar.TEMP_MSG);
+    }
+    
+    public VacuumWorldAvatarAppearance getAppearance() {
+	throw new VacuumWorldRuntimeException(VacuumWorldAvatar.TEMP_MSG);
     }
 
     @Override
-    public Socket getSocketWithEnvironment() {
-	return this.socketWithEnvironment;
+    public Map<SensorPurposeEnum, List<Sensor>> getSensors() {
+	throw new VacuumWorldRuntimeException(VacuumWorldAvatar.TEMP_MSG);
     }
-    
+
     @Override
-    public void setSocketWithEnvironment(Socket socket) {
-        this.socketWithEnvironment = socket;
+    public List<Sensor> getSpecificSensors(SensorPurposeEnum purpose) {
+	throw new VacuumWorldRuntimeException(VacuumWorldAvatar.TEMP_MSG);
     }
-    
+
     @Override
-    public void setStopFlag(boolean stop) {
-	this.stop = stop;
+    public Map<ActuatorPurposeEnum, List<Actuator>> getActuators() {
+	throw new VacuumWorldRuntimeException(VacuumWorldAvatar.TEMP_MSG);
     }
-    
+
     @Override
-    public void setPauseFlag(boolean pause) {
-	this.pause = pause;
+    public List<Actuator> getSpecificActuators(ActuatorPurposeEnum purpose) {
+	throw new VacuumWorldRuntimeException(VacuumWorldAvatar.TEMP_MSG);
     }
-    
+
     @Override
-    public boolean isPaused() {
-        return this.pause;
+    public List<Sensor> getAllSensors() {
+	throw new VacuumWorldRuntimeException(VacuumWorldAvatar.TEMP_MSG);
     }
-    
+
     @Override
-    public void setRunFlag(boolean simulatedRun) {
-	this.simulatedRun = simulatedRun;
-    }
-    
-    @Override
-    public void sendFeedbackToPrincipal(Analyzable... feedback) {
-	throw new UnsupportedOperationException();
+    public List<Actuator> getAllActuators() {
+	throw new VacuumWorldRuntimeException(VacuumWorldAvatar.TEMP_MSG);
     }
 
     @Override
     public ValidatingObjectInputStream getInputChannels() {
-	throw new UnsupportedOperationException();
+	throw new VacuumWorldRuntimeException(VacuumWorldAvatar.TEMP_MSG);
     }
 
     @Override
     public ObjectOutputStream getOutputChannels() {
-	throw new UnsupportedOperationException();
+	throw new VacuumWorldRuntimeException(VacuumWorldAvatar.TEMP_MSG);
     }
 
     @Override
     public void setInputChannels(ValidatingObjectInputStream input) {
-	throw new UnsupportedOperationException();
+	throw new VacuumWorldRuntimeException(VacuumWorldAvatar.TEMP_MSG);
     }
 
     @Override
     public void setOutputChannels(ObjectOutputStream output) {
-	throw new UnsupportedOperationException();
+	throw new VacuumWorldRuntimeException(VacuumWorldAvatar.TEMP_MSG);
     }
 
     @Override
     public void run() {
-	if(this.simulatedRun) {
-	    testRun();
-	}
-	else {
-	    realRun();
-	}
-    }
-    
-    private void realRun() {
-	//useless for now.
-    }
-
-    private void testRun() {
-	while(!this.stop) {
-	    LogUtils.log("Avatar " + getID() + " is being executed.");
-	    
-	    try {
-		Thread.sleep(2000);
-	    }
-	    catch (InterruptedException e) {
-		Thread.currentThread().interrupt();
-	    }
-	}
-	
-	LogUtils.log("Avatar " + getID() + ": stop!");
+	throw new VacuumWorldRuntimeException(VacuumWorldAvatar.TEMP_MSG);
     }
 
     @Override
-    public VacuumWorldActorAppearance getAppearance() {
-        return (VacuumWorldActorAppearance) super.getAppearance();
+    public boolean isUser() {
+	throw new VacuumWorldRuntimeException(VacuumWorldAvatar.TEMP_MSG);
+    }
+
+    @Override
+    public boolean isCleaningAgent() {
+	throw new VacuumWorldRuntimeException(VacuumWorldAvatar.TEMP_MSG);
+    }
+
+    @Override
+    public boolean isAvatar() {
+	throw new VacuumWorldRuntimeException(VacuumWorldAvatar.TEMP_MSG);
+    }
+
+    @Override
+    public void setStopFlag(boolean stop) {
+	throw new VacuumWorldRuntimeException(VacuumWorldAvatar.TEMP_MSG);
+    }
+
+    @Override
+    public void setPauseFlag(boolean pause) {
+	throw new VacuumWorldRuntimeException(VacuumWorldAvatar.TEMP_MSG);
+    }
+
+    @Override
+    public void setRunFlag(boolean simulatedRun) {
+	throw new VacuumWorldRuntimeException(VacuumWorldAvatar.TEMP_MSG);
+    }
+
+    @Override
+    public void setSocketWithEnvironment(Socket socket) {
+	throw new VacuumWorldRuntimeException(VacuumWorldAvatar.TEMP_MSG);
+    }
+
+    @Override
+    public Socket getSocketWithEnvironment() {
+	throw new VacuumWorldRuntimeException(VacuumWorldAvatar.TEMP_MSG);
+    }
+
+    @Override
+    public boolean isPaused() {
+	throw new VacuumWorldRuntimeException(VacuumWorldAvatar.TEMP_MSG);
     }
 }

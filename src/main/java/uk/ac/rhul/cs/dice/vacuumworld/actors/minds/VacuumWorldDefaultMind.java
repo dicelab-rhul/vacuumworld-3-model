@@ -11,7 +11,7 @@ public class VacuumWorldDefaultMind extends VacuumWorldAbstractMind {
 
     @Override
     public VacuumWorldAbstractAction decide() {
-	return super.decideRandomly();
+	return super.decideWithRNG();
     }
     
     @Override

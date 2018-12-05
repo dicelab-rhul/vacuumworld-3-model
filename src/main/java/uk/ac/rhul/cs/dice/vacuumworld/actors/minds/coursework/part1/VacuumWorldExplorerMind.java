@@ -25,7 +25,7 @@ public class VacuumWorldExplorerMind extends VacuumWorldAbstractMind {
 	//Edit here.
 	
 	//Change this with the desired behavior. Remember: NEVER return null!
-	return super.decideRandomly();
+	return super.decideWithRNG();
     }
     
     @Override

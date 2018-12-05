@@ -1,5 +1,6 @@
 package uk.ac.rhul.cs.dice.vacuumworld.actors.minds;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -21,18 +22,38 @@ import uk.ac.rhul.cs.dice.vacuumworld.perception.NothingMoreIncomingPerception;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldPerception;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldSpeechPerception;
 
-public abstract class VacuumWorldAbstractMind extends AbstractAgentMind implements VacuumWorldPerceptiveEntity {
+public abstract class VacuumWorldAbstractMind extends AbstractAgentMind implements VacuumWorldActorMind {
     private static final long serialVersionUID = 5415182091402486290L;
+    private static final int DEFAULT_RNG_LOWER_LIMIT = 0;
+    private static final int DEFAULT_RNG_UPPER_LIMIT = 3;
     private List<VacuumWorldPerception> lastCyclePerceptions;
     private List<VacuumWorldSpeechPerception> lastCycleReceivedMessages;
+    private final int rngLowerLimit;
+    private final int rngUpperLimit;
 
     public VacuumWorldAbstractMind(String bodyId) {
+	this(bodyId, VacuumWorldAbstractMind.DEFAULT_RNG_LOWER_LIMIT, VacuumWorldAbstractMind.DEFAULT_RNG_UPPER_LIMIT);
+    }
+    
+    public VacuumWorldAbstractMind(String bodyId, int rngLowerLimit, int rngUpperLimit) {
 	super(bodyId);
 
 	this.lastCyclePerceptions = new ArrayList<>();
 	this.lastCycleReceivedMessages = new ArrayList<>();
+	this.rngLowerLimit = rngLowerLimit <= rngUpperLimit ? rngLowerLimit : VacuumWorldAbstractMind.DEFAULT_RNG_LOWER_LIMIT;
+	this.rngUpperLimit = rngUpperLimit >= rngLowerLimit ? rngUpperLimit : VacuumWorldAbstractMind.DEFAULT_RNG_UPPER_LIMIT;
     }
 
+    @Override
+    public BigDecimal getRngLowerLimit() {
+        return BigDecimal.valueOf(this.rngLowerLimit);
+    }
+    
+    @Override
+    public BigDecimal getRngUpperLimit() {
+        return BigDecimal.valueOf(this.rngUpperLimit);
+    }
+    
     @Override
     public VacuumWorldPerception getPerception() {
 	return this.lastCyclePerceptions.isEmpty() ? null : this.lastCyclePerceptions.get(0);
@@ -78,19 +99,25 @@ public abstract class VacuumWorldAbstractMind extends AbstractAgentMind implemen
 	}
     }
 
-    public VacuumWorldAbstractAction decideRandomly() {
-	switch (getRng().nextInt(4)) {
-	case 0:
+    @Override
+    public VacuumWorldAbstractAction decideWithRNG() {
+	final int rngValue = getRng().nextInt(getIntRngUpperLimit() + 1) + getIntRngLowerLimit();
+	
+	if(rngValue == getIntRngLowerLimit()) {
 	    return new VacuumWorldMoveAction();
-	case 1:
-	    return new VacuumWorldTurnLeftAction();
-	case 2:
-	    return new VacuumWorldTurnRightAction();
-	case 3:
-	    return new VacuumWorldCleanAction();
-	default:
-	    return new VacuumWorldIdleAction();
 	}
+	else if(rngValue == getIntRngLowerLimit() + 1) {
+	    return new VacuumWorldTurnLeftAction();
+	}
+        else if(rngValue == getIntRngLowerLimit() + 2) {
+            return new VacuumWorldTurnRightAction();
+        }
+        else if(rngValue == getIntRngLowerLimit() + 3) {
+            return new VacuumWorldCleanAction();
+        }
+        else {
+            return new VacuumWorldIdleAction();
+        }
     }
 
     @Override

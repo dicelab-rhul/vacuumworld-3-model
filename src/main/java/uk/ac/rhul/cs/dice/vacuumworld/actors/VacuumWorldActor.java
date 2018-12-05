@@ -89,6 +89,12 @@ public interface VacuumWorldActor extends Actor, Avatar {
     public default JsonObject serialize() {
 	return getAppearance().serialize();
     }
+    
+    public abstract boolean isUser();
+    
+    public abstract boolean isCleaningAgent();
+    
+    public abstract boolean isAvatar();
 
     public abstract VacuumWorldActorAppearance getAppearance();
 

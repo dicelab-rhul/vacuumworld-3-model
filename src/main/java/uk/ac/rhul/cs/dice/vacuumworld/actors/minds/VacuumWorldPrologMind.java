@@ -47,7 +47,7 @@ public class VacuumWorldPrologMind extends VacuumWorldAbstractMind implements Pr
 
     @Override
     public VacuumWorldAbstractAction decide() {
-	return super.decideRandomly();
+	return super.decideWithRNG();
     }
     
     @Override

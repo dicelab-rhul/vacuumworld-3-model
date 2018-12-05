@@ -3,7 +3,6 @@ package uk.ac.rhul.cs.dice.vacuumworld.buildtasks;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldEnvironment;
 
 public class VacuumWorldEnvironmentBuilderTask implements Runnable {
-
     private VacuumWorldEnvironment environment;
     
     public VacuumWorldEnvironmentBuilderTask(VacuumWorldEnvironment environment) {

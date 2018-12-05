@@ -100,11 +100,15 @@ public class VacuumWorldCoordinates extends AbstractCoordinates {
     
     public static VacuumWorldCoordinates of(int x, int y) {
 	if(x == 0 && y == 0) {
-	    return VacuumWorldCoordinates.origin;
+	    return getOrigin();
 	}
 	else {
 	    return new VacuumWorldCoordinates(x, y);
 	}
+    }
+    
+    public static VacuumWorldCoordinates getOrigin() {
+	return VacuumWorldCoordinates.origin;
     }
     
     /**

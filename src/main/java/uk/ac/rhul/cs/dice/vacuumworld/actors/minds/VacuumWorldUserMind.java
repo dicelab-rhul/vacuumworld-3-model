@@ -14,6 +14,7 @@ import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldTurnRightAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.advanced.GoToPositionGoal;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldDirtColor;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldCoordinates;
+import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VacuumWorldRuntimeException;
 
 /**
  * 
@@ -22,7 +23,7 @@ import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldCoordinates;
  * @author cloudstrife9999
  *
  */
-public class VacuumWorldUserMind extends VacuumWorldAbstractMind implements VacuumWorldPerceptiveEntity {
+public class VacuumWorldUserMind extends VacuumWorldAbstractMind {
     private static final long serialVersionUID = 2345235975881410062L;
     private boolean verticalPath;
     private boolean away;
@@ -31,10 +32,11 @@ public class VacuumWorldUserMind extends VacuumWorldAbstractMind implements Vacu
     private boolean visitedOrigin;
     private boolean readyToStart;
     private transient GoToPositionGoal goToOrigin;
-    private static final int RNG_UPPER_LIMIT_INCLUSIVE = 4; // {0, 1, 2, 3} -> resume behaviour; 4 -> drop dirt.
+    private static final int DEFAULT_USER_RNG_LOWER_LIMIT = 0;
+    private static final int DEFAULT_USER_RNG_UPPER_LIMIT = 4;
 
     public VacuumWorldUserMind(String bodyId) {
-	super(bodyId);
+	super(bodyId, VacuumWorldUserMind.DEFAULT_USER_RNG_LOWER_LIMIT, VacuumWorldUserMind.DEFAULT_USER_RNG_UPPER_LIMIT);
 	
 	this.verticalPath = false;
 	this.away = true;
@@ -42,7 +44,7 @@ public class VacuumWorldUserMind extends VacuumWorldAbstractMind implements Vacu
 	this.lastWasPlanned = false;
 	this.visitedOrigin = false;
 	this.readyToStart = false;
-	this.goToOrigin = new GoToPositionGoal(VacuumWorldCoordinates.of(0, 0));
+	this.goToOrigin = new GoToPositionGoal(VacuumWorldCoordinates.getOrigin());
     }
 
     @Override
@@ -95,17 +97,18 @@ public class VacuumWorldUserMind extends VacuumWorldAbstractMind implements Vacu
 	return Orientation.EAST.equals(getOrientation()) && !this.verticalPath || Orientation.SOUTH.equals(getOrientation()) && this.verticalPath;
     }
 
-    private VacuumWorldAbstractAction decideWithRNG() {
-	int nextRandomInt = getRng().nextInt(VacuumWorldUserMind.RNG_UPPER_LIMIT_INCLUSIVE + 1);
+    @Override
+    public VacuumWorldAbstractAction decideWithRNG() {
+	int nextRandomInt = getRng().nextInt(getIntRngUpperLimit() + 1) + getIntRngLowerLimit();
 	
-	if(nextRandomInt >= 0 && nextRandomInt < VacuumWorldUserMind.RNG_UPPER_LIMIT_INCLUSIVE) {
+	if(nextRandomInt >= getIntRngLowerLimit() && nextRandomInt <= getIntRngUpperLimit()) {
 	    return resumeBehavior();
 	}
-	else if(nextRandomInt == VacuumWorldUserMind.RNG_UPPER_LIMIT_INCLUSIVE) {
+	else if(nextRandomInt == getIntRngUpperLimit()) {
 	    return isDirt() ? resumeBehavior() : new VacuumWorldDropDirtAction(VacuumWorldDirtColor.random());
 	}
 	else {
-	    return new VacuumWorldIdleAction(); //Technically unreachable, as 0 <= nextRandomInt <= RNG_UPPER_LIMIT_INCLUSIVE by construction, but here for safety.
+	    throw new VacuumWorldRuntimeException("RNG out of bounds, or inconsistent RNG.");
 	}
     }
 

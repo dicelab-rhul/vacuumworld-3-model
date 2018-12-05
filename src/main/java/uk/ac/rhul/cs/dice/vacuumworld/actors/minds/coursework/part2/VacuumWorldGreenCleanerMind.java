@@ -25,7 +25,7 @@ public class VacuumWorldGreenCleanerMind extends VacuumWorldColoredCleanerMind {
 	//Edit here.
 	
 	//Change this with the desired behavior. Remember: NEVER return null!
-	return super.decideRandomly();
+	return super.decideWithRNG();
     }
     
     @Override

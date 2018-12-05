@@ -1,4 +1,8 @@
-1) Remove the code duplications in VacuumWorldCleaningAgent and VacuumWorldUserAgent.
+This list is in random order (for now), i.e., in no priority order.
+
+1) Implement VacuumWorldAvatar, and related classes.
 2) Unify the JSON parsers / generators. Maybe extract some methods to vwcommon?
 3) Make the delay (excluding the syncronization latency) between cycles - currently 0.75 seconds, hardcoded in VacuumWorldEnvironment - configurable.
 4) Write a whole lot of tests.
+5) Are all the JUnit dependencies really needed? (W.r.t. the tests that need to be written)
+6) Port the whole project (plus view and controller) to Spring.

@@ -32,13 +32,13 @@ public class VacuumWorldGoalOrientedMind extends VacuumWorldAbstractMind {
 	    return getCloserToGoal();
 	}
 	else {
-	    return decideRandomly();
+	    return decideWithRNG();
 	}
     }
 
     private VacuumWorldAbstractAction getCloserToGoal() {
 	if(!this.goal.hasAtLeastOnePlan() || this.goal.getPlan().isEmpty()) {
-	    return decideRandomly();
+	    return decideWithRNG();
 	}
 	else {
 	    return (VacuumWorldAbstractAction) this.goal.getPlan().pop();

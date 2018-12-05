@@ -18,9 +18,12 @@ import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldMoveAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldIdleAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldTurnLeftAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldTurnRightAction;
+import uk.ac.rhul.cs.dice.vacuumworld.actions.messages.VacuumWorldMessage;
+import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldEnvironment;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.NothingMoreIncomingPerception;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldPerception;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldSpeechPerception;
+import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VacuumWorldRuntimeException;
 
 public abstract class VacuumWorldAbstractMind extends AbstractAgentMind implements VacuumWorldActorMind {
     private static final long serialVersionUID = 5415182091402486290L;
@@ -69,9 +72,20 @@ public abstract class VacuumWorldAbstractMind extends AbstractAgentMind implemen
 	return this.lastCycleReceivedMessages;
     }
 
-    @Override
-    public abstract VacuumWorldAbstractAction decide();
-
+    /**
+     * 
+     * This method is always automatically called at the beginning of each cycle (except for the first cycle) before {@link #revise()}.<br/><br/>
+     * 
+     * Its intended practical use is to fetch an updated {@link VacuumWorldPerception} from the {@link VacuumWorldEnvironment},
+     * as well as any {@link VacuumWorldMessage} received during the latest cycle.<br/><br/>
+     * 
+     * The {@link VacuumWorldPerception} is always the first {@link Analyzable} of the {@link Set} passed as parameter.
+     * Any following element is a {@link VacuumWorldMessage}.<br/><br/>
+     * 
+     * Both the perception, and the messages are stored in internal {@link List}s.
+     * The perception and the messages from the cycle(s) before the latest are deleted in the process.
+     * 
+     */
     @Override
     public void perceive(Set<Analyzable> perceptions) {
 	super.perceive(null);
@@ -82,23 +96,41 @@ public abstract class VacuumWorldAbstractMind extends AbstractAgentMind implemen
 	perceptions.forEach(this::dealWithPercept);
     }
     
+    /**
+     * 
+     * This method is always automatically called at the beginning of the first cycle before {@link #revise()}.<br/><br/>
+     * 
+     * Its intended practical use is to fetch the initial {@link VacuumWorldPerception} from the {@link VacuumWorldEnvironment}.
+     * 
+     */
     @Override
     public void receiveFirstPerception(Analyzable perception) {
         perceive(new HashSet<>(Arrays.asList(perception)));
     }
+    
+    /**
+     * 
+     * This method is always automatically called after {@link #revise()}, and before {@link #execute()}.<br/><br/>
+     * 
+     * Its intended use is to output the next action for the agent to {@link #execute()}.<br/><br/>
+     * 
+     */
+    @Override
+    public abstract VacuumWorldAbstractAction decide();
 
-    private void dealWithPercept(Analyzable a) {
-	if (VacuumWorldPerception.class.isAssignableFrom(a.getClass())) {
-	    this.lastCyclePerceptions.add((VacuumWorldPerception) a);
-	}
-	else if (VacuumWorldSpeechPerception.class.isAssignableFrom(a.getClass())) {
-	    this.lastCycleReceivedMessages.add((VacuumWorldSpeechPerception) a);
-	}
-	else if (!NothingMoreIncomingPerception.class.isAssignableFrom(a.getClass())) {
-	    getDefaultLastReceivedPerceptions().add(a);
-	}
-    }
-
+    /**
+     * 
+     * Returns an action based on a RNG roll.<br/><br/>
+     * 
+     * rngValue == rngLowerLimit -> {@link VacuumWorldMoveAction}.<br/>
+     * rngValue == rngLowerLimit + 1 -> {@link VacuumWorldTurnLeftAction}.<br/>
+     * rngValue == rngLowerLimit + 2 -> {@link VacuumWorldTurnRightAction}.<br/>
+     * rngValue == rngLowerLimit + 3 -> {@link VacuumWorldCleanAction}.<br/>
+     * else -> {@link VacuumWorldIdleAction}.<br/>
+     * 
+     * @return a random {@link VacuumWorldAbstractAction}.
+     * 
+     */
     @Override
     public VacuumWorldAbstractAction decideWithRNG() {
 	final int rngValue = getRng().nextInt(getIntRngUpperLimit() + 1) + getIntRngLowerLimit();
@@ -120,9 +152,33 @@ public abstract class VacuumWorldAbstractMind extends AbstractAgentMind implemen
         }
     }
 
+    /**
+     * 
+     * This method is always automatically called after {@link #decide()}.<br/><br/>
+     * 
+     * Its intended use is to prepare to execute the action returned by {@link #decide()}.
+     * 
+     */
     @Override
     public final <T extends Action<?>> void execute(T action) {
-	((VacuumWorldAbstractAction) action).setActor(getBodyId());
-	LogUtils.log(action.getActorID() + " is executing " + action.getClass().getSimpleName());
+	try {
+	    ((VacuumWorldAbstractAction) action).setActor(getBodyId());
+	    LogUtils.log(action.getActorID() + " is executing " + action.getClass().getSimpleName());
+	}
+	catch(ClassCastException e) {
+	    throw new VacuumWorldRuntimeException(action.getClass().getName() + "is not castable to " + VacuumWorldAbstractAction.class.getName() + "!", e);
+	}
+    }
+    
+    private void dealWithPercept(Analyzable a) {
+	if (VacuumWorldPerception.class.isAssignableFrom(a.getClass())) {
+	    this.lastCyclePerceptions.add((VacuumWorldPerception) a);
+	}
+	else if (VacuumWorldSpeechPerception.class.isAssignableFrom(a.getClass())) {
+	    this.lastCycleReceivedMessages.add((VacuumWorldSpeechPerception) a);
+	}
+	else if (!NothingMoreIncomingPerception.class.isAssignableFrom(a.getClass())) {
+	    getDefaultLastReceivedPerceptions().add(a);
+	}
     }
 }

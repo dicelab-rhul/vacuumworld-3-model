@@ -5,6 +5,7 @@ import java.util.List;
 import uk.ac.rhul.cs.dice.agent.interfaces.Actuator;
 import uk.ac.rhul.cs.dice.agent.interfaces.AgentMind;
 import uk.ac.rhul.cs.dice.agent.interfaces.Sensor;
+import uk.ac.rhul.cs.dice.vacuumworld.actors.minds.VacuumWorldUserMind;
 import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
 
 public class VacuumWorldCleaningAgent extends VacuumWorldAbstractActor {
@@ -12,6 +13,8 @@ public class VacuumWorldCleaningAgent extends VacuumWorldAbstractActor {
 
     public VacuumWorldCleaningAgent(String id, VacuumWorldActorAppearance appearance, List<Sensor> sensors, List<Actuator> actuators, AgentMind mind) {
 	super(id, appearance, sensors, actuators, mind);
+	
+	checkForForbiddenMindParents(mind, getClass(), VacuumWorldUserMind.class);
     }
 
     public VacuumWorldCleaningAgent(VacuumWorldCleaningAgent toCopy) {

@@ -43,10 +43,30 @@ public abstract class VacuumWorldAbstractActor extends AbstractAgent implements 
 
     public VacuumWorldAbstractActor(String id, ActorAppearance appearance, List<Sensor> sensors, List<Actuator> actuators, AgentMind mind) {
 	super(id, appearance, sensors, actuators, mind);
+	
+	
     }
     
     public VacuumWorldAbstractActor(VacuumWorldAbstractActor toCopy) {
 	this(toCopy.getID(), toCopy.getAppearance(), toCopy.getAllSensors(), toCopy.getAllActuators(), toCopy.getMind());
+    }
+    
+    public void checkForForbiddenMindParents(AgentMind candidate, Class<?> actorClass, Class<?>... forbiddenParents) {
+	for(Class<?> parent : forbiddenParents)  {
+	    if(parent.getClass().isAssignableFrom(candidate.getClass())) {
+		throw new VacuumWorldRuntimeException("You cannot assign " + candidate.getClass().getName() + " to a " + actorClass.getName());
+	    } 
+	}
+    }
+    
+    public void checkForAllowedMindParents(AgentMind candidate, Class<?> actorClass, Class<?>... allowedParents) {
+	for(Class<?> parent : allowedParents)  {
+	    if(parent.getClass().isAssignableFrom(candidate.getClass())) {
+		return;
+	    } 
+	}
+	
+	throw new VacuumWorldRuntimeException("You cannot assign " + candidate.getClass().getName() + " to a " + actorClass.getName());
     }
     
     @Override

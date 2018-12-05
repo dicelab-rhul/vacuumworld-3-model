@@ -8,111 +8,143 @@ import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldTurnLeftAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldTurnRightAction;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.minds.VacuumWorldAbstractMind;
 import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldCoordinates;
-import uk.ac.rhul.cs.dice.vacuumworld.vwcommon.VacuumWorldRuntimeException;
 
 /**
  * 
- * Tutorial 1 Mind Task 1.<br/>
- * You should make a local copy of this mind (keep it for reference).<br/>
- * You have to edit the {@link #decide()} and {@link #revise()} methods as the task instructs (see below).
+ * Mind for Tutorial 1. The task is, for a single agent, to find the grid size optimally.<br/><br/>
+ * 
+ * The overall goal for this mind is to make the discovery of the grid size optimal w.r.t. the number of cycles it takes.
  * 
  * @author Ben Wilkins
+ * @author cloudstrife9999, a.k.a. Emanuele Uliana
  *
  */
 public class VacuumWorldTutorial1AgentMind extends VacuumWorldAbstractMind {
+    // This is needed for serialization. Do not touch it.
     private static final long serialVersionUID = 8029125006026831040L;
-    private VacuumWorldCoordinates position; // This object will hold a null reference until initialized.
+    
+    // This will hold a null reference until initialized somewhere (unless you change the constructor).
+    private VacuumWorldCoordinates position;
+    
+    // This will hold a null reference until initialized somewhere (unless you change the constructor).
     private Orientation orientation;
+    
+    // This will be initialized with false (unless you change the constructor).
     private boolean orientationAwayFromOrigin;
-    private boolean done;
+    
+    // This will be initialized with false (unless you change the constructor).
+    private boolean arrived;
+    
+    // This will be automatically initialized with 0 (unless you change the constructor), which is an impossible value for the size.
+    private int gridSize;
+    
     //Add any class attribute you want/need.
 
     /**
-     * Constructor. You may do some set up steps here, though they are not necessary in for this task.
      * 
-     * @param bodyId the id of this agent.
+     * Constructor with the body ID.
+     * 
+     * @param bodyId the ID of this agent.
+     * 
      */
-    public VacuumWorldTutorial1AgentMind(String bodyId) { //Add any additional parameter you need.
+    // Add any additional parameter you need to this constructor.
+    public VacuumWorldTutorial1AgentMind(String bodyId) {
 	super(bodyId);
 	
-	//Edit here if needed.
-    }
-    
-    public VacuumWorldCoordinates getPositionCoordinates() {
-	return this.position;
+	// Edit here if needed.
     }
 
     /**
-     * This is the agent's decide method. You should modify the agent's behaviour in
-     * this method where indicated. The agent's current behaviour is to: <br>
-     * <p>
-     * <ul>
-     * <li>1. Turn to face {@link Orientation#East East} or {@link Orientation#South
-     * South}
-     * <li>2. Move forward
-     * <li>3. Stop at a wall
-     * </ul>
-     * <p>
      * 
-     * @return the next action that this agent should attempt. Choose from:
-     *         <p>
-     *         <ul>
-     *         <li>{@link VacuumWorldIdleAction},
-     *         <li>{@link VacuumWorldTurnLeftAction},
-     *         <li>{@link VacuumWorldTurnRightAction},
-     *         <li>{@link VacuumWorldMoveAction},
-     *         <li>{@link VacuumWorldCleanAction}
-     *         </ul>
+     * This method is always automatically called after {@link #perceive()}, and before {@link #decide()}.<br/><br/>
+     * 
+     * Its intended use is to update the agent's beliefs.<br/><br/>
+     * 
+     * The overall goal for this mind is to make the discovery of the grid size optimal w.r.t. the number of cycles it takes.
+     * 
+     */
+    @Override
+    public void revise() {
+	// Updating the stored current position.
+	this.position = getCoordinates();
+	
+	// Updating the stored current orientation.
+	this.orientation = getOrientation();
+	
+	// Updating an internal boolean flag telling whether the agent is facing away from origin.
+	this.orientationAwayFromOrigin = isOrientationEast() || isOrientationSouth();
+	
+	// Updating an internal boolean flag telling whether the agent is ready to discover the grid size.
+	this.arrived = checkIfFacingRelevantWall() || checkSideCases();
+	
+	// Storing the grid size if the agent is able to discover it. Otherwise the relevant class attribute is left unchanged.
+	this.gridSize = this.arrived ? inferGridSize() : this.gridSize;
+    }
+    
+    /**
+     * 
+     * This method is always automatically called after {@link #revise()}, and before {@link #execute()}.<br/><br/>
+     * 
+     * Its intended use is to output the next action for the agent to {@link #execute()}.<br/><br/>
+     * 
+     * The overall goal for this mind is to make the discovery of the grid size optimal w.r.t. the number of cycles it takes.
+     * 
      */
     @Override
     public VacuumWorldAbstractAction decide() {
 	// For students: amend this behaviour in order to make it optimal.
-	if(this.done) {
-	    return new VacuumWorldIdleAction(); // We are done.
+	if(this.arrived) {
+	    // We are done, and we stay idle.
+	    return new VacuumWorldIdleAction();
 	}
 	else if(this.orientationAwayFromOrigin) {
-	    return new VacuumWorldMoveAction(); // We move towards higher coordinates in one direction.
+	    // We are facing EAST or SOUTH. We can move towards higher X or Y values respectively.
+	    return new VacuumWorldMoveAction();
 	}
 	else {
-	    return turnAwayFromOrigin(); // We have to turn.
+	    // We are facing NORTH or WEST. It is better to turn.
+	    return turnAwayFromOrigin();
 	}
     }
 
     private VacuumWorldAbstractAction turnAwayFromOrigin() {
 	if(this.orientation == Orientation.NORTH) {
-	    return new VacuumWorldTurnRightAction(); // North -> East
+	    // We turn from NORTH to EAST.
+	    return new VacuumWorldTurnRightAction();
 	}
 	else if(this.orientation == Orientation.WEST) {
-	    return new VacuumWorldTurnLeftAction(); // West -> South
+	    // We turn from WEST to SOUTH.
+	    return new VacuumWorldTurnLeftAction();
 	}
 	else {
-	    throw new VacuumWorldRuntimeException("Fatal error: inconsistent orientation!");
+	    // At the moment, this default behaviour is not logically reachable. It is here just for completeness.
+	    return new VacuumWorldIdleAction();
 	}
     }
 
-    /**
-     * 
-     * This method is always automatically called after perceive, and before decide. Use it to update the agent beliefs.
-     * 
-     */
-    @Override
-    public void revise() {
-	this.position = getCoordinates();
-	this.orientation = getOrientation();
-	this.orientationAwayFromOrigin = isOrientationEast() || isOrientationSouth();
-	this.done = this.orientationAwayFromOrigin && isWallForward() || checkSideCases();
+    private int inferGridSize() {
+	// Simply the highest coordinate + 1 (because the coordinates are 0-indexed).
+	return Math.max(this.position.getX(), this.position.getY()) + 1;
+    }
+
+    private boolean checkIfFacingRelevantWall() {
+	// Facing (EAST OR SOUTH) AND having a wall in front.
+	return this.orientationAwayFromOrigin && isWallForward();
     }
 
     private boolean checkSideCases() {
-	return checkIfTopRightFacingNorth() || checkBottomLeftFacingWest();
+	// Begin horizontally oriented on the bottom row OR begin vertically oriented on the rightmost column.
+	return checkBottomRow() || checkRightmostColumn();
     }
 
-    private boolean checkBottomLeftFacingWest() {
-	return this.orientation == Orientation.WEST && isWallLeft();
+    private boolean checkRightmostColumn() {
+	// Facing NORTH AND having a wall on the right OR facing SOUTH AND having a wall on the left.
+	return isOrientationNorth() && isWallRight() || isOrientationSouth() && isWallLeft();
     }
 
-    private boolean checkIfTopRightFacingNorth() {
-	return this.orientation == Orientation.NORTH && isWallRight();
+    private boolean checkBottomRow() {
+	// Facing EAST AND having a wall on the right OR facing WEST AND having a wall on the left.
+	return isOrientationEast() && isWallRight() || isOrientationWest() && isWallRight();
     }
     
     //Add any method you need.

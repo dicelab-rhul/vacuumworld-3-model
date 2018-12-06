@@ -1,0 +1,5 @@
+[gerrit]
+host=bitbucket.org
+port=443
+project=rhul-dice-privacy/vacuumworld-3.0.git
+defaultbranch=dev

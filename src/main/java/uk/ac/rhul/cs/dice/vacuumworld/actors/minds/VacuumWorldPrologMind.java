@@ -8,6 +8,7 @@ import alice.tuprolog.Theory;
 import uk.ac.rhul.cs.dice.agent.interfaces.PrologMind;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractAction;
 
+//This mind needs to be implemeted.
 public class VacuumWorldPrologMind extends VacuumWorldAbstractMind implements PrologMind {
     private static final long serialVersionUID = -6107803494980916586L;
     private Prolog interpreter;
@@ -47,7 +48,7 @@ public class VacuumWorldPrologMind extends VacuumWorldAbstractMind implements Pr
 
     @Override
     public VacuumWorldAbstractAction decide() {
-	return super.decideWithRNG();
+	return decideWithRNG();
     }
     
     @Override

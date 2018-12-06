@@ -16,8 +16,8 @@ import uk.ac.rhul.cs.dice.vacuumworld.environment.physics.VacuumWorldPhysicsInte
 public class VacuumWorldSpeakAction extends VacuumWorldAbstractCommunicativeAction {
     private static final long serialVersionUID = 7085737175672939094L;
 
-    public VacuumWorldSpeakAction(VacuumWorldMessage message, Set<String> recipients) {
-	super(VacuumWorldCommunicativeActionsEnum.SPEAK, message, recipients);
+    public VacuumWorldSpeakAction(VacuumWorldMessage message, String senderID, Set<String> recipients) {
+	super(VacuumWorldCommunicativeActionsEnum.SPEAK, message, senderID, recipients);
     }
     
     /**
@@ -27,8 +27,8 @@ public class VacuumWorldSpeakAction extends VacuumWorldAbstractCommunicativeActi
      * @param message a {@link VacuumWorldMessage}.
      * 
      */
-    public VacuumWorldSpeakAction(VacuumWorldMessage message) {
-	super(VacuumWorldCommunicativeActionsEnum.BROADCAST, message, new HashSet<>());
+    public VacuumWorldSpeakAction(VacuumWorldMessage message, String senderID) {
+	super(VacuumWorldCommunicativeActionsEnum.BROADCAST, message, senderID, new HashSet<>());
     }
 
     @Override
@@ -51,7 +51,7 @@ public class VacuumWorldSpeakAction extends VacuumWorldAbstractCommunicativeActi
             return ((VacuumWorldPhysicsInterface) physics).perform(this, (VacuumWorldEnvironment) context);
         }
         
-        return new VacuumWorldCommunicativeActionResult(ActionResult.FAILURE, null, new HashSet<>());
+        return new VacuumWorldCommunicativeActionResult(ActionResult.FAILURE, null, getSenderID(), new HashSet<>());
     }
     
     @Override

@@ -64,13 +64,20 @@ public class VacuumWorldActionFactory {
     private static VacuumWorldAbstractAction generateCommunicative(VacuumWorldCommunicativeActionsEnum code, Object[] additional) {
 	switch(code) {
 	case SPEAK:
-	    return new VacuumWorldSpeakAction(parseMessage(additional), parseRecipients(additional));
+	    return new VacuumWorldSpeakAction(parseMessage(additional), parseSender(additional), parseRecipients(additional));
 	case BROADCAST:
-	    return new VacuumWorldBroadcastingAction(parseMessage(additional));
+	    return new VacuumWorldBroadcastingAction(parseMessage(additional), parseSender(additional));
 	default:
 	    throw new IllegalArgumentException();
 		
 	}
+    }
+
+    private static String parseSender(Object[] additional) {
+	checkArgumentsLength(additional, 2);
+	Object o = additional[1];
+	
+	return o instanceof String ? (String) o : "__UNKNOWN_SENDER__";
     }
 
     private static VacuumWorldMessage parseMessage(Object[] additional) {
@@ -81,9 +88,9 @@ public class VacuumWorldActionFactory {
     }
 
     private static Set<String> parseRecipients(Object[] additional) {
-	checkArgumentsLength(additional, 2);
+	checkArgumentsLength(additional, 3);
 	
-	Object o = additional[1];
+	Object o = additional[2];
 	
 	return o instanceof Set<?> ? parseRecipients((Set<?>) o) : Collections.emptySet();
     }

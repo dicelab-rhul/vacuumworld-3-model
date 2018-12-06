@@ -36,6 +36,6 @@ public class VacuumWorldShoutingMind extends VacuumWorldAbstractMind {
     public VacuumWorldAbstractAction decide() {
 	VacuumWorldMessage message = new VacuumWorldMessage("Hello everyone! I am " + getBodyId() + ". I am sending this on cycle " + this.cycle + ", and you should receive this on cycle " + (this.cycle + 1) + ".");
 	
-	return new VacuumWorldBroadcastingAction(message);
+	return new VacuumWorldBroadcastingAction(message, getBodyId());
     }
 }

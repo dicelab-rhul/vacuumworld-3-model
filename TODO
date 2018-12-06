@@ -6,3 +6,4 @@ This list is in random order (for now), i.e., in no priority order.
 4) Write a whole lot of tests.
 5) Are all the JUnit dependencies really needed? (W.r.t. the tests that need to be written)
 6) Port the whole project (plus view and controller) to Spring.
+7) Implement VacuumWorldPrologMind.

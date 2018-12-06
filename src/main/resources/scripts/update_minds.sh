@@ -44,7 +44,7 @@ def __cluster_minds(minds: list) -> tuple:
     default_mind: str = ""
 
     um = "VacuumWorldUserMind.java"
-    dm = "VacuumWorldDefaultMind.java"
+    dm = "VacuumWorldRandomMind.java"
 
     for mind in minds:
         candidate = mind.split("/")[-1]

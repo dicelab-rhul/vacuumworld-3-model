@@ -18,13 +18,15 @@ public abstract class VacuumWorldAbstractCommunicativeAction extends VacuumWorld
     private static final long serialVersionUID = 1412057176765234760L;
     private VacuumWorldCommunicativeActionsEnum type;
     private VacuumWorldMessage message;
+    private String senderID;
     private Set<String> recipientsIDs;
 
-    public VacuumWorldAbstractCommunicativeAction(VacuumWorldCommunicativeActionsEnum type, VacuumWorldMessage message, Set<String> recipientsIDs) {
+    public VacuumWorldAbstractCommunicativeAction(VacuumWorldCommunicativeActionsEnum type, VacuumWorldMessage message, String senderID, Set<String> recipientsIDs) {
 	super(type.getCode());
 	
 	this.type = type;
 	this.message = message;
+	this.senderID = senderID;
 	this.recipientsIDs = recipientsIDs == null ? new HashSet<>() : recipientsIDs;
     }
 
@@ -35,6 +37,10 @@ public abstract class VacuumWorldAbstractCommunicativeAction extends VacuumWorld
 
     public VacuumWorldMessage getMessage() {
 	return this.message;
+    }
+    
+    public String getSenderID() {
+	return this.senderID;
     }
 
     @Override
@@ -52,7 +58,7 @@ public abstract class VacuumWorldAbstractCommunicativeAction extends VacuumWorld
 	    return performAndCheckResult(context, physics);
 	}
 	else {
-	    return new VacuumWorldCommunicativeActionResult(ActionResult.IMPOSSIBLE, null, new HashSet<>());
+	    return new VacuumWorldCommunicativeActionResult(ActionResult.IMPOSSIBLE, null, getSenderID(), new HashSet<>());
 	}
     }
 
@@ -62,7 +68,7 @@ public abstract class VacuumWorldAbstractCommunicativeAction extends VacuumWorld
 	}
 	catch (Exception e) {
 	    LogUtils.log(e);
-	    return new VacuumWorldCommunicativeActionResult(ActionResult.FAILURE, null, new HashSet<>());
+	    return new VacuumWorldCommunicativeActionResult(ActionResult.FAILURE, null, getSenderID(), new HashSet<>());
 	}
     }
 
@@ -70,7 +76,7 @@ public abstract class VacuumWorldAbstractCommunicativeAction extends VacuumWorld
 	Result result = perform(context, physics);
 
 	if (ActionResult.FAILURE.equals(result.getActionResultType()) || !succeeded(context, physics)) {
-	    return new VacuumWorldCommunicativeActionResult(ActionResult.FAILURE, null, new HashSet<>());
+	    return new VacuumWorldCommunicativeActionResult(ActionResult.FAILURE, null, getSenderID(), new HashSet<>());
 	}
 	else {
 	    return result;

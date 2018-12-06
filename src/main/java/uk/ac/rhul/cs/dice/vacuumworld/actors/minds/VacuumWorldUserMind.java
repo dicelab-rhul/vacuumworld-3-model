@@ -69,7 +69,7 @@ public class VacuumWorldUserMind extends VacuumWorldAbstractMind {
 	    return decideWithPerception();
 	}
 	else if(!this.visitedOrigin) {
-	    return this.goToOrigin.getPlan().next(getPerception().getResult());
+	    return this.goToOrigin.getPlan().next(getLatestActionResult());
 	}
 	else if(this.readyToStart) {
 	    return decideWithRNG();

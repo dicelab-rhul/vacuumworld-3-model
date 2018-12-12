@@ -34,10 +34,26 @@ public abstract class VacuumWorldAbstractMind extends AbstractAgentMind implemen
     private final int rngLowerLimit;
     private final int rngUpperLimit;
 
+    /**
+     * 
+     * Constructor with the body ID. The RNG lower and upper limits are fixed to {@link DEFAULT_RNG_LOWER_LIMIT} and {@link DEFAULT_RNG_UPPER_LIMIT}.
+     * 
+     * @param bodyId the {@link String} body ID.
+     * 
+     */
     public VacuumWorldAbstractMind(String bodyId) {
 	this(bodyId, VacuumWorldAbstractMind.DEFAULT_RNG_LOWER_LIMIT, VacuumWorldAbstractMind.DEFAULT_RNG_UPPER_LIMIT);
     }
     
+    /**
+     * 
+     * Constructor with the body ID, and the lower and upper (both inclusive) limits for the RNG rolls.
+     * 
+     * @param bodyId the {@link String} body ID.
+     * @param rngLowerLimit the inclusive lower limit for RNG rolls.
+     * @param rngUpperLimit the inclusive upper limit for RNG rolls.
+     * 
+     */
     public VacuumWorldAbstractMind(String bodyId, int rngLowerLimit, int rngUpperLimit) {
 	super(bodyId);
 

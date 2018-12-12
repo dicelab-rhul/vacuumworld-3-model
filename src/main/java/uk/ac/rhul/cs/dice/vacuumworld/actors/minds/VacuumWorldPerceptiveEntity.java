@@ -17,6 +17,13 @@ import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldLocation;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldPerception;
 import uk.ac.rhul.cs.dice.vacuumworld.perception.VacuumWorldSpeechPerception;
 
+/**
+ * 
+ * This interface exposes an API for actor minds. The API can be used to query the actor's perceptions.
+ * 
+ * @author cloudstrife9999
+ *
+ */
 public interface VacuumWorldPerceptiveEntity {
 
     /**

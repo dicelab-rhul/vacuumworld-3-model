@@ -41,248 +41,250 @@ public abstract class VacuumWorldAbstractActor extends AbstractAgent implements 
     private volatile boolean pause;
     private boolean simulatedRun;
 
-    public VacuumWorldAbstractActor(String id, ActorAppearance appearance, List<Sensor> sensors, List<Actuator> actuators, AgentMind mind) {
-	super(id, appearance, sensors, actuators, mind);
-	
-	
+    protected VacuumWorldAbstractActor(String id, ActorAppearance appearance, List<Sensor> sensors,
+            List<Actuator> actuators, AgentMind mind) {
+        super(id, appearance, sensors, actuators, mind);
+
     }
-    
-    public VacuumWorldAbstractActor(VacuumWorldAbstractActor toCopy) {
-	this(toCopy.getID(), toCopy.getAppearance(), toCopy.getAllSensors(), toCopy.getAllActuators(), toCopy.getMind());
+
+    protected VacuumWorldAbstractActor(VacuumWorldAbstractActor toCopy) {
+        this(toCopy.getID(), toCopy.getAppearance(), toCopy.getAllSensors(), toCopy.getAllActuators(),
+                toCopy.getMind());
     }
-    
+
     public void checkForForbiddenMindParents(AgentMind candidate, Class<?> actorClass, Class<?>... forbiddenParents) {
-	for(Class<?> parent : forbiddenParents)  {
-	    if(parent.getClass().isAssignableFrom(candidate.getClass())) {
-		throw new VacuumWorldRuntimeException("You cannot assign " + candidate.getClass().getName() + " to a " + actorClass.getName());
-	    } 
-	}
+        for (Class<?> parent : forbiddenParents) {
+            if (parent.getClass().isAssignableFrom(candidate.getClass())) {
+                throw new VacuumWorldRuntimeException("You cannot assign " + candidate.getClass().getName() + " to a " + actorClass.getName());
+            }
+        }
     }
-    
+
     public void checkForAllowedMindParents(AgentMind candidate, Class<?> actorClass, Class<?>... allowedParents) {
-	for(Class<?> parent : allowedParents)  {
-	    if(parent.getClass().isAssignableFrom(candidate.getClass())) {
-		return;
-	    } 
-	}
-	
-	throw new VacuumWorldRuntimeException("You cannot assign " + candidate.getClass().getName() + " to a " + actorClass.getName());
+        for (Class<?> parent : allowedParents) {
+            if (parent.getClass().isAssignableFrom(candidate.getClass())) {
+                return;
+            }
+        }
+
+        throw new VacuumWorldRuntimeException("You cannot assign " + candidate.getClass().getName() + " to a " + actorClass.getName());
     }
-    
+
     @Override
     public boolean isCleaningAgent() {
-	//This holds if and only if there are only cleaning agents, users, and avatars, and they are all mutually exclusive.
-	return !isUser() && !isAvatar();
+        // This holds if and only if there are only cleaning agents, users, and avatars,
+        // and they are all mutually exclusive.
+        return !isUser() && !isAvatar();
     }
-    
+
     @Override
     public boolean isUser() {
-	return VacuumWorldUserMind.class.isAssignableFrom(getMind().getClass());
+        return VacuumWorldUserMind.class.isAssignableFrom(getMind().getClass());
     }
-    
+
     @Override
     public boolean isAvatar() {
-	return VacuumWorldPrincipalListener.class.isAssignableFrom(getMind().getClass());
+        return VacuumWorldPrincipalListener.class.isAssignableFrom(getMind().getClass());
     }
 
     @Override
     public Socket getSocketWithEnvironment() {
-	return this.socketWithEnvironment;
+        return this.socketWithEnvironment;
     }
 
     @Override
     public void setSocketWithEnvironment(Socket socket) {
-	this.socketWithEnvironment = socket;
+        this.socketWithEnvironment = socket;
     }
 
     @Override
     public void setStopFlag(boolean stop) {
-	this.stop = stop;
+        this.stop = stop;
     }
 
     @Override
     public void setPauseFlag(boolean pause) {
-	this.pause = pause;
+        this.pause = pause;
     }
 
     @Override
     public boolean isPaused() {
-	return this.pause;
+        return this.pause;
     }
 
     @Override
     public void setRunFlag(boolean simulatedRun) {
-	this.simulatedRun = simulatedRun;
+        this.simulatedRun = simulatedRun;
     }
-    
+
     @Override
     public void run() {
-	try {
-	    if (this.simulatedRun) {
-		testRun();
-	    }
-	    else {
-		realRun();
-	    }
-	} 
-	catch (Exception e) {
-	    LogUtils.fakeLog(e);
-	}
+        try {
+            if (this.simulatedRun) {
+                testRun();
+            } else {
+                realRun();
+            }
+        }
+        catch (Exception e) {
+            LogUtils.fakeLog(e);
+        }
     }
-    
-    private void realRun() {
-	getFirstPerceptionIfCleaningAgent();
-	cycle();
-    }
-    
-    private void cycle() {
-	while (!this.stop) {
-	    LogUtils.log(getID() + " is revising...");
-	    getMind().revise();
 
-	    LogUtils.log(getID() + " is deciding...");
-	    VacuumWorldAbstractAction action = (VacuumWorldAbstractAction) getMind().decide();
-	    
-	    LogUtils.log(getID() + " is executing...");
-	    getMind().execute((Action<?>) action);
-	    
-	    LogUtils.log(getID() + " is waiting for the environment to report back...");
-	    setForMind(sendToEnvironment(action));
-	    sendToMind();
-	}
+    private void realRun() {
+        getFirstPerceptionIfCleaningAgent();
+        cycle();
+    }
+
+    private void cycle() {
+        while (!this.stop) {
+            LogUtils.log(getID() + " is revising...");
+            getMind().revise();
+
+            LogUtils.log(getID() + " is deciding...");
+            VacuumWorldAbstractAction action = (VacuumWorldAbstractAction) getMind().decide();
+
+            LogUtils.log(getID() + " is executing...");
+            getMind().execute((Action<?>) action);
+
+            LogUtils.log(getID() + " is waiting for the environment to report back...");
+            setForMind(sendToEnvironment(action));
+            sendToMind();
+        }
     }
 
     private void getFirstPerceptionIfCleaningAgent() {
-	if(isCleaningAgent()) {
-	    getFirstPerception();
-	}
+        if (isCleaningAgent()) {
+            getFirstPerception();
+        }
     }
-    
+
     private void getFirstPerception() {
-	try {
-	    LogUtils.log(getID() + " is perceiving for the first time...");
-	    LogUtils.log(getID() + ": waiting for the initial perception from the VacuumWorldEnvironment...");
-	    VacuumWorldWhitelister.whitelistPerceptionClasses(this.input);
-	    Analyzable firstCyclePerception = (Analyzable) this.input.readObject();
-	    getMind().receiveFirstPerception(firstCyclePerception);
-	    LogUtils.log(getID() + ": successfully received the initial perception from the VacuumWorldEnvironment...");
-	}
-	catch(Exception e) {
-	    throw new VacuumWorldRuntimeException(e);
-	}
+        try {
+            LogUtils.log(getID() + " is perceiving for the first time...");
+            LogUtils.log(getID() + ": waiting for the initial perception from the VacuumWorldEnvironment...");
+            VacuumWorldWhitelister.whitelistPerceptionClasses(this.input);
+            Analyzable firstCyclePerception = (Analyzable) this.input.readObject();
+            getMind().receiveFirstPerception(firstCyclePerception);
+            LogUtils.log(getID() + ": successfully received the initial perception from the VacuumWorldEnvironment...");
+        }
+        catch (Exception e) {
+            throw new VacuumWorldRuntimeException(e);
+        }
     }
-    
+
     private void testRun() {
-	while (!this.stop) {
-	    LogUtils.log(getID() + " is being executed.");
-	    final long sleepTime = 2000;
-	    
-	    try {
-		Thread.sleep(sleepTime);
-	    }
-	    catch (InterruptedException e) {
-		Thread.currentThread().interrupt();
-	    }
-	}
+        while (!this.stop) {
+            LogUtils.log(getID() + " is being executed.");
+            final long sleepTime = 2000;
 
-	LogUtils.log(getID() + ": stop!");
+            try {
+                Thread.sleep(sleepTime);
+            }
+            catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+
+        LogUtils.log(getID() + ": stop!");
     }
-    
+
     private Set<Analyzable> sendToEnvironment(VacuumWorldAbstractAction action) {
-	try {
-	    LogUtils.log(getID() + ": sending event with " + action.getClass().getSimpleName() + " to the environment...");
-	    VacuumWorldEvent event = new VacuumWorldEvent(action);
-	    this.output.reset();
-	    this.output.writeObject(event);
-	    this.output.flush();
+        try {
+            LogUtils.log(getID() + ": sending event with " + action.getClass().getSimpleName() + " to the environment...");
+            VacuumWorldEvent event = new VacuumWorldEvent(action);
+            this.output.reset();
+            this.output.writeObject(event);
+            this.output.flush();
 
-	    return collectEnviromentFeedback();
-	}
-	catch (Exception e) {
-	    LogUtils.log(e);
+            return collectEnviromentFeedback();
+        }
+        catch (Exception e) {
+            LogUtils.log(e);
 
-	    return Collections.emptySet();
-	}
+            return Collections.emptySet();
+        }
     }
-    
-    private Set<Analyzable> collectEnviromentFeedback() {
-	try {
-	    return collectPerceptions();
-	}
-	catch (IOException e) {
-	    manageIOException(e);
-	    LogUtils.fakeLog(e);
 
-	    VacuumWorldPerception lastCyclePerception = ((VacuumWorldAbstractMind) getMind()).getPerception();
-	    Set<Analyzable> perceptions = new HashSet<>();
-	    perceptions.add(lastCyclePerception);
-	    
-	    return perceptions; 
-	}
-	catch (Exception e) {
-	    throw new VacuumWorldRuntimeException(e);
-	}
+    private Set<Analyzable> collectEnviromentFeedback() {
+        try {
+            return collectPerceptions();
+        }
+        catch (IOException e) {
+            manageIOException(e);
+            LogUtils.fakeLog(e);
+
+            VacuumWorldPerception lastCyclePerception = ((VacuumWorldAbstractMind) getMind()).getPerception();
+            Set<Analyzable> perceptions = new HashSet<>();
+            perceptions.add(lastCyclePerception);
+
+            return perceptions;
+        }
+        catch (Exception e) {
+            throw new VacuumWorldRuntimeException(e);
+        }
     }
 
     private void manageIOException(IOException e) {
-	if(VacuumWorldCheckedException.class.equals(e.getCause().getClass())) {
-	    LogUtils.log(getID() + ": received stop signal from the environment via StopPerception.");
-	    this.stop = true;
-	}
+        if (VacuumWorldCheckedException.class.equals(e.getCause().getClass())) {
+            LogUtils.log(getID() + ": received stop signal from the environment via StopPerception.");
+            this.stop = true;
+        }
     }
-    
-    private Set<Analyzable> collectPerceptions() throws ClassNotFoundException, IOException {
-	Set<Analyzable> perceptions = new HashSet<>();
-	Perception candidate;
 
-	do {
-	    LogUtils.log(getID() + ": waiting for perception.");
-	    
-	    VacuumWorldWhitelister.whitelistPerceptionClasses(this.input);
-	    candidate = (Perception) this.input.readObject();
-	    checkStop(candidate);
-	    
-	    LogUtils.log(getID() + ": got perception: " + candidate.getClass().getSimpleName() + ".");
-		
-	    perceptions.add(candidate);
-	} while (!(candidate instanceof NothingMoreIncomingPerception));
-	
-	return perceptions;
+    private Set<Analyzable> collectPerceptions() throws ClassNotFoundException, IOException {
+        Set<Analyzable> perceptions = new HashSet<>();
+        Perception candidate;
+
+        do {
+            LogUtils.log(getID() + ": waiting for perception.");
+
+            VacuumWorldWhitelister.whitelistPerceptionClasses(this.input);
+            candidate = (Perception) this.input.readObject();
+            checkStop(candidate);
+
+            LogUtils.log(getID() + ": got perception: " + candidate.getClass().getSimpleName() + ".");
+
+            perceptions.add(candidate);
+        }
+        while (!(candidate instanceof NothingMoreIncomingPerception));
+
+        return perceptions;
     }
 
     private void checkStop(Perception candidate) throws IOException {
-	try {
-	    if (candidate instanceof StopPerception) {
-		throw new VacuumWorldCheckedException(((StopPerception) candidate).getStopMessage());
-	    }
-	}
-	catch(VacuumWorldCheckedException e) {
-	    throw new IOException(e);
-	}
+        try {
+            if (candidate instanceof StopPerception) {
+                throw new VacuumWorldCheckedException(((StopPerception) candidate).getStopMessage());
+            }
+        }
+        catch (VacuumWorldCheckedException e) {
+            throw new IOException(e);
+        }
     }
-    
+
     @Override
     public VacuumWorldActorAppearance getAppearance() {
-	return (VacuumWorldActorAppearance) super.getAppearance();
+        return (VacuumWorldActorAppearance) super.getAppearance();
     }
 
     @Override
     public ValidatingObjectInputStream getInputChannels() {
-	return this.input;
+        return this.input;
     }
 
     @Override
     public ObjectOutputStream getOutputChannels() {
-	return this.output;
+        return this.output;
     }
 
     @Override
     public void setInputChannels(ValidatingObjectInputStream input) {
-	this.input = input;
+        this.input = input;
     }
 
     @Override
     public void setOutputChannels(ObjectOutputStream output) {
-	this.output = output;
+        this.output = output;
     }
 }

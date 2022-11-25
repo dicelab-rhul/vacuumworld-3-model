@@ -15,44 +15,44 @@ public class VacuumWorldPrologMind extends VacuumWorldAbstractMind implements Pr
     private List<Theory> theories;
 
     public VacuumWorldPrologMind(String bodyId, Prolog interpreter) {
-	super(bodyId);
+    super(bodyId);
 
-	this.theories = new ArrayList<>();
-	setInterpreter(interpreter);
+    this.theories = new ArrayList<>();
+        setInterpreter(interpreter);
     }
 
     @Override
     public Prolog getInterpreter() {
-	return this.interpreter;
+        return this.interpreter;
     }
 
     @Override
     public void setInterpreter(Prolog interpreter) {
-	this.interpreter = interpreter;
+        this.interpreter = interpreter;
     }
 
     @Override
     public List<Theory> getTheories() {
-	return this.theories;
+        return this.theories;
     }
 
     @Override
     public void setTheories(List<Theory> theories) {
-	this.theories = theories;
+        this.theories = theories;
     }
 
     @Override
     public Theory getFirstTheory() {
-	return this.theories != null ? PrologMind.super.getFirstTheory() : null;
+        return this.theories != null ? PrologMind.super.getFirstTheory() : null;
     }
 
     @Override
     public VacuumWorldAbstractAction decide() {
-	return decideWithRNG();
+        return decideWithRNG();
     }
-    
+
     @Override
     public void revise() {
-	//Edit here.
+        // Edit here.
     }
 }

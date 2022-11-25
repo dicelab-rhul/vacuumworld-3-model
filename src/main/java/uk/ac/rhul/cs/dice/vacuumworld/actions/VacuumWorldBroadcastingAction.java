@@ -17,42 +17,42 @@ public class VacuumWorldBroadcastingAction extends VacuumWorldSpeakAction {
     private static final long serialVersionUID = 7205890569373167178L;
 
     public VacuumWorldBroadcastingAction(VacuumWorldMessage message, String senderID) {
-	super(message, senderID);
+        super(message, senderID);
     }
 
     @Override
     public boolean isTypeConsistent() {
-	return VacuumWorldCommunicativeActionsEnum.BROADCAST.equals(getType());
+        return VacuumWorldCommunicativeActionsEnum.BROADCAST.equals(getType());
     }
 
     public void addRecipients(Set<String> recipients) {
-	addAllRecipients(recipients);
+        addAllRecipients(recipients);
     }
-    
+
     @Override
     public boolean isPossible(Environment context, Physics physics) {
-        if(context instanceof VacuumWorldEnvironment && physics instanceof VacuumWorldPhysicsInterface) {
+        if (context instanceof VacuumWorldEnvironment && physics instanceof VacuumWorldPhysicsInterface) {
             return ((VacuumWorldPhysicsInterface) physics).isPossible(this, (VacuumWorldEnvironment) context);
         }
-        
+
         return false;
     }
 
     @Override
     public Result perform(Environment context, Physics physics) {
-        if(context instanceof VacuumWorldEnvironment && physics instanceof VacuumWorldPhysicsInterface) {
+        if (context instanceof VacuumWorldEnvironment && physics instanceof VacuumWorldPhysicsInterface) {
             return ((VacuumWorldPhysicsInterface) physics).perform(this, (VacuumWorldEnvironment) context);
         }
-        
+
         return new VacuumWorldCommunicativeActionResult(ActionResult.FAILURE, null, getSenderID(), new HashSet<>());
     }
-    
+
     @Override
     public boolean succeeded(Environment context, Physics physics) {
-        if(context instanceof VacuumWorldEnvironment && physics instanceof VacuumWorldPhysicsInterface) {
+        if (context instanceof VacuumWorldEnvironment && physics instanceof VacuumWorldPhysicsInterface) {
             return ((VacuumWorldPhysicsInterface) physics).succeeded(this, (VacuumWorldEnvironment) context);
         }
-        
+
         return false;
     }
 }

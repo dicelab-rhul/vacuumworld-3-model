@@ -1,13 +1,17 @@
 package uk.ac.rhul.cs.dice.vacuumworld.actors.minds;
 
+import java.math.BigDecimal;
+
 import uk.ac.rhul.cs.dice.agent.interfaces.AgentMind;
 import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractAction;
 
 /**
  * 
- * This interface exposes RNG-related utility methods for actor minds.<br/><br/>
+ * This interface exposes RNG-related utility methods for actor minds.<br/>
+ * <br/>
  * 
- * Extends {@link VacuumWorldPerceptiveEntity} and {@link AgentMind}.<br/><br/>
+ * Extends {@link VacuumWorldPerceptiveEntity} and {@link AgentMind}.<br/>
+ * <br/>
  * 
  * Known implementations: {@link VacuumWorldAbstractMind}.
  * 
@@ -15,7 +19,7 @@ import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractAction;
  *
  */
 public interface VacuumWorldActorMind extends VacuumWorldPerceptiveEntity, AgentMind {
-    
+
     /**
      * 
      * Returns the lower limit (inclusive) of the possible output of the RNG.
@@ -26,7 +30,7 @@ public interface VacuumWorldActorMind extends VacuumWorldPerceptiveEntity, Agent
     public default int getIntRngLowerLimit() {
         return getRngLowerLimit().intValueExact();
     }
-    
+
     /**
      * 
      * Returns the uppper limit (inclusive) of the possible output of the RNG.
@@ -35,9 +39,9 @@ public interface VacuumWorldActorMind extends VacuumWorldPerceptiveEntity, Agent
      * 
      */
     public default int getIntRngUpperLimit() {
-	 return getRngUpperLimit().intValueExact();
+        return getRngUpperLimit().intValueExact();
     }
-    
+
     /**
      * 
      * Returns an action based on a RNG roll.
@@ -46,4 +50,8 @@ public interface VacuumWorldActorMind extends VacuumWorldPerceptiveEntity, Agent
      * 
      */
     public abstract VacuumWorldAbstractAction decideWithRNG();
+
+    public abstract BigDecimal getRngLowerLimit();
+
+    public abstract BigDecimal getRngUpperLimit();
 }

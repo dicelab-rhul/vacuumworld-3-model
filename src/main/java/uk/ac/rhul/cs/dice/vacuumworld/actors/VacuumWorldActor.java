@@ -23,77 +23,77 @@ public interface VacuumWorldActor extends Actor, Avatar {
 
     @Override
     public default void sendFeedbackToPrincipal(Analyzable... feedback) {
-	throw new UnsupportedOperationException("Not an Avatar!");
+        throw new UnsupportedOperationException("Not an Avatar!");
     }
 
     @Override
     public default PrincipalListener getPrincipalListener() {
-	throw new UnsupportedOperationException("Not an Avatar!");
+        throw new UnsupportedOperationException("Not an Avatar!");
     }
 
     public default void turn(TurnDirection direction) {
-	switch (direction) {
-	case LEFT:
-	    turnLeft();
-	    break;
-	case RIGHT:
-	    turnRight();
-	    break;
-	default:
-	    throw new IllegalArgumentException();
-	}
+        switch (direction) {
+            case LEFT:
+                turnLeft();
+                break;
+            case RIGHT:
+                turnRight();
+                break;
+            default:
+                throw new IllegalArgumentException();
+        }
     }
 
     @Override
     public default void openSocket(String hostname, int port) throws IOException {
-	setSocketWithEnvironment(new Socket(hostname, port));
+        setSocketWithEnvironment(new Socket(hostname, port));
 
-	ObjectOutputStream o = new ObjectOutputStream(getSocketWithEnvironment().getOutputStream());
-	ValidatingObjectInputStream i = new ValidatingObjectInputStream(getSocketWithEnvironment().getInputStream());
-	o.writeUTF(getID());
-	o.flush();
-	setOutputChannels(o);
-	setInputChannels(i);
+        ObjectOutputStream o = new ObjectOutputStream(getSocketWithEnvironment().getOutputStream());
+        ValidatingObjectInputStream i = new ValidatingObjectInputStream(getSocketWithEnvironment().getInputStream());
+        o.writeUTF(getID());
+        o.flush();
+        setOutputChannels(o);
+        setInputChannels(i);
     }
 
     @Override
     public default void turnLeft() {
-	getAppearance().turnLeft();
+        getAppearance().turnLeft();
     }
 
     @Override
     public default void turnRight() {
-	getAppearance().turnRight();
+        getAppearance().turnRight();
     }
 
     @Override
     public default void sendToActuator(Action<?> action) {
-	EnvironmentalActionType type = (EnvironmentalActionType) action.getGenericType();
-	((VacuumWorldActuator) getActuatorFromActionType(type)).validateExecution(action);
+        EnvironmentalActionType type = (EnvironmentalActionType) action.getGenericType();
+        ((VacuumWorldActuator) getActuatorFromActionType(type)).validateExecution(action);
     }
 
     public default Actuator getActuatorFromActionType(EnvironmentalActionType type) {
-	switch (type) {
-	case PHYSICAL:
-	    return getSpecificActuators(ActuatorPurposeEnum.ACT_PHYSICALLY).get(0);
-	case COMMUNICATIVE:
-	    return getSpecificActuators(ActuatorPurposeEnum.SPEAK).get(0);
-	case SENSING:
-	    return getSpecificActuators(ActuatorPurposeEnum.OTHER).get(0);
-	default:
-	    throw new UnsupportedOperationException("No compatible actuator found.");
-	}
+        switch (type) {
+            case PHYSICAL:
+                return getSpecificActuators(ActuatorPurposeEnum.ACT_PHYSICALLY).get(0);
+            case COMMUNICATIVE:
+                return getSpecificActuators(ActuatorPurposeEnum.SPEAK).get(0);
+            case SENSING:
+                return getSpecificActuators(ActuatorPurposeEnum.OTHER).get(0);
+            default:
+                throw new UnsupportedOperationException("No compatible actuator found.");
+        }
     }
 
     @Override
     public default JsonObject serialize() {
-	return getAppearance().serialize();
+        return getAppearance().serialize();
     }
-    
+
     public abstract boolean isUser();
-    
+
     public abstract boolean isCleaningAgent();
-    
+
     public abstract boolean isAvatar();
 
     public abstract VacuumWorldActorAppearance getAppearance();

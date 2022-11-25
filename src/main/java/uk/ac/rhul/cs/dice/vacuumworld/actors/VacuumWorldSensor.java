@@ -7,6 +7,6 @@ public class VacuumWorldSensor extends AbstractSensor {
     private static final long serialVersionUID = 1853724355290142343L;
 
     public VacuumWorldSensor(SensorPurposeEnum purpose) {
-	super(purpose);
+        super(purpose);
     }
 }

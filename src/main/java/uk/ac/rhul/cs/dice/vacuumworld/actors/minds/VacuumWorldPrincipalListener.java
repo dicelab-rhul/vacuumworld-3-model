@@ -12,7 +12,7 @@ import uk.ac.rhul.cs.dice.agentcommon.interfaces.Action;
 
 /**
  * 
- * DO NOT USE THIS CLASS IN THE COURSE-WORK!!!
+ * PLEASE DO NOT USE THIS CLASS IN THE COURSEWORK.
  * 
  * @author cloudstrife9999
  *
@@ -21,26 +21,26 @@ public class VacuumWorldPrincipalListener extends AbstractPrincipalListener {
     private static final long serialVersionUID = 587747917705356370L;
 
     public VacuumWorldPrincipalListener(ServerSocket server) throws IOException {
-	super(server);
+        super(server);
     }
 
     @Override
     public void perceive(Set<Analyzable> perceptions) {
-	//useless for now.
+        // Useless for now.
     }
 
     @Override
     public <T extends Action<?>> void execute(T action) {
-	//useless for now.
+        // Useless for now.
     }
-    
+
     @Override
     public void revise() {
-	//Edit here.
+        // Edit here.
     }
 
     @Override
     public void receiveFirstPerception(Analyzable perception) {
-	perceive(new HashSet<>(Arrays.asList(perception)));
+        perceive(new HashSet<>(Arrays.asList(perception)));
     }
 }

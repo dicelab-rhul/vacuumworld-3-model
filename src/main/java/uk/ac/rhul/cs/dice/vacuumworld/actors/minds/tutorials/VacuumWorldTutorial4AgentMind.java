@@ -13,7 +13,7 @@ import uk.ac.rhul.cs.dice.vacuumworld.actors.minds.VacuumWorldAbstractMind;
 public class VacuumWorldTutorial4AgentMind extends VacuumWorldAbstractMind {
     // This is needed for serialization. Do not touch it.
     private static final long serialVersionUID = 8029125006026831040L;
-    
+
     //Add any class attribute you want/need.
 
     /**
@@ -25,9 +25,9 @@ public class VacuumWorldTutorial4AgentMind extends VacuumWorldAbstractMind {
      */
     // Add any additional parameter you need to this constructor.
     public VacuumWorldTutorial4AgentMind(String bodyId) {
-	super(bodyId);
-	
-	// Edit here if needed.
+        super(bodyId);
+
+        // Edit here if needed.
     }
 
     /**
@@ -39,9 +39,9 @@ public class VacuumWorldTutorial4AgentMind extends VacuumWorldAbstractMind {
      */
     @Override
     public void revise() {
-	// Think of something useful to do here.
+        // Think of something useful to do here.
     }
-    
+
     /**
      * 
      * This method is always automatically called after {@link #revise()}, and before {@link #execute()}.<br/><br/>
@@ -51,9 +51,9 @@ public class VacuumWorldTutorial4AgentMind extends VacuumWorldAbstractMind {
      */
     @Override
     public VacuumWorldAbstractAction decide() {
-	// For students: amend this behaviour in order to make it meaningful.
-	return decideWithRNG();
+        // For students: amend this behaviour in order to make it meaningful.
+        return decideWithRNG();
     }
-    
+
     //Add any method you need.
 }

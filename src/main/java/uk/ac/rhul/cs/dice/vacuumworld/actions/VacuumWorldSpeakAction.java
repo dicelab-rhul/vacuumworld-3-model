@@ -17,9 +17,9 @@ public class VacuumWorldSpeakAction extends VacuumWorldAbstractCommunicativeActi
     private static final long serialVersionUID = 7085737175672939094L;
 
     public VacuumWorldSpeakAction(VacuumWorldMessage message, String senderID, Set<String> recipients) {
-	super(VacuumWorldCommunicativeActionsEnum.SPEAK, message, senderID, recipients);
+        super(VacuumWorldCommunicativeActionsEnum.SPEAK, message, senderID, recipients);
     }
-    
+
     /**
      * 
      * Do NOT call this constructor directly. Construct a {@link VacuumWorldBroadcastingAction} instead.
@@ -28,38 +28,38 @@ public class VacuumWorldSpeakAction extends VacuumWorldAbstractCommunicativeActi
      * 
      */
     public VacuumWorldSpeakAction(VacuumWorldMessage message, String senderID) {
-	super(VacuumWorldCommunicativeActionsEnum.BROADCAST, message, senderID, new HashSet<>());
+        super(VacuumWorldCommunicativeActionsEnum.BROADCAST, message, senderID, new HashSet<>());
     }
 
     @Override
     public boolean isTypeConsistent() {
-	return VacuumWorldCommunicativeActionsEnum.SPEAK.equals(getType());
+        return VacuumWorldCommunicativeActionsEnum.SPEAK.equals(getType());
     }
 
     @Override
     public boolean isPossible(Environment context, Physics physics) {
-        if(context instanceof VacuumWorldEnvironment && physics instanceof VacuumWorldPhysicsInterface) {
+        if (context instanceof VacuumWorldEnvironment && physics instanceof VacuumWorldPhysicsInterface) {
             return ((VacuumWorldPhysicsInterface) physics).isPossible(this, (VacuumWorldEnvironment) context);
         }
-        
+
         return false;
     }
 
     @Override
     public Result perform(Environment context, Physics physics) {
-        if(context instanceof VacuumWorldEnvironment && physics instanceof VacuumWorldPhysicsInterface) {
+        if (context instanceof VacuumWorldEnvironment && physics instanceof VacuumWorldPhysicsInterface) {
             return ((VacuumWorldPhysicsInterface) physics).perform(this, (VacuumWorldEnvironment) context);
         }
-        
+
         return new VacuumWorldCommunicativeActionResult(ActionResult.FAILURE, null, getSenderID(), new HashSet<>());
     }
-    
+
     @Override
     public boolean succeeded(Environment context, Physics physics) {
-        if(context instanceof VacuumWorldEnvironment && physics instanceof VacuumWorldPhysicsInterface) {
+        if (context instanceof VacuumWorldEnvironment && physics instanceof VacuumWorldPhysicsInterface) {
             return ((VacuumWorldPhysicsInterface) physics).succeeded(this, (VacuumWorldEnvironment) context);
         }
-        
+
         return false;
     }
 }

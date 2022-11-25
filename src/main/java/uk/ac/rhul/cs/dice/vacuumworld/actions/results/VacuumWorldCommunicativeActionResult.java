@@ -11,15 +11,15 @@ public class VacuumWorldCommunicativeActionResult extends AbstractActionResult {
     private VacuumWorldMessage message;
     private String senderID;
     private Set<String> recipients;
-    
+
     public VacuumWorldCommunicativeActionResult(ActionResult type, VacuumWorldMessage message, String senderID, Set<String> recipients) {
-	super(type);
-	
-	this.message = message;
-	this.senderID = senderID;
-	this.recipients = recipients == null ? new HashSet<>() : recipients;
+        super(type);
+
+        this.message = message;
+        this.senderID = senderID;
+        this.recipients = recipients == null ? new HashSet<>() : recipients;
     }
-    
+
     /**
      * 
      * Returns the wrapped {@link VacuumWorldMessage}.
@@ -28,9 +28,9 @@ public class VacuumWorldCommunicativeActionResult extends AbstractActionResult {
      * 
      */
     public VacuumWorldMessage getMessage() {
-	return this.message;
+        return this.message;
     }
-    
+
     /**
      * 
      * Returns the ID of the sender of the wrapped {@link VacuumWorldMessage}.
@@ -39,9 +39,9 @@ public class VacuumWorldCommunicativeActionResult extends AbstractActionResult {
      * 
      */
     public String getSenderID() {
-	return this.senderID;
+        return this.senderID;
     }
-    
+
     /**
      * 
      * Returns a {@link Set} of {@link String} IDs of all the recipients of the related communication.
@@ -50,6 +50,6 @@ public class VacuumWorldCommunicativeActionResult extends AbstractActionResult {
      * 
      */
     public Set<String> getRecipients() {
-	return this.recipients;
+        return this.recipients;
     }
 }

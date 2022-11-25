@@ -13,38 +13,38 @@ public class VacuumWorldIdleAction extends VacuumWorldAbstractSensingAction {
     private static final long serialVersionUID = -8335780880947142634L;
 
     public VacuumWorldIdleAction() {
-	super(VacuumWorldSensingActionsEnum.STAY_IDLE);
+        super(VacuumWorldSensingActionsEnum.STAY_IDLE);
     }
 
     @Override
     public boolean isTypeConsistent() {
-	return VacuumWorldSensingActionsEnum.STAY_IDLE.equals(getType());
+        return VacuumWorldSensingActionsEnum.STAY_IDLE.equals(getType());
     }
 
     @Override
     public boolean isPossible(Environment context, Physics physics) {
-        if(context instanceof VacuumWorldEnvironment && physics instanceof VacuumWorldPhysicsInterface) {
+        if (context instanceof VacuumWorldEnvironment && physics instanceof VacuumWorldPhysicsInterface) {
             return ((VacuumWorldPhysicsInterface) physics).isPossible(this, (VacuumWorldEnvironment) context);
         }
-        
+
         return false;
     }
 
     @Override
     public Result perform(Environment context, Physics physics) {
-        if(context instanceof VacuumWorldEnvironment && physics instanceof VacuumWorldPhysicsInterface) {
+        if (context instanceof VacuumWorldEnvironment && physics instanceof VacuumWorldPhysicsInterface) {
             return ((VacuumWorldPhysicsInterface) physics).perform(this, (VacuumWorldEnvironment) context);
         }
-        
+
         return new VacuumWorldSensingActionResult(ActionResult.FAILURE);
     }
-    
+
     @Override
     public boolean succeeded(Environment context, Physics physics) {
-        if(context instanceof VacuumWorldEnvironment && physics instanceof VacuumWorldPhysicsInterface) {
+        if (context instanceof VacuumWorldEnvironment && physics instanceof VacuumWorldPhysicsInterface) {
             return ((VacuumWorldPhysicsInterface) physics).succeeded(this, (VacuumWorldEnvironment) context);
         }
-        
+
         return false;
     }
 }

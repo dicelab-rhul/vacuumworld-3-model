@@ -11,7 +11,7 @@ import java.io.Serializable;
  *
  */
 public interface VacuumWorldMessageInterface extends Serializable {
-    
+
     /**
      * 
      * Returns the text of the message as a {@link String}. The returned value cannot be <code>null</code>. At the very least it consists of an empty {@link String}.
@@ -20,7 +20,7 @@ public interface VacuumWorldMessageInterface extends Serializable {
      * 
      */
     public abstract String getText();
-    
+
     /**
      * 
      * Discards whatever is the current text, and replaces it with <code>text</code>.
@@ -29,7 +29,7 @@ public interface VacuumWorldMessageInterface extends Serializable {
      * 
      */
     public abstract void setText(CharSequence text);
-    
+
     /**
      * 
      * Appends <code>toAppend</code> to the current text.
@@ -38,7 +38,7 @@ public interface VacuumWorldMessageInterface extends Serializable {
      * 
      */
     public abstract void appendAsIs(CharSequence toAppend);
-    
+
     /**
      * 
      * Appends a space to the current text, and then appends <code>toAppend</code>.
@@ -47,7 +47,7 @@ public interface VacuumWorldMessageInterface extends Serializable {
      * 
      */
     public abstract void appendWithSpaceBefore(CharSequence toAppend);
-    
+
     /**
      * 
      * Appends a newline ('\n') to the current text, and then appends <code>toAppend</code>.

@@ -9,40 +9,40 @@ public class VacuumWorldActuator extends AbstractActuator {
     private static final long serialVersionUID = 3229911760231407824L;
 
     public VacuumWorldActuator(ActuatorPurposeEnum purpose) {
-	super(purpose);
+        super(purpose);
     }
-    
+
     public void validateExecution(Action<?> a) {
-	switch((EnvironmentalActionType) a.getGenericType()) {
-	case PHYSICAL:
-	    dealWithPhysicalAction();
-	    break;
-	case COMMUNICATIVE:
-	    dealWithCommunicativeAction();
-	    break;
-	case SENSING:
-	    dealWithSensingAction();
-	    break;
-	default:
-	    throw new UnsupportedOperationException();
-	}
+        switch ((EnvironmentalActionType) a.getGenericType()) {
+            case PHYSICAL:
+                dealWithPhysicalAction();
+                break;
+            case COMMUNICATIVE:
+                dealWithCommunicativeAction();
+                break;
+            case SENSING:
+                dealWithSensingAction();
+                break;
+            default:
+                throw new UnsupportedOperationException();
+        }
     }
 
     private void dealWithPhysicalAction() {
-	if(!ActuatorPurposeEnum.ACT_PHYSICALLY.equals(getPurpose())) {
-	    throw new UnsupportedOperationException();
-	}
+        if (!ActuatorPurposeEnum.ACT_PHYSICALLY.equals(getPurpose())) {
+            throw new UnsupportedOperationException();
+        }
     }
 
     private void dealWithCommunicativeAction() {
-	if(!ActuatorPurposeEnum.SPEAK.equals(getPurpose())) {
-	    throw new UnsupportedOperationException();
-	}
+        if (!ActuatorPurposeEnum.SPEAK.equals(getPurpose())) {
+            throw new UnsupportedOperationException();
+        }
     }
 
     private void dealWithSensingAction() {
-	if(!ActuatorPurposeEnum.OTHER.equals(getPurpose())) {
-	    throw new UnsupportedOperationException();
-	}
+        if (!ActuatorPurposeEnum.OTHER.equals(getPurpose())) {
+            throw new UnsupportedOperationException();
+        }
     }
 }

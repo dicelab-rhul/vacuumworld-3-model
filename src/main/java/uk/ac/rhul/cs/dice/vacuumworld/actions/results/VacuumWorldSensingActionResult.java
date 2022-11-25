@@ -6,6 +6,6 @@ import uk.ac.rhul.cs.dice.agentactions.enums.ActionResult;
 public class VacuumWorldSensingActionResult extends AbstractActionResult {
 
     public VacuumWorldSensingActionResult(ActionResult type) {
-	super(type);
+        super(type);
     }
 }

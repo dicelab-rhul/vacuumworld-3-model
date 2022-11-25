@@ -18,7 +18,7 @@ public class VacuumWorldMessage implements VacuumWorldMessageInterface {
      * 
      */
     public VacuumWorldMessage() {
-	this("");
+    this("");
     }
 
     /**
@@ -29,36 +29,36 @@ public class VacuumWorldMessage implements VacuumWorldMessageInterface {
      * 
      */
     public VacuumWorldMessage(CharSequence text) {
-	this.builder = new StringBuilder(text);
+    this.builder = new StringBuilder(text);
     }
 
     @Override
     public String getText() {
-	return this.builder.toString();
+    return this.builder.toString();
     }
-    
+
     @Override
     public void setText(CharSequence text) {
-	this.builder = new StringBuilder(text);
+    this.builder = new StringBuilder(text);
     }
-    
+
     @Override
     public void appendAsIs(CharSequence toAppend) {
-	this.builder.append(toAppend);
+    this.builder.append(toAppend);
     }
-    
+
     @Override
     public void appendWithSpaceBefore(CharSequence toAppend) {
-	this.builder.append(' ');
-	this.builder.append(toAppend);
+    this.builder.append(' ');
+    this.builder.append(toAppend);
     }
-    
+
     @Override
     public void appendWithNewLineBefore(CharSequence toAppend) {
-	this.builder.append('\n');
-	this.builder.append(toAppend);
+    this.builder.append('\n');
+    this.builder.append(toAppend);
     }
-    
+
     /**
      * 
      * Concatenates the {@link String} "Message: " with the text of the message, and returns the result.
@@ -68,6 +68,6 @@ public class VacuumWorldMessage implements VacuumWorldMessageInterface {
      */
     @Override
     public String toString() {
-	return "Message: " + getText();
+    return "Message: " + getText();
     }
 }

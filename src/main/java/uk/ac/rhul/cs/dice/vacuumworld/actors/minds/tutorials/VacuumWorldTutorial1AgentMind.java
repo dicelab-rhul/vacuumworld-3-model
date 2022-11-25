@@ -22,22 +22,22 @@ import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldCoordinates;
 public class VacuumWorldTutorial1AgentMind extends VacuumWorldAbstractMind {
     // This is needed for serialization. Do not touch it.
     private static final long serialVersionUID = 8029125006026831040L;
-    
+
     // This will hold a null reference until initialized somewhere (unless you change the constructor).
     private VacuumWorldCoordinates position;
-    
+
     // This will hold a null reference until initialized somewhere (unless you change the constructor).
     private Orientation orientation;
-    
+
     // This will be initialized with false (unless you change the constructor).
     private boolean orientationAwayFromOrigin;
-    
+
     // This will be initialized with false (unless you change the constructor).
     private boolean arrived;
-    
+
     // This will be automatically initialized with 0 (unless you change the constructor), which is an impossible value for the size.
     private int gridSize;
-    
+
     //Add any class attribute you want/need.
 
     /**
@@ -49,9 +49,9 @@ public class VacuumWorldTutorial1AgentMind extends VacuumWorldAbstractMind {
      */
     // Add any additional parameter you need to this constructor.
     public VacuumWorldTutorial1AgentMind(String bodyId) {
-	super(bodyId);
-	
-	// Edit here if needed.
+        super(bodyId);
+
+        // Edit here if needed.
     }
 
     /**
@@ -65,22 +65,22 @@ public class VacuumWorldTutorial1AgentMind extends VacuumWorldAbstractMind {
      */
     @Override
     public void revise() {
-	// Updating the stored current position.
-	this.position = getCoordinates();
-	
-	// Updating the stored current orientation.
-	this.orientation = getOrientation();
-	
-	// Updating an internal boolean flag telling whether the agent is facing away from origin.
-	this.orientationAwayFromOrigin = isOrientationEast() || isOrientationSouth();
-	
-	// Updating an internal boolean flag telling whether the agent is ready to discover the grid size.
-	this.arrived = checkIfFacingRelevantWall() || checkSideCases();
-	
-	// Storing the grid size if the agent is able to discover it. Otherwise the relevant class attribute is left unchanged.
-	this.gridSize = this.arrived ? inferGridSize() : this.gridSize;
+        // Updating the stored current position.
+        this.position = getCoordinates();
+
+        // Updating the stored current orientation.
+        this.orientation = getOrientation();
+
+        // Updating an internal boolean flag telling whether the agent is facing away from origin.
+        this.orientationAwayFromOrigin = isOrientationEast() || isOrientationSouth();
+
+        // Updating an internal boolean flag telling whether the agent is ready to discover the grid size.
+        this.arrived = checkIfFacingRelevantWall() || checkSideCases();
+
+        // Storing the grid size if the agent is able to discover it. Otherwise the relevant class attribute is left unchanged.
+        this.gridSize = this.arrived ? inferGridSize() : this.gridSize;
     }
-    
+
     /**
      * 
      * This method is always automatically called after {@link #revise()}, and before {@link #execute()}.<br/><br/>
@@ -92,60 +92,60 @@ public class VacuumWorldTutorial1AgentMind extends VacuumWorldAbstractMind {
      */
     @Override
     public VacuumWorldAbstractAction decide() {
-	// For students: amend this behaviour in order to make it optimal.
-	if(this.arrived) {
-	    // We are done, and we stay idle.
-	    return new VacuumWorldIdleAction();
-	}
-	else if(this.orientationAwayFromOrigin) {
-	    // We are facing EAST or SOUTH. We can move towards higher X or Y values respectively.
-	    return new VacuumWorldMoveAction();
-	}
-	else {
-	    // We are facing NORTH or WEST. It is better to turn.
-	    return turnAwayFromOrigin();
-	}
+        // For students: amend this behaviour in order to make it optimal.
+        if(this.arrived) {
+            // We are done, and we stay idle.
+            return new VacuumWorldIdleAction();
+        }
+        else if(this.orientationAwayFromOrigin) {
+            // We are facing EAST or SOUTH. We can move towards higher X or Y values respectively.
+            return new VacuumWorldMoveAction();
+        }
+        else {
+            // We are facing NORTH or WEST. It is better to turn.
+            return turnAwayFromOrigin();
+        }
     }
 
     private VacuumWorldAbstractAction turnAwayFromOrigin() {
-	if(this.orientation == Orientation.NORTH) {
-	    // We turn from NORTH to EAST.
-	    return new VacuumWorldTurnRightAction();
-	}
-	else if(this.orientation == Orientation.WEST) {
-	    // We turn from WEST to SOUTH.
-	    return new VacuumWorldTurnLeftAction();
-	}
-	else {
-	    // At the moment, this default behaviour is not logically reachable. It is here just for completeness.
-	    return new VacuumWorldIdleAction();
-	}
+        if(this.orientation == Orientation.NORTH) {
+            // We turn from NORTH to EAST.
+            return new VacuumWorldTurnRightAction();
+        }
+        else if(this.orientation == Orientation.WEST) {
+            // We turn from WEST to SOUTH.
+            return new VacuumWorldTurnLeftAction();
+        }
+        else {
+            // At the moment, this default behaviour is not logically reachable. It is here just for completeness.
+            return new VacuumWorldIdleAction();
+        }
     }
 
     private int inferGridSize() {
-	// Simply the highest coordinate + 1 (because the coordinates are 0-indexed).
-	return Math.max(this.position.getX(), this.position.getY()) + 1;
+    // Simply the highest coordinate + 1 (because the coordinates are 0-indexed).
+        return Math.max(this.position.getX(), this.position.getY()) + 1;
     }
 
     private boolean checkIfFacingRelevantWall() {
-	// Facing (EAST OR SOUTH) AND having a wall in front.
-	return this.orientationAwayFromOrigin && isWallForward();
+    // Facing (EAST OR SOUTH) AND having a wall in front.
+        return this.orientationAwayFromOrigin && isWallForward();
     }
 
     private boolean checkSideCases() {
-	// Begin horizontally oriented on the bottom row OR begin vertically oriented on the rightmost column.
-	return checkBottomRow() || checkRightmostColumn();
+    // Begin horizontally oriented on the bottom row OR begin vertically oriented on the rightmost column.
+        return checkBottomRow() || checkRightmostColumn();
     }
 
     private boolean checkRightmostColumn() {
-	// Facing NORTH AND having a wall on the right OR facing SOUTH AND having a wall on the left.
-	return isOrientationNorth() && isWallRight() || isOrientationSouth() && isWallLeft();
+    // Facing NORTH AND having a wall on the right OR facing SOUTH AND having a wall on the left.
+        return isOrientationNorth() && isWallRight() || isOrientationSouth() && isWallLeft();
     }
 
     private boolean checkBottomRow() {
-	// Facing EAST AND having a wall on the right OR facing WEST AND having a wall on the left.
-	return isOrientationEast() && isWallRight() || isOrientationWest() && isWallRight();
+    // Facing EAST AND having a wall on the right OR facing WEST AND having a wall on the left.
+        return isOrientationEast() && isWallRight() || isOrientationWest() && isWallRight();
     }
-    
+
     //Add any method you need.
 }

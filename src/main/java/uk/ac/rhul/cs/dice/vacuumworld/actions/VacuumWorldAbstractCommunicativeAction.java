@@ -21,65 +21,65 @@ public abstract class VacuumWorldAbstractCommunicativeAction extends VacuumWorld
     private String senderID;
     private Set<String> recipientsIDs;
 
-    public VacuumWorldAbstractCommunicativeAction(VacuumWorldCommunicativeActionsEnum type, VacuumWorldMessage message, String senderID, Set<String> recipientsIDs) {
-	super(type.getCode());
-	
-	this.type = type;
-	this.message = message;
-	this.senderID = senderID;
-	this.recipientsIDs = recipientsIDs == null ? new HashSet<>() : recipientsIDs;
+    protected VacuumWorldAbstractCommunicativeAction(VacuumWorldCommunicativeActionsEnum type, VacuumWorldMessage message, String senderID, Set<String> recipientsIDs) {
+        super(type.getCode());
+
+        this.type = type;
+        this.message = message;
+        this.senderID = senderID;
+        this.recipientsIDs = recipientsIDs == null ? new HashSet<>() : recipientsIDs;
     }
 
     @Override
     public VacuumWorldCommunicativeActionsEnum getType() {
-	return this.type;
+        return this.type;
     }
 
     public VacuumWorldMessage getMessage() {
-	return this.message;
+        return this.message;
     }
-    
+
     public String getSenderID() {
-	return this.senderID;
+        return this.senderID;
     }
 
     @Override
     public Set<String> getRecipientsIds() {
-	return this.recipientsIDs;
+        return this.recipientsIDs;
     }
 
     protected void addAllRecipients(Set<String> recipients) {
-	this.recipientsIDs = recipients;
+        this.recipientsIDs = recipients;
     }
 
     @Override
     public Result attempt(Environment context, Physics physics) {
-	if (isPossible(context, physics)) {
-	    return performAndCheckResult(context, physics);
-	}
-	else {
-	    return new VacuumWorldCommunicativeActionResult(ActionResult.IMPOSSIBLE, null, getSenderID(), new HashSet<>());
-	}
+        if (isPossible(context, physics)) {
+            return performAndCheckResult(context, physics);
+        }
+        else {
+            return new VacuumWorldCommunicativeActionResult(ActionResult.IMPOSSIBLE, null, getSenderID(), new HashSet<>());
+        }
     }
 
     private Result performAndCheckResult(Environment context, Physics physics) {
-	try {
-	    return performAndCheckResultHelper(context, physics);
-	}
-	catch (Exception e) {
-	    LogUtils.log(e);
-	    return new VacuumWorldCommunicativeActionResult(ActionResult.FAILURE, null, getSenderID(), new HashSet<>());
-	}
+        try {
+            return performAndCheckResultHelper(context, physics);
+        }
+        catch (Exception e) {
+            LogUtils.log(e);
+            return new VacuumWorldCommunicativeActionResult(ActionResult.FAILURE, null, getSenderID(), new HashSet<>());
+        }
     }
 
     private Result performAndCheckResultHelper(Environment context, Physics physics) {
-	Result result = perform(context, physics);
+        Result result = perform(context, physics);
 
-	if (ActionResult.FAILURE.equals(result.getActionResultType()) || !succeeded(context, physics)) {
-	    return new VacuumWorldCommunicativeActionResult(ActionResult.FAILURE, null, getSenderID(), new HashSet<>());
-	}
-	else {
-	    return result;
-	}
+        if (ActionResult.FAILURE.equals(result.getActionResultType()) || !succeeded(context, physics)) {
+            return new VacuumWorldCommunicativeActionResult(ActionResult.FAILURE, null, getSenderID(), new HashSet<>());
+        }
+        else {
+            return result;
+        }
     }
 }

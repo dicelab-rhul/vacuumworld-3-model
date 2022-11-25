@@ -9,7 +9,7 @@ import uk.ac.rhul.cs.dice.vacuumworld.actions.VacuumWorldAbstractAction;
  */
 public class VacuumWorldRandomMind extends VacuumWorldAbstractMind {
     private static final long serialVersionUID = 8611021479667623569L;
-    
+
     /**
      * 
      * Constructor that calls the super constructor with the same parameter.
@@ -18,7 +18,7 @@ public class VacuumWorldRandomMind extends VacuumWorldAbstractMind {
      * 
      */
     public VacuumWorldRandomMind(String bodyId) {
-	super(bodyId);
+        super(bodyId);
     }
 
     /**
@@ -28,9 +28,9 @@ public class VacuumWorldRandomMind extends VacuumWorldAbstractMind {
      */
     @Override
     public VacuumWorldAbstractAction decide() {
-	return decideWithRNG();
+        return decideWithRNG();
     }
-    
+
     /**
      * 
      * This mind does not revise anything.
@@ -38,6 +38,6 @@ public class VacuumWorldRandomMind extends VacuumWorldAbstractMind {
      */
     @Override
     public void revise() {
-	// This mind does not revise anything.
+        // This mind does not revise anything.
     }
 }

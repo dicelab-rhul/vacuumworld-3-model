@@ -14,77 +14,77 @@ public class GoToPositionPlan implements VacuumWorldPlan<PhysicalAction<VacuumWo
     private VacuumWorldAbstractAction last;
 
     public GoToPositionPlan() {
-	this.actions = new ArrayDeque<>();
-	this.last = new VacuumWorldIdleAction();
+        this.actions = new ArrayDeque<>();
+        this.last = new VacuumWorldIdleAction();
     }
-    
+
     @Override
     public boolean isEmpty() {
-	return this.actions.isEmpty();
+        return this.actions.isEmpty();
     }
 
     @Override
     public int getSize() {
-	return this.actions.size();
+        return this.actions.size();
     }
 
     public VacuumWorldAbstractAction next(ActionResult lastResult) {
-	if(!ActionResult.SUCCESS.equals(lastResult)) {
-	    return last;
-	}
-	else {
-	    return (VacuumWorldAbstractAction) pop();
-	}
+        if (!ActionResult.SUCCESS.equals(lastResult)) {
+            return last;
+        }
+        else {
+            return (VacuumWorldAbstractAction) pop();
+        }
     }
-    
+
     @Override
     public PhysicalAction<VacuumWorldPhysicalActionsEnum> peek() {
-	return this.actions.peek();
+        return this.actions.peek();
     }
 
     @Override
     public void enqueueAction(PhysicalAction<VacuumWorldPhysicalActionsEnum> action) {
-	this.actions.add(action);
+        this.actions.add(action);
     }
 
     @Override
     public void pushActionAtTheBeginning(PhysicalAction<VacuumWorldPhysicalActionsEnum> action) {
-	this.actions.push(action);
+        this.actions.push(action);
     }
 
     @Override
     public PhysicalAction<VacuumWorldPhysicalActionsEnum> pop() {
-	if(!isEmpty()) {
-	    this.last = (VacuumWorldAbstractAction) this.actions.peek();
-	    
-	    return this.actions.pop();
-	}
-	
-	return null;
+        if (!isEmpty()) {
+            this.last = (VacuumWorldAbstractAction) this.actions.peek();
+
+            return this.actions.pop();
+        }
+
+        return null;
     }
 
     @Override
     public void deleteLast() {
-	if(!isEmpty()) {
-	    this.actions.removeLast();
-	}
+        if (!isEmpty()) {
+            this.actions.removeLast();
+        }
     }
-    
+
     @Override
     public void clear() {
         this.actions.clear();
     }
-    
+
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        
+
         builder.append("Number of actions: ");
         builder.append(this.actions.size());
         builder.append(". Representation: ");
-        
+
         this.actions.forEach(a -> builder.append(((VacuumWorldAbstractAction) a).toShortString()));
-        
+
         return builder.toString();
     }
 }

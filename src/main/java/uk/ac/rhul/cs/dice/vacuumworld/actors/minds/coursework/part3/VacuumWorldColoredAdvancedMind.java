@@ -12,13 +12,13 @@ import uk.ac.rhul.cs.dice.vacuumworld.actors.minds.VacuumWorldAbstractMind;
  */
 public abstract class VacuumWorldColoredAdvancedMind extends VacuumWorldAbstractMind {
     private static final long serialVersionUID = 2849444832311084020L;
-    //Add any class attribute you want/need.
+    // Add any class attribute you want/need.
 
-    public VacuumWorldColoredAdvancedMind(String bodyId) { //Add any additional parameter you need.
-	super(bodyId);
-	
-	//Edit here if needed.
+    protected VacuumWorldColoredAdvancedMind(String bodyId) { // Add any additional parameter you need.
+        super(bodyId);
+
+        // Edit here if needed.
     }
-    
-    //Add any method you need.
+
+    // Add any method you need.
 }

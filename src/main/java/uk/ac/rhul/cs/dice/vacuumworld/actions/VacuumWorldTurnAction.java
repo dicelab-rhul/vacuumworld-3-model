@@ -9,32 +9,32 @@ public abstract class VacuumWorldTurnAction extends VacuumWorldAbstractPhysicalA
     private TurnDirection direction;
     private Orientation originalOrientation;
 
-    public VacuumWorldTurnAction(VacuumWorldPhysicalActionsEnum type, TurnDirection direction) {
-	super(type);
+    protected VacuumWorldTurnAction(VacuumWorldPhysicalActionsEnum type, TurnDirection direction) {
+        super(type);
 
-	this.direction = direction;
+        this.direction = direction;
     }
 
     public void setOriginalOrientation(Orientation originalOrientation) {
-	this.originalOrientation = originalOrientation;
+        this.originalOrientation = originalOrientation;
     }
 
     public Orientation getOriginalOrientation() {
-	return this.originalOrientation;
+        return this.originalOrientation;
     }
 
     public TurnDirection getTurnDirection() {
-	return this.direction;
+        return this.direction;
     }
 
     public static VacuumWorldTurnAction generate(TurnDirection direction) {
-	switch (direction) {
-	case LEFT:
-	    return new VacuumWorldTurnLeftAction();
-	case RIGHT:
-	    return new VacuumWorldTurnRightAction();
-	default:
-	    throw new IllegalArgumentException();
-	}
+        switch (direction) {
+            case LEFT:
+                return new VacuumWorldTurnLeftAction();
+            case RIGHT:
+                return new VacuumWorldTurnRightAction();
+            default:
+                throw new IllegalArgumentException();
+        }
     }
 }

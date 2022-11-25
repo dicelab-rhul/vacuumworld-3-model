@@ -18,16 +18,15 @@ public class VacuumWorldPerception implements Perception {
 
     /**
      * 
-     * Constructs a {@link VacuumWorldPerception} with an {@link ActionResult} and a
-     * {@link VacuumWorldEnvironmentAppearance}.
+     * Constructs a {@link VacuumWorldPerception} with an {@link ActionResult} and a {@link VacuumWorldEnvironmentAppearance}.
      * 
-     * @param result an {@link ActionResult}.
+     * @param result     an {@link ActionResult}.
      * @param appearance a {@link VacuumWorldEnvironmentAppearance}.
      * 
      */
     public VacuumWorldPerception(ActionResult result, VacuumWorldEnvironmentAppearance appearance) {
-	this.result = result;
-	this.appearance = appearance;
+        this.result = result;
+        this.appearance = appearance;
     }
 
     /**
@@ -38,7 +37,7 @@ public class VacuumWorldPerception implements Perception {
      * 
      */
     public ActionResult getResult() {
-	return this.result;
+        return this.result;
     }
 
     /**
@@ -49,11 +48,11 @@ public class VacuumWorldPerception implements Perception {
      * 
      */
     public VacuumWorldEnvironmentAppearance getAppearance() {
-	return this.appearance;
+        return this.appearance;
     }
 
     @Override
     public String toString() {
-	return "Perception: " + this.appearance.toString();
+        return "Perception: " + this.appearance.toString();
     }
 }

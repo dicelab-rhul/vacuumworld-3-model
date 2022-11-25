@@ -41,10 +41,10 @@ public abstract class VacuumWorldAbstractMind extends AbstractAgentMind implemen
      * @param bodyId the {@link String} body ID.
      * 
      */
-    public VacuumWorldAbstractMind(String bodyId) {
-	this(bodyId, VacuumWorldAbstractMind.DEFAULT_RNG_LOWER_LIMIT, VacuumWorldAbstractMind.DEFAULT_RNG_UPPER_LIMIT);
+    protected VacuumWorldAbstractMind(String bodyId) {
+        this(bodyId, VacuumWorldAbstractMind.DEFAULT_RNG_LOWER_LIMIT, VacuumWorldAbstractMind.DEFAULT_RNG_UPPER_LIMIT);
     }
-    
+
     /**
      * 
      * Constructor with the body ID, and the lower and upper (both inclusive) limits for the RNG rolls.
@@ -54,38 +54,38 @@ public abstract class VacuumWorldAbstractMind extends AbstractAgentMind implemen
      * @param rngUpperLimit the inclusive upper limit for RNG rolls.
      * 
      */
-    public VacuumWorldAbstractMind(String bodyId, int rngLowerLimit, int rngUpperLimit) {
-	super(bodyId);
+    protected VacuumWorldAbstractMind(String bodyId, int rngLowerLimit, int rngUpperLimit) {
+        super(bodyId);
 
-	this.lastCyclePerceptions = new ArrayList<>();
-	this.lastCycleReceivedMessages = new ArrayList<>();
-	this.rngLowerLimit = rngLowerLimit <= rngUpperLimit ? rngLowerLimit : VacuumWorldAbstractMind.DEFAULT_RNG_LOWER_LIMIT;
-	this.rngUpperLimit = rngUpperLimit >= rngLowerLimit ? rngUpperLimit : VacuumWorldAbstractMind.DEFAULT_RNG_UPPER_LIMIT;
+        this.lastCyclePerceptions = new ArrayList<>();
+        this.lastCycleReceivedMessages = new ArrayList<>();
+        this.rngLowerLimit = rngLowerLimit <= rngUpperLimit ? rngLowerLimit : VacuumWorldAbstractMind.DEFAULT_RNG_LOWER_LIMIT;
+        this.rngUpperLimit = rngUpperLimit >= rngLowerLimit ? rngUpperLimit : VacuumWorldAbstractMind.DEFAULT_RNG_UPPER_LIMIT;
     }
 
     @Override
     public BigDecimal getRngLowerLimit() {
         return BigDecimal.valueOf(this.rngLowerLimit);
     }
-    
+
     @Override
     public BigDecimal getRngUpperLimit() {
         return BigDecimal.valueOf(this.rngUpperLimit);
     }
-    
+
     @Override
     public VacuumWorldPerception getPerception() {
-	return this.lastCyclePerceptions.isEmpty() ? null : this.lastCyclePerceptions.get(0);
+        return this.lastCyclePerceptions.isEmpty() ? null : this.lastCyclePerceptions.get(0);
     }
 
     @Override
     public boolean hasNewMessages() {
         return !this.lastCycleReceivedMessages.isEmpty();
     }
-    
+
     @Override
     public List<VacuumWorldSpeechPerception> getMessages() {
-	return this.lastCycleReceivedMessages;
+        return this.lastCycleReceivedMessages;
     }
 
     /**
@@ -104,14 +104,14 @@ public abstract class VacuumWorldAbstractMind extends AbstractAgentMind implemen
      */
     @Override
     public void perceive(Set<Analyzable> perceptions) {
-	super.perceive(null);
+        super.perceive(null);
 
-	this.lastCyclePerceptions.clear();
-	this.lastCycleReceivedMessages.clear();
+        this.lastCyclePerceptions.clear();
+        this.lastCycleReceivedMessages.clear();
 
-	perceptions.forEach(this::dealWithPercept);
+        perceptions.forEach(this::dealWithPercept);
     }
-    
+
     /**
      * 
      * This method is always automatically called at the beginning of the first cycle before {@link #revise()}.<br/><br/>
@@ -123,7 +123,7 @@ public abstract class VacuumWorldAbstractMind extends AbstractAgentMind implemen
     public void receiveFirstPerception(Analyzable perception) {
         perceive(new HashSet<>(Arrays.asList(perception)));
     }
-    
+
     /**
      * 
      * This method is always automatically called after {@link #revise()}, and before {@link #execute()}.<br/><br/>
@@ -149,14 +149,14 @@ public abstract class VacuumWorldAbstractMind extends AbstractAgentMind implemen
      */
     @Override
     public VacuumWorldAbstractAction decideWithRNG() {
-	final int rngValue = getRng().nextInt(getIntRngUpperLimit() + 1) + getIntRngLowerLimit();
-	
-	if(rngValue == getIntRngLowerLimit()) {
-	    return new VacuumWorldMoveAction();
-	}
-	else if(rngValue == getIntRngLowerLimit() + 1) {
-	    return new VacuumWorldTurnLeftAction();
-	}
+        final int rngValue = getRng().nextInt(getIntRngUpperLimit() + 1) + getIntRngLowerLimit();
+
+        if(rngValue == getIntRngLowerLimit()) {
+            return new VacuumWorldMoveAction();
+        }
+        else if(rngValue == getIntRngLowerLimit() + 1) {
+            return new VacuumWorldTurnLeftAction();
+        }
         else if(rngValue == getIntRngLowerLimit() + 2) {
             return new VacuumWorldTurnRightAction();
         }
@@ -177,24 +177,24 @@ public abstract class VacuumWorldAbstractMind extends AbstractAgentMind implemen
      */
     @Override
     public final <T extends Action<?>> void execute(T action) {
-	try {
-	    ((VacuumWorldAbstractAction) action).setActor(getBodyId());
-	    LogUtils.log(action.getActorID() + " is executing " + action.getClass().getSimpleName());
-	}
-	catch(ClassCastException e) {
-	    throw new VacuumWorldRuntimeException(action.getClass().getName() + "is not castable to " + VacuumWorldAbstractAction.class.getName() + "!", e);
-	}
+        try {
+            ((VacuumWorldAbstractAction) action).setActor(getBodyId());
+            LogUtils.log(action.getActorID() + " is executing " + action.getClass().getSimpleName());
+        }
+        catch(ClassCastException e) {
+            throw new VacuumWorldRuntimeException(action.getClass().getName() + "is not castable to " + VacuumWorldAbstractAction.class.getName() + "!", e);
+        }
     }
-    
+
     private void dealWithPercept(Analyzable a) {
-	if (VacuumWorldPerception.class.isAssignableFrom(a.getClass())) {
-	    this.lastCyclePerceptions.add((VacuumWorldPerception) a);
-	}
-	else if (VacuumWorldSpeechPerception.class.isAssignableFrom(a.getClass())) {
-	    this.lastCycleReceivedMessages.add((VacuumWorldSpeechPerception) a);
-	}
-	else if (!NothingMoreIncomingPerception.class.isAssignableFrom(a.getClass())) {
-	    getDefaultLastReceivedPerceptions().add(a);
-	}
+        if (VacuumWorldPerception.class.isAssignableFrom(a.getClass())) {
+            this.lastCyclePerceptions.add((VacuumWorldPerception) a);
+        }
+        else if (VacuumWorldSpeechPerception.class.isAssignableFrom(a.getClass())) {
+            this.lastCycleReceivedMessages.add((VacuumWorldSpeechPerception) a);
+        }
+        else if (!NothingMoreIncomingPerception.class.isAssignableFrom(a.getClass())) {
+            getDefaultLastReceivedPerceptions().add(a);
+        }
     }
 }

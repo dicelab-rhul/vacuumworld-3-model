@@ -30,9 +30,9 @@ import uk.ac.rhul.cs.dice.vacuumworld.environment.VacuumWorldLocation;
  *
  */
 public interface VacuumWorldLocationPerceptionInterface extends Serializable {
-    
+
     public abstract JsonObject serialize();
-    
+
     /**
      * 
      * Returns the {@link VacuumWorldActorAppearance} of the {@link ActiveBody} that is present on this {@link VacuumWorldLocation}, if any, <code>null</code> otherwise.
@@ -41,7 +41,7 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * 
      */
     public abstract VacuumWorldActorAppearance getActiveBodyAppearanceIfAny();
-    
+
     /**
      * 
      * Returns the {@link VacuumWorldDirtAppearance} of the {@link VacuumWorldDirt} that is present on this {@link VacuumWorldLocation}, if any, <code>null</code> otherwise.
@@ -50,7 +50,7 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * 
      */
     public abstract VacuumWorldDirtAppearance getDirtAppearanceIfAny();
-    
+
     /**
      * 
      * Returns the {@link VacuumWorldCoordinates} of this {@link VacuumWorldLocation}.
@@ -59,7 +59,7 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * 
      */
     public abstract VacuumWorldCoordinates getCoordinates();
-    
+
     /**
      * 
      * Checks whether there is a wall on the northern side of this {@link VacuumWorldLocation}.
@@ -68,7 +68,7 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * 
      */
     public abstract boolean isWallOnNorth();
-    
+
     /**
      * 
      * Checks whether there is a wall on the southern side of this {@link VacuumWorldLocation}.
@@ -77,7 +77,7 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * 
      */
     public abstract boolean isWallOnSouth();
-    
+
     /**
      * 
      * Checks whether there is a wall on the western side of this {@link VacuumWorldLocation}.
@@ -86,7 +86,7 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * 
      */
     public abstract boolean isWallOnWest();
-    
+
     /**
      * 
      * Checks whether there is a wall on the eastern side of this {@link VacuumWorldLocation}.
@@ -95,7 +95,7 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * 
      */
     public abstract boolean isWallOnEast();
-    
+
     /**
      * 
      * Checks whether there is an {@link ActiveBody} with <code>actorId</code> as ID and returns whether, according to its {@link Orientation}, there is a wall in front.<br />
@@ -119,7 +119,7 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * 
      */
     public abstract boolean isWallOnTheLeft(String actorId);
-    
+
     /**
      * 
      * Checks whether there is an {@link ActiveBody} with <code>actorId</code> as ID and returns whether, according to its {@link Orientation}, there is a wall on the right.<br />
@@ -131,7 +131,7 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * 
      */
     public abstract boolean isWallOnTheRight(String actorId);
-    
+
     /**
      * 
      * Checks whether there is an {@link ActiveBody} with <code>actorId</code> as ID and returns whether, according to its {@link Orientation}, there is a wall behind.<br />
@@ -143,7 +143,7 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * 
      */
     public abstract boolean isWallBehind(String actorId);
-    
+
     /**
      * 
      * Checks of the presence of a wall on the side specified by <code>orientation</code>.
@@ -154,7 +154,7 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * 
      */
     public abstract boolean checkForWall(Orientation orientation);
-    
+
     /**
      * 
      * Returns the {@link Orientation} of the {@link ActiveBody} present on this {@link VacuumWorldLocation}.<br />
@@ -164,16 +164,16 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * 
      */
     public default Orientation getActiveBodyOrientation() {
-	Orientation orientation = getActiveBodyOrientationIfAny();
-	
-	if(orientation != null) {
-	    return orientation;
-	}
-	else {
-	    throw new IllegalArgumentException();
-	}
+        Orientation orientation = getActiveBodyOrientationIfAny();
+
+        if(orientation != null) {
+            return orientation;
+        }
+        else {
+            throw new IllegalArgumentException();
+        }
     }
-    
+
     /**
      * 
      * Returns the {@link Orientation} of the {@link ActiveBody} present on this {@link VacuumWorldLocation}, if any.
@@ -182,9 +182,9 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * 
      */
     public default Orientation getActiveBodyOrientationIfAny() {
-	return isAnActiveBodyThere() ? getActiveBodyAppearanceIfAny().getOrientation() : null;
+        return isAnActiveBodyThere() ? getActiveBodyAppearanceIfAny().getOrientation() : null;
     }
-    
+
     /**
      * 
      * Checks whether a {@link VacuumWorldCleaningAgent} is present on this {@link VacuumWorldLocation}.
@@ -193,7 +193,7 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * 
      */
     public abstract boolean isACleaningAgentThere();
-    
+
     /**
      * 
      * Checks whether a <code>GREEN</code> {@link VacuumWorldCleaningAgent} is present on this {@link VacuumWorldLocation}.
@@ -202,7 +202,7 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * 
      */
     public abstract boolean isAGreenAgentThere();
-    
+
     /**
      * 
      * Checks whether an <code>ORANGE</code> {@link VacuumWorldCleaningAgent} is present on this {@link VacuumWorldLocation}.
@@ -211,7 +211,7 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * 
      */
     public abstract boolean isAnOrangeAgentThere();
-    
+
     /**
      * 
      * Checks whether a <code>WHITE</code> {@link VacuumWorldCleaningAgent} is present on this {@link VacuumWorldLocation}.
@@ -220,7 +220,7 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * 
      */
     public abstract boolean isAWhiteAgentThere();
-    
+
     /**
      * 
      * Checks whether a {@link VacuumWorldCleaningAgent} whose {@link AgentColor} matches <code>color</code> is present on this {@link VacuumWorldLocation}.
@@ -231,7 +231,7 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * 
      */
     public abstract boolean isACleaningAgentWithSuchColorThere(AgentColor color);
-    
+
     /**
      * 
      * Checks whether a {@link VacuumWorldCleaningAgent} whose {@link AgentColor} is compatible with <code>color</code> is present on this {@link VacuumWorldLocation}.
@@ -242,7 +242,7 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * 
      */
     public abstract boolean isACleaningAgentCompatibleWithSuchDirtThere(VacuumWorldDirtColor color);
-    
+
     /**
      * 
      * Checks whether a {@link VacuumWorldUserAgent} is present on this {@link VacuumWorldLocation}.
@@ -251,7 +251,7 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * 
      */
     public abstract boolean isAUserThere();
-    
+
     /**
      * 
      * Checks whether a {@link VacuumWorldAvatar} is present on this {@link VacuumWorldLocation}.
@@ -260,7 +260,7 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * 
      */
     public abstract boolean isAnAvatarThere();
-    
+
     /**
      * 
      * Checks whether an {@link ActiveBody} ({@link VacuumWorldCleaningAgent}, {@link VacuumWorldUserAgent}, or {@link VacuumWorldAvatar}) is present on this {@link VacuumWorldLocation}.
@@ -269,7 +269,7 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * 
      */
     public abstract boolean isAnActiveBodyThere();
-    
+
     /**
      * 
      * Checks whether no instance of an {@link ActiveBody} ({@link VacuumWorldCleaningAgent}, {@link VacuumWorldUserAgent}, or {@link VacuumWorldAvatar}) is present on this {@link VacuumWorldLocation}.
@@ -278,7 +278,7 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * 
      */
     public abstract boolean isFreeFromActiveBodies();
-    
+
     /**
      * 
      * Checks whether a {@link VacuumWorldDirt} is present on this {@link VacuumWorldLocation}.
@@ -287,7 +287,7 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * 
      */
     public abstract boolean isDirtThere();
-    
+
     /**
      * 
      * Checks whether a {@link VacuumWorldDirt} is not present on this {@link VacuumWorldLocation}.
@@ -296,7 +296,7 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * 
      */
     public abstract boolean isFreeFromDirt();
-    
+
     /**
      * 
      * Checks whether a {@link VacuumWorldDirt} whose {@link VacuumWorldDirtColor} matches <code>color</code> is present on this {@link VacuumWorldLocation}.
@@ -307,7 +307,7 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * 
      */
     public abstract boolean isSuchDirtThere(VacuumWorldDirtColor color);
-    
+
     /**
      * 
      * Checks whether a {@link VacuumWorldDirt} whose {@link VacuumWorldDirtColor} is compatible with <code>color</code> is present on this {@link VacuumWorldLocation}.
@@ -318,7 +318,7 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * 
      */
     public abstract boolean isCompatibleDirtThere(AgentColor color);
-    
+
     /**
      * 
      * Checks whether a <code>GREEN</code> {@link VacuumWorldDirt} is present on this {@link VacuumWorldLocation}.
@@ -327,7 +327,7 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * 
      */
     public abstract boolean isGreenDirtThere() ;
-    
+
     /**
      * 
      * Checks whether an <code>ORANGE</code> {@link VacuumWorldDirt} is present on this {@link VacuumWorldLocation}.
@@ -336,7 +336,7 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * 
      */
     public abstract boolean isOrangeDirtThere();
-    
+
     /**
      * 
      * Checks whether no instance of an {@link ActiveBody} ({@link VacuumWorldCleaningAgent}, {@link VacuumWorldUserAgent}, or {@link VacuumWorldAvatar}) and no instance of a {@link VacuumWorldDirt} are present on this {@link VacuumWorldLocation}.
@@ -345,9 +345,9 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * 
      */
     public default boolean isEmpty() {
-	return isFreeFromActiveBodies() && isFreeFromDirt();
+        return isFreeFromActiveBodies() && isFreeFromDirt();
     }
-    
+
     /**
      * 
      * Checks whether an instance of an {@link ActiveBody} ({@link VacuumWorldCleaningAgent}, {@link VacuumWorldUserAgent}, or {@link VacuumWorldAvatar}) or an instance of a {@link VacuumWorldDirt} are present on this {@link VacuumWorldLocation}.
@@ -356,9 +356,9 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * 
      */
     public default boolean isNotEmpty() {
-	return isAnActiveBodyThere() || isDirtThere();
+        return isAnActiveBodyThere() || isDirtThere();
     }
-    
+
     /**
      * 
      * Checks whether an {@link ActiveBody} ({@link VacuumWorldCleaningAgent}, {@link VacuumWorldUserAgent}, or {@link VacuumWorldAvatar}) whose ID matches <code>id</code> is present on this {@link VacuumWorldLocation}.
@@ -369,9 +369,9 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * 
      */
     public default boolean containsSuchActiveBody(String id) {
-	return containsSuchCleaningAgent(id) || containsSuchUser(id) || containsSuchAvatar(id);
+        return containsSuchCleaningAgent(id) || containsSuchUser(id) || containsSuchAvatar(id);
     }
-    
+
     /**
      * 
      * Checks whether a {@link VacuumWorldCleaningAgent} whose ID matches <code>id</code> is present on this {@link VacuumWorldLocation}.
@@ -382,9 +382,9 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * 
      */
     public default boolean containsSuchCleaningAgent(String id) {
-	return isACleaningAgentThere() && id.equals(this.getAgentAppearanceIfAny().getId());
+        return isACleaningAgentThere() && id.equals(this.getAgentAppearanceIfAny().getId());
     }
-    
+
     /**
      * 
      * Checks whether a {@link VacuumWorldUserAgent} whose ID matches <code>id</code> is present on this {@link VacuumWorldLocation}.
@@ -395,9 +395,9 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * 
      */
     public default boolean containsSuchUser(String id) {
-	return isAUserThere() && id.equals(this.getUserAppearanceIfAny().getId());
+        return isAUserThere() && id.equals(this.getUserAppearanceIfAny().getId());
     }
-    
+
     /**
      * 
      * Checks whether a {@link VacuumWorldAvatar} whose ID matches <code>id</code> is present on this {@link VacuumWorldLocation}.
@@ -408,9 +408,9 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * 
      */
     public default boolean containsSuchAvatar(String id) {
-	return isAnAvatarThere() && id.equals(this.getAvatarAppearanceIfAny().getId());
+        return isAnAvatarThere() && id.equals(this.getAvatarAppearanceIfAny().getId());
     }
-    
+
     /**
      * 
      * Returns the {@link VacuumWorldAutonomousActorAppearance} of the {@link VacuumWorldCleaningAgent} on this {@link VacuumWorldLocation}, if any.
@@ -419,7 +419,7 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * 
      */
     public abstract VacuumWorldAutonomousActorAppearance getAgentAppearanceIfAny();
-    
+
     /**
      * 
      * Returns the {@link VacuumWorldAutonomousActorAppearance} of the {@link VacuumWorldUserAgent} on this {@link VacuumWorldLocation}, if any.
@@ -428,7 +428,7 @@ public interface VacuumWorldLocationPerceptionInterface extends Serializable {
      * 
      */
     public abstract VacuumWorldAutonomousActorAppearance getUserAppearanceIfAny();
-    
+
     /**
      * 
      * Returns the {@link VacuumWorldAvatarAppearance} of the {@link VacuumWorldAvatar} on this {@link VacuumWorldLocation}, if any.

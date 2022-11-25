@@ -15,52 +15,52 @@ public class VacuumWorldDropDirtAction extends VacuumWorldAbstractPhysicalAction
     private VacuumWorldDirtColor droppedDirtColor;
 
     public VacuumWorldDropDirtAction(VacuumWorldDirtColor droppedDirtColor) {
-	super(VacuumWorldPhysicalActionsEnum.DROP_DIRT);
-	
-	this.droppedDirtColor = droppedDirtColor == null ? selectRandomDirtColor() : droppedDirtColor;
+        super(VacuumWorldPhysicalActionsEnum.DROP_DIRT);
+
+        this.droppedDirtColor = droppedDirtColor == null ? selectRandomDirtColor() : droppedDirtColor;
     }
-    
+
     public VacuumWorldDropDirtAction() {
-	this(null);
+        this(null);
     }
 
     private VacuumWorldDirtColor selectRandomDirtColor() {
-	return VacuumWorldDirtColor.random();
+        return VacuumWorldDirtColor.random();
     }
 
     @Override
     public boolean isTypeConsistent() {
-	return VacuumWorldPhysicalActionsEnum.DROP_DIRT.equals(getType());
+        return VacuumWorldPhysicalActionsEnum.DROP_DIRT.equals(getType());
     }
-    
+
     public VacuumWorldDirtColor getDroppedDirtColor() {
-	return this.droppedDirtColor;
+        return this.droppedDirtColor;
     }
 
     @Override
     public boolean isPossible(Environment context, Physics physics) {
-        if(context instanceof VacuumWorldEnvironment && physics instanceof VacuumWorldPhysicsInterface) {
+        if (context instanceof VacuumWorldEnvironment && physics instanceof VacuumWorldPhysicsInterface) {
             return ((VacuumWorldPhysicsInterface) physics).isPossible(this, (VacuumWorldEnvironment) context);
         }
-        
+
         return false;
     }
 
     @Override
     public Result perform(Environment context, Physics physics) {
-        if(context instanceof VacuumWorldEnvironment && physics instanceof VacuumWorldPhysicsInterface) {
+        if (context instanceof VacuumWorldEnvironment && physics instanceof VacuumWorldPhysicsInterface) {
             return ((VacuumWorldPhysicsInterface) physics).perform(this, (VacuumWorldEnvironment) context);
         }
-        
+
         return new VacuumWorldPhysicalActionResult(ActionResult.FAILURE);
     }
-    
+
     @Override
     public boolean succeeded(Environment context, Physics physics) {
-        if(context instanceof VacuumWorldEnvironment && physics instanceof VacuumWorldPhysicsInterface) {
+        if (context instanceof VacuumWorldEnvironment && physics instanceof VacuumWorldPhysicsInterface) {
             return ((VacuumWorldPhysicsInterface) physics).succeeded(this, (VacuumWorldEnvironment) context);
         }
-        
+
         return false;
     }
 }

@@ -12,12 +12,12 @@ public class VacuumWorldCleaningAgent extends VacuumWorldAbstractActor {
     private static final long serialVersionUID = -7231158706838196637L;
 
     public VacuumWorldCleaningAgent(String id, VacuumWorldActorAppearance appearance, List<Sensor> sensors, List<Actuator> actuators, AgentMind mind) {
-	super(id, appearance, sensors, actuators, mind);
-	
-	checkForForbiddenMindParents(mind, getClass(), VacuumWorldUserMind.class);
+        super(id, appearance, sensors, actuators, mind);
+
+        checkForForbiddenMindParents(mind, getClass(), VacuumWorldUserMind.class);
     }
 
     public VacuumWorldCleaningAgent(VacuumWorldCleaningAgent toCopy) {
-	this(toCopy.getID(), toCopy.getAppearance(), toCopy.getAllSensors(), toCopy.getAllActuators(), toCopy.getMind());
+        this(toCopy.getID(), toCopy.getAppearance(), toCopy.getAllSensors(), toCopy.getAllActuators(), toCopy.getMind());
     }
 }

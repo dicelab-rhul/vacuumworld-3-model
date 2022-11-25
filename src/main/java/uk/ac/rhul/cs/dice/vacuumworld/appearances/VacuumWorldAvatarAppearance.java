@@ -6,13 +6,12 @@ import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonObject;
 
 import uk.ac.rhul.cs.dice.agent.interfaces.Actuator;
-import uk.ac.rhul.cs.dice.agent.interfaces.AvatarAppearance;
 import uk.ac.rhul.cs.dice.agent.interfaces.Sensor;
 import uk.ac.rhul.cs.dice.agentcontainers.enums.Orientation;
 import uk.ac.rhul.cs.dice.vacuumworld.VacuumWorldSerializer;
 import uk.ac.rhul.cs.dice.vacuumworld.actors.ActorType;
 
-public class VacuumWorldAvatarAppearance implements AvatarAppearance, VacuumWorldActorAppearance {
+public class VacuumWorldAvatarAppearance implements VacuumWorldActorAppearance {
     private static final long serialVersionUID = 6754120129442366599L;
     private String id;
     private Orientation orientation;
@@ -22,49 +21,49 @@ public class VacuumWorldAvatarAppearance implements AvatarAppearance, VacuumWorl
     private List<Actuator> actuators;
 
     public VacuumWorldAvatarAppearance(String id, Orientation orientation, int listeningPort, VacuumWorldPrincipalListenerAppearance mindAppearance, List<Sensor> sensors, List<Actuator> actuators) {
-	this.id = id;
-	this.orientation = orientation;
-	this.listeningPort = listeningPort;
-	this.mindAppearance = mindAppearance;
-	this.sensors = ImmutableList.copyOf(sensors);
-	this.actuators = ImmutableList.copyOf(actuators);
+        this.id = id;
+        this.orientation = orientation;
+        this.listeningPort = listeningPort;
+        this.mindAppearance = mindAppearance;
+        this.sensors = ImmutableList.copyOf(sensors);
+        this.actuators = ImmutableList.copyOf(actuators);
     }
-    
+
     @Override
     public String getId() {
-	return this.id;
+        return this.id;
     }
-    
+
     @Override
     public Orientation getOrientation() {
-	return this.orientation;
+        return this.orientation;
     }
-    
+
     @Override
     public void setOrientation(Orientation orientation) {
         this.orientation = orientation;
     }
-    
+
     @Override
     public int getListeningPort() {
-	return this.listeningPort;
+        return this.listeningPort;
     }
-    
+
     @Override
     public VacuumWorldPrincipalListenerAppearance getMindAppearance() {
-	return this.mindAppearance;
+        return this.mindAppearance;
     }
-    
+
     @Override
     public List<Actuator> getActuators() {
-	return this.actuators;
+        return this.actuators;
     }
-    
+
     @Override
     public List<Sensor> getSensors() {
-	return this.sensors;
+        return this.sensors;
     }
-    
+
     @Override
     public JsonObject serialize() {
         return VacuumWorldSerializer.serialize(this);
@@ -72,6 +71,6 @@ public class VacuumWorldAvatarAppearance implements AvatarAppearance, VacuumWorl
 
     @Override
     public ActorType getType() {
-	return ActorType.AVATAR;
+        return ActorType.AVATAR;
     }
 }

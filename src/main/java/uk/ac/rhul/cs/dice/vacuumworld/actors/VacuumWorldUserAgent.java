@@ -12,12 +12,12 @@ public class VacuumWorldUserAgent extends VacuumWorldAbstractActor {
     private static final long serialVersionUID = -2882228263580151389L;
 
     public VacuumWorldUserAgent(String id, VacuumWorldActorAppearance appearance, List<Sensor> sensors, List<Actuator> actuators, AgentMind mind) {
-	super(id, appearance, sensors, actuators, mind);
-	
-	checkForAllowedMindParents(mind, getClass(), VacuumWorldUserMind.class);
+        super(id, appearance, sensors, actuators, mind);
+
+        checkForAllowedMindParents(mind, getClass(), VacuumWorldUserMind.class);
     }
 
     public VacuumWorldUserAgent(VacuumWorldUserAgent toCopy) {
-	this(toCopy.getID(), toCopy.getAppearance(), toCopy.getAllSensors(), toCopy.getAllActuators(), toCopy.getMind());
+        this(toCopy.getID(), toCopy.getAppearance(), toCopy.getAllSensors(), toCopy.getAllActuators(), toCopy.getMind());
     }
 }

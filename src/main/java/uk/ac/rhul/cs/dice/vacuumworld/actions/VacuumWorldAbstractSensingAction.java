@@ -13,47 +13,47 @@ import uk.ac.rhul.cs.dice.vacuumworld.actions.results.VacuumWorldSensingActionRe
 public abstract class VacuumWorldAbstractSensingAction extends VacuumWorldAbstractAction implements SensingAction<VacuumWorldSensingActionsEnum> {
     private static final long serialVersionUID = 497895445426989292L;
     private VacuumWorldSensingActionsEnum type;
-    
-    public VacuumWorldAbstractSensingAction(VacuumWorldSensingActionsEnum type) {
-	super(type.getCode());
-	
-	this.type = type;
+
+    protected VacuumWorldAbstractSensingAction(VacuumWorldSensingActionsEnum type) {
+        super(type.getCode());
+
+        this.type = type;
     }
-    
+
     @Override
     public VacuumWorldSensingActionsEnum getType() {
-	return this.type;
+        return this.type;
     }
-    
+
     @Override
     public Result attempt(Environment context, Physics physics) {
-	if(isPossible(context, physics)) {
-	    return performAndCheckResult(context, physics);
-	}
-	else {
-	    return new VacuumWorldSensingActionResult(ActionResult.IMPOSSIBLE);
-	}
+        if (isPossible(context, physics)) {
+            return performAndCheckResult(context, physics);
+        }
+        else {
+            return new VacuumWorldSensingActionResult(ActionResult.IMPOSSIBLE);
+        }
     }
-    
+
     private Result performAndCheckResult(Environment context, Physics physics) {
-	try {
-	    return performAndCheckResultHelper(context, physics);
-	}
-	catch(Exception e) {
-	    LogUtils.log(e);
-	    
-	    return new VacuumWorldSensingActionResult(ActionResult.FAILURE);
-	}
+        try {
+            return performAndCheckResultHelper(context, physics);
+        }
+        catch (Exception e) {
+            LogUtils.log(e);
+
+            return new VacuumWorldSensingActionResult(ActionResult.FAILURE);
+        }
     }
-    
+
     private Result performAndCheckResultHelper(Environment context, Physics physics) {
-	Result result = perform(context, physics);
-	
-	if(ActionResult.FAILURE.equals(result.getActionResultType()) || !succeeded(context, physics)) {
-	    return new VacuumWorldSensingActionResult(ActionResult.FAILURE);
-	}
-	else {
-	    return result;
-	}
+        Result result = perform(context, physics);
+
+        if (ActionResult.FAILURE.equals(result.getActionResultType()) || !succeeded(context, physics)) {
+            return new VacuumWorldSensingActionResult(ActionResult.FAILURE);
+        }
+        else {
+            return result;
+        }
     }
 }

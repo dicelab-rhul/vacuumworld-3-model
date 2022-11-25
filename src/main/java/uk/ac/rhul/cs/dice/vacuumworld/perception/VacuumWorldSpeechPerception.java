@@ -6,7 +6,7 @@ import uk.ac.rhul.cs.dice.vacuumworld.appearances.VacuumWorldActorAppearance;
 
 /**
  * 
- * Wrapper for a {@link VacuumWorldMessage} and the {@link VacuumWorldctorAppearance} of its sender. It implements {@link Perception}.
+ * Wrapper for a {@link VacuumWorldMessage} and the {@link VacuumWorldActorAppearance} of its sender. It implements {@link Perception}.
  * 
  * @author cloudstrife9999
  *
@@ -21,12 +21,12 @@ public class VacuumWorldSpeechPerception implements Perception {
      * Constructs the {@link VacuumWorldSpeechPerception} with a {@link VacuumWorldMessage} and the {@link VacuumWorldActorAppearance} of its sender.
      * 
      * @param message a {@link VacuumWorldMessage}.
-     * @param sender the {@link VacuumWorldActorAppearance} of the {@link VacuumWorldMessage} sender.
+     * @param sender  the {@link VacuumWorldActorAppearance} of the {@link VacuumWorldMessage} sender.
      * 
      */
     public VacuumWorldSpeechPerception(VacuumWorldMessage message, VacuumWorldActorAppearance sender) {
-	this.message = message;
-	this.sender = sender;
+        this.message = message;
+        this.sender = sender;
     }
 
     /**
@@ -37,7 +37,7 @@ public class VacuumWorldSpeechPerception implements Perception {
      * 
      */
     public VacuumWorldMessage getMessage() {
-	return this.message;
+        return this.message;
     }
 
     /**
@@ -48,11 +48,11 @@ public class VacuumWorldSpeechPerception implements Perception {
      * 
      */
     public VacuumWorldActorAppearance getSender() {
-	return this.sender;
+        return this.sender;
     }
 
     @Override
     public String toString() {
-	return "Perception: " + this.message + " from: " + this.sender;
+        return "Perception: " + this.message + " from: " + this.sender;
     }
 }

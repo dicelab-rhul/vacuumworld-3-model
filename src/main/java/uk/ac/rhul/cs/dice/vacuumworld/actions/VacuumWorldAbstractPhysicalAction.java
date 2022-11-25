@@ -14,56 +14,56 @@ public abstract class VacuumWorldAbstractPhysicalAction extends VacuumWorldAbstr
     private static final long serialVersionUID = -6157006955598814219L;
     private VacuumWorldPhysicalActionsEnum type;
 
-    public VacuumWorldAbstractPhysicalAction(VacuumWorldPhysicalActionsEnum type) {
-	super(type.getCode());
-	
-	this.type = type;
+    protected VacuumWorldAbstractPhysicalAction(VacuumWorldPhysicalActionsEnum type) {
+        super(type.getCode());
+
+        this.type = type;
     }
 
     @Override
     public VacuumWorldPhysicalActionsEnum getType() {
-	return this.type;
+        return this.type;
     }
 
     @Override
     public Result attempt(Environment context, Physics physics) {
-	if (isPossible(context, physics)) {
-	    LogUtils.log(getActorID() + ": " + getClass().getSimpleName() + " is POSSIBLE.");
+        if (isPossible(context, physics)) {
+            LogUtils.log(getActorID() + ": " + getClass().getSimpleName() + " is POSSIBLE.");
 
-	    return performAndCheckResult(context, physics);
-	}
-	else {
-	    LogUtils.log(getActorID() + ": " + getClass().getSimpleName() + " is IMPOSSIBLE.");
-		
-	    return new VacuumWorldPhysicalActionResult(ActionResult.IMPOSSIBLE);
-	}
+            return performAndCheckResult(context, physics);
+        }
+        else {
+            LogUtils.log(getActorID() + ": " + getClass().getSimpleName() + " is IMPOSSIBLE.");
+
+            return new VacuumWorldPhysicalActionResult(ActionResult.IMPOSSIBLE);
+        }
     }
 
     private Result performAndCheckResult(Environment context, Physics physics) {
-	try {
-	    return performAndCheckResultHelper(context, physics);
-	}
-	catch (Exception e) {
-	    LogUtils.log(e);
+        try {
+            return performAndCheckResultHelper(context, physics);
+        }
+        catch (Exception e) {
+            LogUtils.log(e);
 
-	    return new VacuumWorldPhysicalActionResult(ActionResult.FAILURE);
-	}
+            return new VacuumWorldPhysicalActionResult(ActionResult.FAILURE);
+        }
     }
 
     private Result performAndCheckResultHelper(Environment context, Physics physics) {
-	Result result = perform(context, physics);
-	LogUtils.log(getActorID() + ": " + getClass().getSimpleName() + " executed with: " + result.getActionResultType() + ".");
-	    
+        Result result = perform(context, physics);
+        LogUtils.log(getActorID() + ": " + getClass().getSimpleName() + " executed with: " + result.getActionResultType() + ".");
 
-	if (ActionResult.FAILURE.equals(result.getActionResultType()) || !succeeded(context, physics)) {
-	    LogUtils.log(getActorID() + ": " + getClass().getSimpleName() + " post-conditions check: FAILURE.");
 
-	    return new VacuumWorldPhysicalActionResult(ActionResult.FAILURE);
-	}
-	else {
-	    LogUtils.log(getActorID() + ": " + getClass().getSimpleName() + " post-conditions check: " + result.getActionResultType() + ".");
+        if (ActionResult.FAILURE.equals(result.getActionResultType()) || !succeeded(context, physics)) {
+            LogUtils.log(getActorID() + ": " + getClass().getSimpleName() + " post-conditions check: FAILURE.");
 
-	    return result;
-	}
+            return new VacuumWorldPhysicalActionResult(ActionResult.FAILURE);
+        }
+        else {
+            LogUtils.log(getActorID() + ": " + getClass().getSimpleName() + " post-conditions check: " + result.getActionResultType() + ".");
+
+            return result;
+        }
     }
 }
